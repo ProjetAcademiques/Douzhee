@@ -1,0 +1,70 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #4b006e, #7b1fa2);
+    font-family: Arial, sans-serif;
+}
+.PCIR{
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: white;
+}
+.PCIR h2{
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+.PCIR input[type= "email"],
+.PCIR input[type = "password"],
+.PCIR input[type = "text"],
+.PCIR input[type = "vérifier"]{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: none;
+    background-color: #c3acce;
+    color: white;
+    font-size: 16px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    font-style: italic;
+}
+.PCIR button{
+    background-color: #ab00e7;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 50%;
+    font-size: 16px;
+    color: black;
+    margin: 10px;
+            
+}
+.PCIR .checkbox{
+   display: flex;
+   align-items: center;
+   margin-bottom: 25px;
+   margin-left: -13px;
+   color: gray;
+   
+}
+.PCIR input[type="checkbox"]{
+    margin-right: 13px;
+    
+}
+.PCIR .link{
+    margin-top: 20px;
+    font-size: 14px;
+    color: grey;
+}
+a:link{
+    color: grey;
+    text-decoration: none;
+}

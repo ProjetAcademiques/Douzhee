@@ -1,0 +1,62 @@
+body {
+    margin: 0; 
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #380052;
+    width: 100%;
+    height: 74px;
+    padding: 10px;
+    position: fixed; 
+    top: 0;
+    box-sizing: border-box;
+}
+
+#logo {
+    border-radius: 10px;
+}
+
+.selection_droite {
+    display: flex;
+    align-items: center;
+}
+
+#money {
+    font-size: 16px; 
+    margin-right: 5px;
+    color: white;
+}
+
+#coin {
+    margin-right: 10px;
+}
+
+#pseudo {
+    font-size: 16px; 
+    margin-right: 10px;
+    color: white;
+}
+
+#profil {
+    background-image: url(imgheader/photodefault.jpg);
+    border-radius: 50%; 
+    margin-right: 10px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    width: 56px;
+    height: 56px;
+}
+
+button {
+    background-color: #3893ff;
+    border-radius: 10px;
+    width: 97px;
+    height: 46px;
+    border: none;
+    color: white;
+}

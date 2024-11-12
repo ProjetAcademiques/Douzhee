@@ -1,0 +1,65 @@
+body {
+    background: linear-gradient(to bottom,
+    #642581 0%,
+    #421956 52%,
+    #421956 70%,
+    #421956 79%,
+    #391549 88%,
+    #341343 95%,
+    #341343 96%,
+    #351444 100%,
+    #15081B 100%
+    );
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#fonctionnalites {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+#sectionHaut, #sectionBas {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    justify-content: center;
+    padding: 150px;
+    
+}
+
+input[type="submit"] {
+    width: 223px;
+    height: 85px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    margin: 30px;
+}
+
+#regles {
+    background-image: url("imageindex/regles.png");
+    
+}
+
+#classement {
+    background-image: url("imageindex/imgclassement.png");
+}
+
+#versusrobot {
+    width: 300px;
+    height: 156.62px;
+    background-image: url("imageindex/imgvsrobot.png");
+}
+
+#versushuman {
+    width: 300px;
+    height: 156.62px;
+    background-image: url("imageindex/imgvshuman.png");
+}

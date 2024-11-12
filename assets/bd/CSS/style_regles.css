@@ -1,0 +1,76 @@
+body{
+    height: 100%; 
+    margin: 0;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    background-color: #c2adcc;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 74px);
+    margin-top: 74px; 
+}
+.bulle{
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    padding: 15px 20px;
+    width: 450px;
+    max-width: 600px;
+    font-size: 18px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    position: absolute; /* Centrer avec les coordonnées */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Ajustement pour le centrer parfaitement */
+    text-align: center;
+}
+
+.bulle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent #f0f0f0 transparent transparent;
+    transform: translateY(-50%);
+}
+
+.Bouton{
+    display: flex;
+    width: 100px;
+    height: 20px;
+    justify-content: space-between;
+}
+.Bouton img{
+    display: none;
+}
+#Valider {
+    background-color: #4CAF50; 
+    color: white; 
+}
+
+#Refuser {
+    background-color: #f44336; 
+    color: white; 
+}
+#FirstMascotte{
+    position: absolute;
+    right: -100px; 
+    top: 50%; 
+    transform: translateY(-50%);
+    z-index: 1;
+}
+#SecondMascotte{
+    position: absolute;
+    display: none;
+    transform: scale(-1,1);
+    z-index: 2;
+}

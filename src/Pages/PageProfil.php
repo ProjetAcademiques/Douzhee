@@ -16,9 +16,10 @@ require_once ("pdo.php");
         <h2 id="Pseudo"><?php echo getPseudoById($_SESSION['user_id']); ?></h2>
         <p id="bio"><?php echo getBioById($_SESSION['user_id']); ?></p>
         <div class="buttons">
-            <button  onclick="location.href='states.php'">Statistiques</button>
-            <button onclick="location.href='perso.php'">Personnalisation</button>
-            <button onclick="location.href='succes.php'">Succès</button>
+         <a href="states.php" class="button">Statistiques</a>
+        <a href="PagePersonnalisation.php" class="button">Personnalisation</a>
+        <a href="succes.php" class="button">Succès</a>
+
         </div>
     </div>
 </body>

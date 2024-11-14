@@ -1,5 +1,6 @@
 <?php
     require_once('pdo.php');
+    
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -17,8 +17,8 @@
         $insertConsulte = 'INSERT INTO consulte VALUES (idStats, idUser)';
 
         $statement = $connection->prepare($insertConsulte);
-        $statement->bindParam('idStats', $idStats);
-        $statement->bindParam('idUser', $idUser);
+        $statement->bindParam('idStats', $idStats, PDO::PARAM_INT);
+        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
     }
 
@@ -37,7 +37,7 @@
         $readConsulte = 'SELECT * FROM consulte WHERE idJoueur = idUser';
         
         $statement = $connection->prepare($readConsulte);
-        $statement->bindParam('idUser', $idUser);
+        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -56,7 +56,7 @@
         $readConsulte = 'SELECT * FROM consulte WHERE idStatistiques = idStats';
 
         $statement = $connection->prepare($readConsulte);
-        $statement->bindParam('idStats', $idStats);
+        $statement->bindParam('idStats', $idStats, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);

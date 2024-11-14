@@ -25,13 +25,16 @@
 <?php
  if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     if (!empty($_POST['E-mail']) && !empty($_POST['Pseudo']) && !empty($_POST['Password'])){
-        insertUser($_POST['E-mail'],$_POST['Pseudo'],$_POST['Password']);
-        $_SESSION['userId'] = getIdUser($_POST['E-mail']);
+        $dejaExistant = verifEmail($_POST['E-mail']);
+        if ($dejaExistant){
+            echo '<script 
+            type="text/javascript"> window.onload = function () { alert("Utilisateur déja existant pour cette adresse mail!"); }
+            </script>';
+        }else{
+        insertUser($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
+        $_SESSION['user_id'] = getIdUser($_POST['E-mail']);
         header('Location: index.php');
-    }else{
-        echo '<script 
-                    type="text/javascript"> window.onload = function () { alert("Mauvais mot de passe ou email"); }
-                    </script>';
     }
+}
 }
 ?>

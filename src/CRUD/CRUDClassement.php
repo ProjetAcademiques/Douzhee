@@ -11,9 +11,9 @@
         $insertClassement = 'INSERT INTO classement VALUES (placeClassement, score, pseudo)';
 
         $statement = $connection->prepare($insertClassement);
-        $statement->bindParam('placeClassement', $placeClassement);
-        $statement->bindParam('score', $score);
-        $statement->bindParam('pseudo', $pseudo);
+        $statement->bindParam('placeClassement', $placeClassement, PDO::PARAM_INT);
+        $statement->bindParam('score', $score, PDO::PARAM_INT);
+        $statement->bindParam('pseudo', $pseudo, PDO::PARAM_STR);
         $statement->execute();
     }
 
@@ -48,7 +48,7 @@
         $readClassement = 'SELECT * FROM classement WHERE id = (SELECT idClassement FROM seTrouve WHERE idJoueur = idUser)';
 
         $statement = $connection->prepare($readClassement);
-        $statement->bindParam('idUser', $idUser);
+        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -70,14 +70,14 @@
 
         $getClassementId = "SELECT idClassement FROM seTrouve WHERE idJoueur = idUser";
         $stmt = $connection->prepare($getClassementId);
-        $stmt->bindParam('idUser', $idUser);
+        $stmt->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $stmt->execute();
         $idClassement = $stmt->fetchColumn();
     
         $updateScore = "UPDATE Classement SET score = :newScore WHERE id = :idClassement";
         $stmt = $connection->prepare($updateScore);
-        $stmt->bindParam(':newScore', $newScore);
-        $stmt->bindParam(':idClassement', $idClassement);
+        $stmt->bindParam(':newScore', $newScore, PDO::PARAM_INT);
+        $stmt->bindParam(':idClassement', $idClassement, PDO::PARAM_INT);
         $stmt->execute();
     
         $getRankings = "SELECT id, score FROM Classement ORDER BY score DESC, placeClassement ASC";

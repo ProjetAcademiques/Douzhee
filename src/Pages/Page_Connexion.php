@@ -23,7 +23,7 @@
              </div>
              <button type="submit">Connexion</button>
             </form>
-            <a href="Page_Réinitialisation">Mot de passe oublié ?</a>
+            <a href="Page_Réinitialisation.php">Mot de passe oublié ?</a>
             <div class = "link">Nouveau ici ? <a href="Page_Inscription.php">Inscrivez vous</a>
             </div>
         </div>
@@ -40,7 +40,7 @@
         }else{
             unset($_SESSION['cacheE-mail'], $_SESSION['cachePassword']);
         }
-        $trouve = verifUser($_POST['E-mail'],$_POST['Password']);
+        $trouve = verifUser($_POST['E-mail']);
         if ($trouve){
             $_SESSION['user_id'] = getIdUser($_POST['E-mail']);
             header('Location: index.php');

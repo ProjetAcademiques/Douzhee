@@ -79,6 +79,11 @@ function afficheDes(desGardes){
 function affichePointsCombinaisons(reset = false){
     let pointsCombinaisons = GameDataManager.checkCombinaisons(joueur1.getListeDes());
 
+    if(pointsCombinaisons[12] == 50 && inputs[12].value == 50){
+        inputs[12].value += 25;
+        joueur1.ajoutSectionInferieure(25);
+    }
+
     for(let i = 0 ; i<13 ; i++){
         if(inputs[i].disabled != true){
             if(!reset){

@@ -29,14 +29,17 @@ export class GameDataManager{
             return acc;
         }, {});
         Object.entries(totalValeurs).forEach(([count]) => {
-            if (count >= 3) {
+            if(count >= 3) {
                 brelan = listeDes.reduce((acc, currentValue) => acc + currentValue, 0);
             }
-            if (count >= 4) {
+            if(count >= 4) {
                 carre = listeDes.reduce((acc, currentValue) => acc + currentValue, 0);
             }
+            if(count == 5) {
+                douzhee = 50;
+            }
 
-            if(totalValeurs.length == 2 && (count == 3 || count == 2)){
+            if(Object.values(totalValeurs).includes(3) && Object.values(totalValeurs).includes(2)) {
                 full = 25;
             }
         });
@@ -46,10 +49,10 @@ export class GameDataManager{
     
         let suite = 1;
         for (let i = 1; i < listeDesUnique.length; i++) {
-            if (listeDesUnique[i] == listeDesUnique[i - 1] + 1) {
+            if(listeDesUnique[i] == listeDesUnique[i - 1] + 1) {
                 suite++;
-                if (suite >= 4) petiteSuite = 30;
-                if (suite >= 5) grandeSuite = 40;
+                if(suite >= 4) petiteSuite = 30;
+                if(suite >= 5) grandeSuite = 40;
             } else {
                 suite = 1;
             }

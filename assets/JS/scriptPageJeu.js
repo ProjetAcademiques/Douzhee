@@ -61,13 +61,17 @@ function afficheDes(desGardes){
 }
 
 
-function affichePointsCombinaisons(){
+function affichePointsCombinaisons(vide = false){
     let pointsCombinaisons = GameDataManager.checkCombinaisons(joueur1.getListeDes());
 
     for(let i = 0 ; i<13 ; i++){
         if(inputs[i].disabled != true){
-            inputs[i].placeholder = pointsCombinaisons[i];
-            inputs[i].value = pointsCombinaisons[i];
+            if(!vide){
+                inputs[i].placeholder = pointsCombinaisons[i];
+                inputs[i].value = pointsCombinaisons[i];
+            } else{
+                inputs[i].value = '';
+            }
         }
     }
 }
@@ -128,7 +132,12 @@ function activeRoll(){
 function resetJeu(){
     joueur1.resetTab()
 
-    afficheDes();
+    des.forEach(de => {
+        de.classList.replace("selected", "libre");
+        de.innerHTML = '';
+    })
+
+    affichePointsCombinaisons(true);
 
     activeRoll();
 

@@ -20,8 +20,10 @@
         $tempsJeu = 0;
         $ratioVictoire = 0;
         $nbSucces = 0;
+        $nbDouzhee = 0;
+        $nbPartiesJoues = 0;
 
-        $insertStatsQuery = "INSERT INTO statistiques VALUES (nbPartiesGagnees, scoreMaximal, tempsJeu, ratioVictoire, nbSucces)";
+        $insertStatsQuery = "INSERT INTO statistiques VALUES (nbPartiesGagnees, scoreMaximal, tempsJeu, ratioVictoire, nbSucces, nbDouzhee, nbPartieJoues)";
 
         $statement = $connection->prepare($insertStatsQuery);
         $statement->bindParam("nbPartiesGagnees", $nbPartiesGagnees, PDO::PARAM_INT);
@@ -29,6 +31,8 @@
         $statement->bindParam("tempsJeu", $tempsJeu, PDO::PARAM_STR);
         $statement->bindParam("ratioVictoire", $ratioVictoire);
         $statement->bindParam("nbSucces", $nbSucces, PDO::PARAM_INT);
+        $statement->bindParam("nbDouzhee", $nbDouzhee, PDO::PARAM_INT);
+        $statement->bindParam("nbPartieJoues", $nbPartiesJoues, PDO::PARAM_INT);
         $statement->execute();
 
         $idStats = $connection->lastInsertId();
@@ -58,7 +62,7 @@
 
         $data = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $statsUser = new Statistiques($data['id'], $data['nbPartiesGagnees'], $data['scoreMaximal'], $data['tempsJeu'], $data['ratioVictoire'], $data['nbSucces']);
+        $statsUser = new Statistiques($data['id'], $data['nbPartiesGagnees'], $data['scoreMaximal'], $data['tempsJeu'], $data['ratioVictoire'], $data['nbSucces'], $data['nbDouzhee'], $data['nbPartiesJoues']);
         return $statsUser;
     }
 
@@ -76,6 +80,11 @@
         $connection = ConnexionSingleton::getInstance();
         $stats = readStatistiquesByIdUser($idUser);
 
+        $updateNbParties = 'UPDATE statistiques SET nbPartiesJoues = nbPartiesJoues + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
+        $statement = $connection->prepare($updateNbParties);
+        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->execute();
+
         if(readVictory($connection, $idUser, $idGame)){ //Fonction qui devra etre codée dans CRUDJouerPartie.php
             $updateVictory = 'UPDATE statistiques SET nbPartiesGagnees = nbPartiesGagnees + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
             $statement = $connection->prepare($updateVictory);
@@ -85,7 +94,7 @@
             updateClassement($idUser, $stats->getNbPartiesGagnees() + 1);
         }
 
-        $updateRatio = 'UPDATE statistiques SET ratioVictoire = nbPartieGagnees / (SELECT COUNT(*) FROM participeA WHERE idJoueur = idUser)';
+        $updateRatio = 'UPDATE statistiques SET ratioVictoire = nbPartieGagnees / nbPartiesJoues WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
         $statement = $connection->prepare($updateRatio);
         $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
@@ -97,7 +106,7 @@
             $statement->bindParam('newScore', $partie->getScoreJoueur(), PDO::PARAM_INT);
             $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
             $statement->execute();
-        }
+        } 
     }
 
     /**
@@ -106,11 +115,28 @@
      * @param int $idUser identifiant du joueur
      * @return void
      */
-    function updateNbSucces(int $idUser){
+    function updateNbSucces(int $idUser): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $updateSucces = 'UPDATE statistiques SET nbSucces = nbSucces + 1 WHERE id = idUser';
+        $updateSucces = 'UPDATE statistiques SET nbSucces = nbSucces + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
         $statement = $connection->prepare($updateSucces);
         $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->execute();
+    }
+
+    /**
+     * @brief Met à jour le nombre de Douzhee d'un joueur
+     * @author Nathan
+     * @param int $idUser identifiant du joueur
+     * @param int $nbDouzhee nombre de Douzhee a ajouter
+     * @return void
+     */
+    function updateNbDouzhee(int $idUser, int $nbDouzhee): void{
+        $connection = ConnexionSingleton::getInstance();
+
+        $updateNbDouzhee = 'UPDATE statistiques SET nbDouzhee = nbDouzhee + :nbDouzhee WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
+        $statement = $connection->prepare($updateNbDouzhee);
+        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':nbDouzhee', $nbDouzhee, PDO::PARAM_INT);
         $statement->execute();
     }

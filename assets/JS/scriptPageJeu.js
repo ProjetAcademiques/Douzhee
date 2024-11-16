@@ -48,27 +48,23 @@ button.addEventListener('click', () => {
 
 function afficheDes(desGardes){
     let listeDes = joueur1.getListeDes();
-    let i = 0;
 
-    des.forEach(de => {
-        if(listeDes.length != 0){
+    des.forEach((de, i) => {
+        if (i < desGardes.length) {
+            de.innerHTML = desGardes[i];
+            de.classList.replace("libre", "selected");
+        } else {
             de.innerHTML = listeDes[i];
-
-            if(i < desGardes.length){
-                de.classList.replace("libre" ,"selected");
-            }
-            i++;
-        } else{
-            de.innerHTML = [];
+            de.classList.replace("selected", "libre");
         }
-    })
+    });
 }
+
 
 function affichePointsCombinaisons(){
     let pointsCombinaisons = GameDataManager.checkCombinaisons(joueur1.getListeDes());
 
     for(let i = 0 ; i<13 ; i++){
-        console.log(inputs[i].disabled);
         if(inputs[i].disabled != true){
             inputs[i].placeholder = pointsCombinaisons[i];
             inputs[i].value = pointsCombinaisons[i];
@@ -92,6 +88,7 @@ function gardeDes(){
         }
     })
 
+    console.log("Dés gardés :", desGardes);
     return desGardes;
 }
 
@@ -131,7 +128,7 @@ function activeRoll(){
 function resetJeu(){
     joueur1.resetTab()
 
-    afficheDes([0, 0, 0, 0, 0, 0]);
+    afficheDes();
 
     activeRoll();
 

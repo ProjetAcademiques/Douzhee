@@ -174,6 +174,10 @@ function activeRoll(){
 function ajoutScore(event){
     if(event.target.name == 'section-superieure'){
         joueur1.ajoutSectionSuperieure(parseInt(event.target.value));
+
+        if(joueur1.getSectionSuperieure() > 62){
+            joueur1.ajoutSectionSuperieure(25);
+        }
     } else{
         joueur1.ajoutSectionInferieure(parseInt(event.target.value));
     }

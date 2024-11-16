@@ -2,12 +2,14 @@ import {Dice} from "./Dice.js";
 export class Player{
 
     #id;
-    #score;
+    #sectionSuperieure;
+    #sectionInferieure;
     #listeDes;
 
     constructor(id){
         this.#id = id;
-        this.#score = 0;
+        this.#sectionSuperieure = 0;
+        this.#sectionInferieure = 0;
         this.#listeDes = [];
     }
 
@@ -15,8 +17,12 @@ export class Player{
         return this.#id;
     }
 
-    getScore(){
-        return this.#score;
+    getSectionSuperieure(){
+        return this.#sectionSuperieure;
+    }
+
+    getSectionInferieure(){
+        return this.#sectionInferieure;
     }
 
     getListeDes(){
@@ -27,8 +33,9 @@ export class Player{
         return this.#listeDes[index];
     }
 
-    setScore(score){
-        this.#score += score;
+
+    getScore(){
+        return this.#sectionSuperieure + this.#sectionInferieure;
     }
 
     setListeDes(listeDesGardes) {
@@ -42,5 +49,13 @@ export class Player{
     
     resetTab(){
         this.#listeDes = [];
+    }
+
+    ajoutSectionInferieure(score){
+        this.#sectionInferieure += score;
+    }
+
+    ajoutSectionSuperieure(score){
+        this.#sectionSuperieure += score;
     }
 }

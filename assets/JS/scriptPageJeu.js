@@ -16,6 +16,7 @@ inputs.forEach(input => {
         event.target.placeholder = "-1";
         event.target.disabled = true;
 
+        ajoutScore(event);
         resetJeu();
     })
 })
@@ -92,7 +93,6 @@ function gardeDes(){
         }
     })
 
-    console.log("Dés gardés :", desGardes);
     return desGardes;
 }
 
@@ -127,6 +127,14 @@ function desactiveInput(){
 function activeRoll(){
     nbRoll = 3;
     button.disabled = false;
+}
+
+function ajoutScore(event){
+    if(event.target.name == 'section-superieure'){
+        joueur1.ajoutSectionSuperieure(parseInt(event.target.value));
+    } else{
+        joueur1.ajoutSectionInferieure(parseInt(event.target.value));
+    }
 }
 
 function resetJeu(){

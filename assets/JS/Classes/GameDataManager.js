@@ -28,7 +28,7 @@ export class GameDataManager{
             acc[currentValue] = (acc[currentValue] || 0) + 1;
             return acc;
         }, {});
-        Object.entries(totalValeurs).forEach(([count]) => {
+        Object.entries(totalValeurs).forEach(([value, count]) => {
             if(count >= 3) {
                 brelan = listeDes.reduce((acc, currentValue) => acc + currentValue, 0);
             }

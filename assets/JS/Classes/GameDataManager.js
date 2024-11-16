@@ -28,18 +28,18 @@ export class GameDataManager{
             acc[currentValue] = (acc[currentValue] || 0) + 1;
             return acc;
         }, {});
-        Object.entries(totalValeurs).forEach(([valeur, count]) => {
+        Object.entries(totalValeurs).forEach(([count]) => {
             if (count >= 3) {
                 brelan = listeDes.reduce((acc, currentValue) => acc + currentValue, 0);
             }
             if (count >= 4) {
                 carre = listeDes.reduce((acc, currentValue) => acc + currentValue, 0);
             }
+
+            if(totalValeurs.length == 2 && (count == 3 || count == 2)){
+                full = 25;
+            }
         });
-    
-        if (totalValeurs.length == 2 && in_array(2, totalValeurs) && in_array(3, totalValeurs)) {
-            full = 25;
-        }
     
         let listeDesUnique = [...new Set(listeDes)];
         listeDesUnique.sort();

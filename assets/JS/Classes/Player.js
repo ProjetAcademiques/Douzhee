@@ -31,13 +31,16 @@ export class Player{
         this.#score += score;
     }
 
-    setListeDes(listeDesGardes){
-        this.#listeDes = [];
-        let listeNvDes = [];
-        for(let i = 5 ; i > listeDesGardes.length ; i--){
-            let des = new Dice();
-            listeNvDes.push(des.getFace());
+    setListeDes(listeDesGardes) {
+        this.#listeDes = [...listeDesGardes];
+    
+        while (this.#listeDes.length < 5) {
+            let de = new Dice();
+            this.#listeDes.push(de.getFace());
         }
-        this.#listeDes.push(...listeDesGardes, ...listeNvDes);
+    }
+    
+    resetTab(){
+        this.#listeDes = [];
     }
 }

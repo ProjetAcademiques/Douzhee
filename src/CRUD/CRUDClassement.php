@@ -1,7 +1,7 @@
 <?PHP 
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Classes/Classement.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Utils/connectionSingleton.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/CRUD/CRUDSeTrouve.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Classement.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
+  //  require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/CRUD/CRUDSeTrouve.php";
 
     //FONCTIONS CREATE
 
@@ -47,7 +47,7 @@
         $statement = $connection->prepare($readAllClassement);
         $statement->execute();
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

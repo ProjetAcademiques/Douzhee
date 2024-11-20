@@ -10,8 +10,9 @@
         private String $tempsJeu;
         private float $ratioVictoire;
         private int $nbSucces;
+        private int $nbDouzhee;
+        private int $nbPartiesJoues;
 
-    
         /**
          * @param int $id
          * @param int $nbPartiesGagnees
@@ -19,14 +20,18 @@
          * @param string $tempsJeu
          * @param float $ratioVictoire
          * @param int $nbSucces
+         * @param int $nbDouzhee
+         * @param int $nbPartiesJoues
          */
-        public function __construct(int $id, int $nbPartiesGagnees, int $scoreMaximal, string $tempsJeu, float $ratioVictoire, int $nbSucces) {
+        public function __construct(int $id, int $nbPartiesGagnees, int $scoreMaximal, string $tempsJeu, float $ratioVictoire, int $nbSucces, int $nbDouzhee, int $nbPartiesJoues) {
             $this->id = $id;
             $this->nbPartiesGagnees = $nbPartiesGagnees;
             $this->scoreMaximal = $scoreMaximal;
             $this->tempsJeu = $tempsJeu;
             $this->ratioVictoire = $ratioVictoire;
             $this->nbSucces = $nbSucces;
+            $this->nbDouzhee = $nbDouzhee;
+            $this->nbPartiesJoues = $nbPartiesJoues;
         }
 
         /**
@@ -122,6 +127,38 @@
          */
         public function setNbSucces(int $nbSucces): self {
             $this->nbSucces = $nbSucces;
+            return $this;
+        }
+    
+        /**
+         * @return int
+         */
+        public function getNbDouzhee(): int {
+            return $this->nbDouzhee;
+        }
+        
+        /**
+         * @param int $nbDouzhee 
+         * @return self
+         */
+        public function setNbDouzhee(int $nbDouzhee): self {
+            $this->nbDouzhee = $nbDouzhee;
+            return $this;
+        }
+
+        /**
+         * @return int
+         */
+        public function getNbPartiesJoues(): int {
+            return $this->nbPartiesJoues;
+        }
+        
+        /**
+         * @param int $nbPartiesJoues 
+         * @return self
+         */
+        public function setNbPartiesJoues(int $nbPartiesJoues): self {
+            $this->nbPartiesJoues = $nbPartiesJoues;
             return $this;
         }
     }

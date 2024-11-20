@@ -1,7 +1,7 @@
 <?PHP 
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Classes/Obtient.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Utils/connectionSingleton.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/CRUD/CRUDStatistiques.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Obtient.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/CRUD/CRUDStatistiques.php";
 
     //FONCTIONS CREATE
 

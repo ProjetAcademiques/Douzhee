@@ -1,6 +1,6 @@
 <?PHP 
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Classes/Partie.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Utils/connectionSingleton.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Partie.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
 
     //FONCTIONS CREATE
 
@@ -8,23 +8,33 @@
      * @brief Création d'une partie avec $nbJoueurs joueurs
      * @author Nathan
      * @param int $nbJoueurs nombre de joueurs
-     * @return void
+     * @param string $lienPartie lien d'invitation de la partie
+     * @return int identifiant de la partie créée
      */
-    function createPartie(int $nbJoueurs): void{
+    function createPartie(int $nbJoueurs, String $lienPartie): int{
+        $liens = readAllLiens();
+        if(in_array($lienPartie, $liens)){
+            return -1;
+        }
+
         $connection = ConnexionSingleton::getInstance();
 
-        $date = date("j:n:g:i:s");
+        $date = date("j:n:G:i:s");
         $statut = 'En commencement';
         $scoreTotal = 0;
 
-        $insertPartie = 'INSERT INTO partie VALUES (datePartie, statut, scoreTotalPartie, nbJoueurs)';
+        $insertPartie = 'INSERT INTO partie VALUES (datePartie, statut, scoreTotalPartie, nbJoueurs, lienPartie)';
 
         $statement = $connection->prepare($insertPartie);
         $statement->bindParam('datePartie', $date, PDO::PARAM_STR);
         $statement->bindParam('statut', $statut, PDO::PARAM_STR);
         $statement->bindParam('scoreTotalPartie', $scoreTotal, PDO::PARAM_INT);
         $statement->bindParam('nbJoueurs', $nbJoueurs, PDO::PARAM_INT);
+        $statement->bindParam('lienPartie', $lienPartie, PDO::PARAM_STR);
         $statement->execute();
+
+        $idPartie = $connection->lastInsertId();
+        return $idPartie;
     }
 
 
@@ -47,6 +57,21 @@
     }
 
     /**
+     * @brief Récupère tous les liens des parties
+     * @author Nathan
+     * @return array tableau contenant tous les liens des parties
+     */
+    function readAllLiens(): array{
+        $connection = ConnexionSingleton::getInstance();
+
+        $readLiens = 'SELECT lienPartie FROM partie';
+        $statement = $connection->prepare($readLiens);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @brief Récupère une partie donnée
      * @author Nathan
      * @param int $id identifiant de la partie
@@ -62,7 +87,7 @@
         $statement->execute();
 
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return new Partie($results['id'], $results['date'], $results['score'], $results['scoreTotalPartie'], $results['nbJoueurs']);
+        return new Partie($results['id'], $results['date'], $results['score'], $results['scoreTotalPartie'], $results['nbJoueurs'], $results['lienPartie']);
     }
 
     /**

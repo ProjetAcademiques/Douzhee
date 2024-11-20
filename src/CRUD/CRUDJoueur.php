@@ -1,6 +1,6 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Classes/Joueur.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/Douzhee/src/Utils/connectionSingleton.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Joueur.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
 
 
 /**
@@ -81,7 +81,7 @@ function updateJoueur(int $id, string $pseudo = null, string $mdp = null, int $d
  */
 function updatePseudoJoueur(int $id, string $pseudo): bool {
     $connection = ConnexionSingleton::getInstance();
-    $updateQuery = "UPDATE Joueur SET pseudo = :pseudo WHERE id = :id";
+    $updateQuery = "UPDATE Joueur SET pseudonyme = :pseudo WHERE id = :id";
 
     $statement = $connection->prepare($updateQuery);
 

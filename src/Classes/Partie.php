@@ -8,20 +8,23 @@
         private String $score;
         private int $scoreTotalPartie;
         private int $nbJoueurs;
-    
+        private String $lienPartie;
+
         /**
          * @param int $id
          * @param string $date
          * @param string $score
          * @param int $scoreTotalPartie
          * @param int $nbJoueurs
+         * @param string $lienPartie
          */
-        public function __construct(int $id, string $date, string $score, int $scoreTotalPartie, int $nbJoueurs) {
+        public function __construct(int $id, string $date, string $score, int $scoreTotalPartie, int $nbJoueurs, string $lienPartie) {
             $this->id = $id;
             $this->date = $date;
             $this->score = $score;
             $this->scoreTotalPartie = $scoreTotalPartie;
             $this->nbJoueurs = $nbJoueurs;
+            $this->lienPartie = $lienPartie;
         }
 
         /**
@@ -101,6 +104,22 @@
          */
         public function setNbJoueurs(int $nbJoueurs): self {
             $this->nbJoueurs = $nbJoueurs;
+            return $this;
+        }
+        
+        /**
+         * @return string
+         */
+        public function getLienPartie(): string {
+            return $this->lienPartie;
+        }
+        
+        /**
+         * @param string $lienPartie 
+         * @return self
+         */
+        public function setLienPartie(string $lienPartie): self {
+            $this->lienPartie = $lienPartie;
             return $this;
         }
     }

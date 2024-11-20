@@ -3,7 +3,7 @@ require_once("../CRUD/CRUDJoueur.php");
 ?>
 <body>
     <header>
-        <img src="../../assets/Images/imgheader/logo.png" alt="Logo du jeu" width="67" height="69" id="logo">
+        <img src="../../assets/images/imgheader/logo.png" alt="Logo du jeu" width="67" height="69" id="logo">
         <?php if (isset($_SESSION['user_id'])):
             // On vérifie si les variables de session sont définies
             if (!isset($_SESSION['douzeCoin'])){

@@ -18,8 +18,8 @@
         $insertObtient = 'INSERT INTO obtient VALUES (:idUser, :idSucces)';
 
         $statement = $connection->prepare($insertObtient);
-        $statement->bindValue('idUser', $idUser, PDO::PARAM_INT);
-        $statement->bindValue('idSucces', $idSucces, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idSucces', $idSucces, PDO::PARAM_INT);
         $statement->execute();
 
         updateNbSucces($idUser);
@@ -56,10 +56,10 @@
     function readAllSuccesOfAnUser(int $idUser): array{
         $connection = ConnexionSingleton::getInstance();
 
-        $readAllSucces = 'SELECT * FROM obtient WHERE idJoueur = idUser';
+        $readAllSucces = 'SELECT * FROM obtient WHERE idJoueur = :idUser';
 
         $statement = $connection->prepare($readAllSucces);
-        $statement->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -74,9 +74,9 @@
     function readAllUserWinTheSuccesId(int $idSucces): array{
         $connection = ConnexionSingleton::getInstance();
 
-        $readAllUserSucces = 'SELECT * FROM obtient WHERE idSucces = idSucces';
+        $readAllUserSucces = 'SELECT * FROM obtient WHERE idSucces = :idSucces';
         $statement = $connection->prepare($readAllUserSucces);
-        $statement->bindValue('idSucces', $idSucces, PDO::PARAM_INT);
+        $statement->bindParam(':idSucces', $idSucces, PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

@@ -14,11 +14,11 @@
     function createConsulte(int $idStats, int $idUser): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $insertConsulte = 'INSERT INTO consulte VALUES (idStats, idUser)';
+        $insertConsulte = 'INSERT INTO consulte VALUES (:idStats, :idUser)';
 
         $statement = $connection->prepare($insertConsulte);
-        $statement->bindParam('idStats', $idStats, PDO::PARAM_INT);
-        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idStats', $idStats, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
     }
 
@@ -34,10 +34,10 @@
     function readConsulteByIdUser(int $idUser): Consulte{
         $connection = ConnexionSingleton::getInstance();
 
-        $readConsulte = 'SELECT * FROM consulte WHERE idJoueur = idUser';
+        $readConsulte = 'SELECT * FROM consulte WHERE idJoueur = :idUser';
         
         $statement = $connection->prepare($readConsulte);
-        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -53,10 +53,10 @@
     function readConsulteByIdStats(int $idStats): Consulte{
         $connection = ConnexionSingleton::getInstance();
 
-        $readConsulte = 'SELECT * FROM consulte WHERE idStatistiques = idStats';
+        $readConsulte = 'SELECT * FROM consulte WHERE idStatistiques = :idStats';
 
         $statement = $connection->prepare($readConsulte);
-        $statement->bindParam('idStats', $idStats, PDO::PARAM_INT);
+        $statement->bindParam(':idStats', $idStats, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);

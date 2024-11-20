@@ -15,12 +15,12 @@
     function createAppartientA(int $idPartieJouee, int $idJoueurJouee): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $insertAppartientA = 'INSERT INTO appartientA VALUES (idPartieJouee, idJoueurJouee)';
+        $insertAppartientA = 'INSERT INTO appartientA VALUES (:idPartie, :idPartieJouee, :idJoueurJouee)';
 
         $statement = $connection->prepare($insertAppartientA);
-        $statement->bindParam('idPartie', $idPartie, PDO::PARAM_INT);
-        $statement->bindParam('idPartieJoue', $idPartieJouee, PDO::PARAM_INT);
-        $statement->bindParam('idJoueurJoue',$idJoueurJouee, PDO::PARAM_INT);
+        $statement->bindParam(':idPartie', $idPartie, PDO::PARAM_INT);
+        $statement->bindParam(':idPartieJoue', $idPartieJouee, PDO::PARAM_INT);
+        $statement->bindParam(':idJoueurJoue',$idJoueurJouee, PDO::PARAM_INT);
         $statement->execute();
     }
 
@@ -52,10 +52,10 @@
     function readAppartientAByIdUser(int $idUser): array{
         $connection = ConnexionSingleton::getInstance();
 
-        $readLiaisons = 'SELECT * FROM appartientA WHERE idJoueurJoue = idUser';
+        $readLiaisons = 'SELECT * FROM appartientA WHERE idJoueurJoue = :idUser';
 
         $statement = $connection->prepare($readLiaisons);
-        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -70,10 +70,10 @@
     function readAppartientAByIdPartie(int $idPartie): array{
         $connection = ConnexionSingleton::getInstance();
 
-        $readLiaisons = 'SELECT * FROM appartientA WHERE idPartieJoue = idPartie';
+        $readLiaisons = 'SELECT * FROM appartientA WHERE idPartieJoue = :idPartie';
 
         $statement = $connection->prepare($readLiaisons);
-        $statement->bindParam('idPartieJoue', $idPartie, PDO::PARAM_INT);
+        $statement->bindParam(':idPartie', $idPartie, PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

@@ -14,10 +14,10 @@ function createJoueur(string $pseudo, string $mdp, int $douzCoin, string $email,
 
     $statement = $connection->prepare($InsertQuery);
 
-    $statement->bindParam("pseudo", $pseudo);
-    $statement->bindParam("mdp", $hashedPassword);
-    $statement->bindParam("email", $email);
-    $statement->bindParam("bio", $bio);
+    $statement->bindParam(":pseudo", $pseudo);
+    $statement->bindParam(":mdp", $hashedPassword);
+    $statement->bindParam(":email", $email);
+    $statement->bindParam(":bio", $bio);
 
     return $statement->execute();
 }
@@ -47,28 +47,28 @@ function updateJoueur(int $id, string $pseudo = null, string $mdp = null, int $d
     $statement = $connection->prepare($UpdateQuery);
 
     if(isNull($pseudo))
-        $statement->bindParam("pseudo", $pseudo);
-    else $statement->bindParam("pseudo", $oldPseudo);
+        $statement->bindParam(":pseudo", $pseudo);
+    else $statement->bindParam(":pseudo", $oldPseudo);
 
     if(isNull($mdp))
-        $statement->bindParam("mdp", $mpd);
-    else $statement->bindParam("mdp", $oldMdp);
+        $statement->bindParam(":mdp", $mpd);
+    else $statement->bindParam(":mdp", $oldMdp);
 
     if(isNull($email))
-        $statement->bindParam("email", $email);
-    else $statement->bindParam("email", $oldEmail);
+        $statement->bindParam(":email", $email);
+    else $statement->bindParam(":email", $oldEmail);
 
     if(isNull($bio))
-        $statement->bindParam("bio", $bio);
-    else $statement->bindParam("bio", $oldBio);
+        $statement->bindParam(":bio", $bio);
+    else $statement->bindParam(":bio", $oldBio);
 
     if(isNull($douzCoin))
-        $statement->bindParam("douzCoin", $douzCoin);
-    else $statement->bindParam("douzCoin", $oldDouzCoin);
+        $statement->bindParam(":douzCoin", $douzCoin);
+    else $statement->bindParam(":douzCoin", $oldDouzCoin);
 
     if(isNull($idPartie))
-        $statement->bindParam("idPartie", $idPartie);
-    else $statement->bindParam("idPartie", $oldIdPartie);
+        $statement->bindParam(":idPartie", $idPartie);
+    else $statement->bindParam(":idPartie", $oldIdPartie);
 
     return $statement->execute();
 }
@@ -85,8 +85,8 @@ function updatePseudoJoueur(int $id, string $pseudo): bool {
 
     $statement = $connection->prepare($updateQuery);
 
-    $statement->bindParam("pseudo", $pseudo);
-    $statement->bindParam("id", $id);
+    $statement->bindParam(":pseudo", $pseudo);
+    $statement->bindParam(":id", $id);
 
     return $statement->execute();
 }
@@ -103,8 +103,8 @@ function updateDouzCoin(int $id, string $douzCoin): bool {
 
     $statement = $connection->prepare($updateQuery);
 
-    $statement->bindParam("douzCoin", $douzCoin);
-    $statement->bindParam("id", $id);
+    $statement->bindParam(":douzCoin", $douzCoin);
+    $statement->bindParam(":id", $id);
 
     return $statement->execute();
 }
@@ -123,8 +123,8 @@ function updateMDP(int $id, string $mdp): bool {
 
     $statement = $connection->prepare($updateQuery);
 
-    $statement->bindParam("mdp", $hashedPassword);
-    $statement->bindParam("id", $id);
+    $statement->bindParam(":mdp", $hashedPassword);
+    $statement->bindParam(":id", $id);
 
     return $statement->execute();
 }
@@ -142,9 +142,9 @@ function updateEmail(int $id, string $email, string $mdp) {
 
     $statement = $connection->prepare($updateQuery);
 
-    $statement->bindParam("mdp", $mdp);
-    $statement->bindParam("email", $email);
-    $statement->bindParam("id", $id);
+    $statement->bindParam(":mdp", $mdp);
+    $statement->bindParam(":email", $email);
+    $statement->bindParam(":id", $id);
 
     return $statement->execute();
 } 
@@ -160,8 +160,8 @@ function updateBio(int $id, string $bio): bool {
     $updateQuery = "UPDATE Joueur SET Biographie = :bio WHERE id = :id";
 
     $statement = $connection->prepare($updateQuery);
-    $statement->bindParam("bio", $bio);
-    $statement->bindParam("id", $id);
+    $statement->bindParam(":bio", $bio);
+    $statement->bindParam(":id", $id);
 
     return $statement->execute();
 }
@@ -177,8 +177,8 @@ function updateJoueurIdPartie(int $id, int $idPartie):bool {
     $updateQuery = "UPDATE Joueur SET idPartie = :idPartie WHERE id = :id";
 
     $statement = $connection->prepare($updateQuery);
-    $statement->bindParam("idPartie", $idPartie);
-    $statement->bindParam("id", $id);
+    $statement->bindParam(":idPartie", $idPartie);
+    $statement->bindParam(":id", $id);
 
     return $statement->execute();
 }
@@ -259,7 +259,7 @@ function verifUser($email) {
     $connexion = ConnexionSingleton::getInstance();
     $sql = "SELECT email FROM joueur WHERE email = :email";
     $stmt = $connexion->prepare($sql);
-    $stmt->bindParam('email', $email);
+    $stmt->bindParam(':email', $email);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }

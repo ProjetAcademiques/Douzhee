@@ -15,15 +15,10 @@
     function createClassement(String $pseudo, int $idUser): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $placeClassement = 0;
-        $score = 0;
-
-        $insertClassement = 'INSERT INTO classement VALUES (placeClassement, score, pseudo)';
+        $insertClassement = 'INSERT INTO classement VALUES (NULL, 0, 0, :pseudo)';
 
         $statement = $connection->prepare($insertClassement);
-        $statement->bindParam('placeClassement', $placeClassement, PDO::PARAM_INT);
-        $statement->bindParam('score', $score, PDO::PARAM_INT);
-        $statement->bindParam('pseudo', $pseudo, PDO::PARAM_STR);
+        $statement->bindParam(':pseudo', $pseudo, PDO::PARAM_STR);
         $statement->execute();
 
         $idClassement = $connection->lastInsertId();
@@ -59,10 +54,10 @@
     function readClassementByIdUser(int $idUser): Classement{
         $connection = ConnexionSingleton::getInstance();
 
-        $readClassement = 'SELECT * FROM classement WHERE id = (SELECT idClassement FROM seTrouve WHERE idJoueur = idUser)';
+        $readClassement = 'SELECT * FROM classement WHERE id = (SELECT idClassement FROM seTrouve WHERE idJoueur = :idUser)';
 
         $statement = $connection->prepare($readClassement);
-        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -82,9 +77,9 @@
     function updateClassement(int $idUser, int $newScore): void {
         $connection = ConnexionSingleton::getInstance();
 
-        $getClassementId = "SELECT idClassement FROM seTrouve WHERE idJoueur = idUser";
+        $getClassementId = "SELECT idClassement FROM seTrouve WHERE idJoueur = :idUser";
         $stmt = $connection->prepare($getClassementId);
-        $stmt->bindParam('idUser', $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $stmt->execute();
         $idClassement = $stmt->fetchColumn();
     

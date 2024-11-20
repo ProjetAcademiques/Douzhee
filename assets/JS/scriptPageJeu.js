@@ -13,6 +13,7 @@ let joueur1 = new Player(1);
 let game = new GameDataManager(1);
 
 let nbRoll = 3; //nombre de lancés possible
+let nbDouzhee = 0; //nombre de Douzhee effectués
 
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
@@ -79,9 +80,19 @@ function afficheDes(desGardes){
 function affichePointsCombinaisons(reset = false){
     let pointsCombinaisons = GameDataManager.checkCombinaisons(joueur1.getListeDes());
 
-    if(pointsCombinaisons[12] == 50 && inputs[12].value == 50){
-        inputs[12].value += 25;
-        joueur1.ajoutSectionInferieure(25);
+    if(pointsCombinaisons[12] != 0){
+        nbDouzhee++;
+        if(pointsCombinaisons[12] == 50 && inputs[12].value == 50){
+            inputs[12].value += 25;
+            joueur1.ajoutSectionInferieure(25);
+    
+            if(nbRoll == 3){
+                //zikette pour le succès du premier coup
+            }
+            if(nbDouzhee == 3){
+                //zikette pour le succès des 3 Douzhee
+            }
+        }
     }
 
     for(let i = 0 ; i<13 ; i++){
@@ -180,6 +191,10 @@ function ajoutScore(event){
         }
     } else{
         joueur1.ajoutSectionInferieure(parseInt(event.target.value));
+    }
+
+    if(joueur1.getScore() >= 300){
+        //zikette pour ajouter un succès
     }
 }
 

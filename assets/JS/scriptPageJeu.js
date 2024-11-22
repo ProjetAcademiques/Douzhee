@@ -62,12 +62,10 @@ function afficheDes(desGardes){
     des.forEach((de, i) => {
         if (i < desGardes.length) {
             de.innerHTML = desGardes[i];
-            de.classList.toggle('libre');
-            de.classList.toggle('selected');
+            de.classList.replace("libre", "selected");
         } else {
             de.innerHTML = listeDes[i];
-            de.classList.toggle('libre');
-            de.classList.toggle('selected');
+            de.classList.replace("selected", "libre");
         }
     });
 }
@@ -205,8 +203,7 @@ function resetManche(){
 
     //libère tous les dés
     des.forEach(de => {
-        de.classList.toggle('libre');
-        de.classList.toggle('selected');
+        de.classList.replace("selected", "libre");
         de.innerHTML = '';
     })
 

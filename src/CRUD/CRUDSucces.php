@@ -33,6 +33,6 @@
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
         $statement->execute();
 
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return new Succes($results['id'], $results['name'], $results['condition'], $results['type']);
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+        return new Succes($results['id'], $results['nomSucces'], $results['Condition'], $results['typeSucces']);
     }

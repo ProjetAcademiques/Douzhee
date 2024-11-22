@@ -61,7 +61,7 @@
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-        return new Classement($result['id'], $result['placeClassement'], $result['score'], $result['pseudo']);
+        return new Classement($result['id'], $result['placeClassement'], $result['score'], $result['pseudonyme']);
     }
 
 

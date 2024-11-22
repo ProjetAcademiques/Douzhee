@@ -12,7 +12,7 @@
      * @param int $idSucces identifiant du succès obtenu
      * @return void
      */
-    function createObtient(int $idUser, int $idSucces){
+    function createObtient(int $idUser, int $idSucces): void{
         $connection = ConnexionSingleton::getInstance();
 
         $insertObtient = 'INSERT INTO obtient VALUES (:idUser, :idSucces)';

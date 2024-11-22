@@ -15,10 +15,9 @@
     function createAppartientA(int $idPartieJouee, int $idJoueurJouee): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $insertAppartientA = 'INSERT INTO appartientA VALUES (:idPartie, :idPartieJouee, :idJoueurJouee)';
+        $insertAppartientA = 'INSERT INTO appartientA VALUES (NULL, :idPartieJouee, :idJoueurJouee)';
 
         $statement = $connection->prepare($insertAppartientA);
-        $statement->bindParam(':idPartie', $idPartie, PDO::PARAM_INT);
         $statement->bindParam(':idPartieJoue', $idPartieJouee, PDO::PARAM_INT);
         $statement->bindParam(':idJoueurJoue',$idJoueurJouee, PDO::PARAM_INT);
         $statement->execute();

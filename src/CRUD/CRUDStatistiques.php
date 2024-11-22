@@ -47,7 +47,7 @@
 
         $data = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $statsUser = new Statistiques($data['id'], $data['nbPartiesGagnees'], $data['scoreMaximal'], $data['tempsJeu'], $data['ratioVictoire'], $data['nbSucces'], $data['nbDouzhee'], $data['nbPartiesJoues']);
+        $statsUser = new Statistiques($data['id'], $data['nbPartiesGagnees'], $data['scoreMaximal'], $data['tempsJeu'], $data['ratioVictoire'], $data['nombreSucces'], $data['nbDouzhee'], $data['nbPartiesJoues']);
         return $statsUser;
     }
 

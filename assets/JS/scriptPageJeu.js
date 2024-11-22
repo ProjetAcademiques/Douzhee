@@ -30,11 +30,8 @@ inputs.forEach(input => {
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
 des.forEach(de => {
     de.addEventListener("click", (event) => {
-        if(event.target.classList.contains("libre")){
-            event.target.classList.replace("libre" ,"selected");
-        } else{
-            event.target.classList.replace("selected" ,"libre");
-        }
+        event.target.classList.toggle('libre');
+        event.target.classList.toggle('selected');
 
         verifDesTousGardes();
     })
@@ -65,10 +62,12 @@ function afficheDes(desGardes){
     des.forEach((de, i) => {
         if (i < desGardes.length) {
             de.innerHTML = desGardes[i];
-            de.classList.replace("libre", "selected");
+            de.classList.toggle('libre');
+            de.classList.toggle('selected');
         } else {
             de.innerHTML = listeDes[i];
-            de.classList.replace("selected", "libre");
+            de.classList.toggle('libre');
+            de.classList.toggle('selected');
         }
     });
 }
@@ -206,7 +205,8 @@ function resetManche(){
 
     //libère tous les dés
     des.forEach(de => {
-        de.classList.replace("selected", "libre");
+        de.classList.toggle('libre');
+        de.classList.toggle('selected');
         de.innerHTML = '';
     })
 

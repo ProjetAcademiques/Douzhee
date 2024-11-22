@@ -28,15 +28,19 @@ function readSkinAchete(int $idSkin, int $idAchat): ?SkinAchete {
     $success = $statement->execute();
 
     if (gettype($success) == "boolean") {
-        $results = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $idAchat_ = $results ["idAchat"];
-        $idSkin_ = $results ["idSkin"];
-        $etatSkin = $results ["etatSkin"];
-        $date = $results ["dateAchat"];
-        $typeSkin = $results ["typeSkin"];
-
-        return new SkinAchete($idAchat_, $idSkin_, $date, $etatSkin, $typeSkin);
+            $results = $statement->fetch(PDO::FETCH_ASSOC);
+        if(gettype($results) == "boolean") {
+            $idAchat_ = $results ["idAchat"];
+            $idSkin_ = $results ["idSkin"];
+            $etatSkin = $results ["etatSkin"];
+            $date = $results ["dateAchat"];
+            $typeSkin = $results ["typeSkin"];
+    
+            return new SkinAchete($idAchat_, $idSkin_, $date, $etatSkin, $typeSkin);
+        } else {
+            return null;
+        }
     } else {
         return null;
     }

@@ -8,6 +8,7 @@
 
 
  /**
+  * @author Mael
   * @brief retourne le skinAchetable ayant l'id id ou null si aucun existe avec cet id
   * @return SkinAchetable | null
   */
@@ -17,13 +18,22 @@
     $SelectQuery = "SELECT * FROM SkinAchetable WHERE id = $id";
 
     $statement = $connection->prepare($SelectQuery);
-    $statement->execute();
+    
+    if($statement->execute()) {
 
-    $results = $statement->fetch(PDO::FETCH_ASSOC);
-    	
-    $idSkin = $results["idSkin"];
-    $nomSkin = $results["nomSkin"];
-    $prixSkin = $results["prixSkin"];
-        
-    return new SkinAchetable($idSkin, $nomSkin, $prixSkin);
+      $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+      if(gettype($results) == "boolean") {
+         $idSkin = $results["idSkin"];
+         $nomSkin = $results["nomSkin"];
+         $prixSkin = $results["prixSkin"];
+             
+         return new SkinAchetable($idSkin, $nomSkin, $prixSkin);  
+      } else {
+         return null;
+      }
+      
+    } else {
+      return null;
+    }
  }

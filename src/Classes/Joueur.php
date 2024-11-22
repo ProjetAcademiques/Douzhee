@@ -8,7 +8,7 @@ class Joueur {
     private string $email;
     private string $bio;
     private string $dateInsc;
-    private int $idPartie;
+    private int $idPartieEnCours;
 
     function __construct(string $pseudo, string $mdp, int $douzCoin, string $email, string $bio, string $dateInsc, int $idPartie) {
         $this->pseudo = $pseudo;
@@ -17,7 +17,7 @@ class Joueur {
         $this->email = $email;
         $this->bio = $bio;
         $this->dateInsc = $dateInsc;
-        $this->idPartie = $idPartie;
+        $this->idPartieEnCours = $idPartie;
     }
 
     // PSEUDO
@@ -75,10 +75,10 @@ class Joueur {
     }
 
     function getIdPartie():int {
-        return $this->idPartie;
+        return $this->idPartieEnCours;
     }
 
     function setIdPartie(int $idPartie):void {
-        $this->idPartie = $idPartie;
+        $this->idPartieEnCours = $idPartie;
     }
 }

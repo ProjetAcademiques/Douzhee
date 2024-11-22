@@ -1,23 +1,24 @@
 <?php
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Joueur.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Classes/Joueur.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
 
 
 /**
  * @brief insère un nouveau joueur dans la table Joueur selon les paramètres spécifiés. tout les paramètres sont obligatoires.
  * @return bool false si la requête a échoué true sinon
  */
-function createJoueur(string $pseudo, string $mdp, int $douzCoin, string $email, string $bio, string $dateInsc) :bool {
+function createJoueur(string $pseudo, string $mdp, int $douzCoin = 0, string $email, string $bio = null) :bool {
     $connection = ConnexionSingleton::getInstance();
     $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
-    $InsertQuery = "INSERT INTO Joueur (Pseudonyme, Mdp, DouzCoin, Email, Biographie, DateInscription) VALUES (:pseudo, :mdp, 0, :email, 'Douzhee est un jeu conçu par des passionees dans le but de divertir les gens', CURRENT_DATE)";
+    $InsertQuery = "INSERT INTO Joueur (pseudonyme, mdp, douzCoin, email, biographie, dateInscription) VALUES (:pseudo, :mdp, :douzCoin, :email, :bio, CURRENT_TIMESTAMP)";
 
     $statement = $connection->prepare($InsertQuery);
 
-    $statement->bindParam(":pseudo", $pseudo);
-    $statement->bindParam(":mdp", $hashedPassword);
-    $statement->bindParam(":email", $email);
-    $statement->bindParam(":bio", $bio);
+    $statement->bindParam("pseudo", $pseudo);
+    $statement->bindParam("mdp", $hashedPassword);
+    $statement->bindParam("email", $email);
+    $statement->bindParam("bio", $bio);
+    $statement->bindParam("douzCoin", $douzCoin);
 
     return $statement->execute();
 }
@@ -42,7 +43,7 @@ function updateJoueur(int $id, string $pseudo = null, string $mdp = null, int $d
     
 
     $connection = ConnexionSingleton::getInstance();
-    $UpdateQuery = "UPDATE Joueur SET Pseudonyme = :pseudo, Mdp = :mdp, DouzCoin = :douzCoin, Email = :email, Biographie = :bio, DateInscription = :dateInsc, idPartie = :idPartie WHERE id = $id";
+    $UpdateQuery = "UPDATE Joueur SET pseudonyme = :pseudo, mdp = :mdp, douzCoin = :douzCoin, email = :email, biographie = :bio, idPartie = :idPartie WHERE id = $id";
 
     $statement = $connection->prepare($UpdateQuery);
 
@@ -195,19 +196,26 @@ function readJoueur(int $id): ?Joueur {
     $SelectQuery = "SELECT * FROM Joueur WHERE id = $id";
 
     $statement = $connection->prepare($SelectQuery);
-    $statement->execute();
 
-    $results = $statement->fetch(PDO::FETCH_ASSOC);
-    	
-    $pseudo = $results ["Pseudonyme"];
-    $mdp = $results ["Mdp"];
-    $douzCoin = $results ["DouzCoin"];
-    $email = $results ["Email"];
-    $bio = $results ["Biographie"];
-    $dateInsc = $results ["DateInscription"];
-    $idPartie = $results ["idPartie"];
-    
-    return new Joueur ($pseudo, $mdp, $douzCoin, $email, $bio, $dateInsc, $idPartie);
+    if($statement->execute()) {
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if(gettype($results) == "boolean") {
+            $pseudo = $results ["pseudonyme"];
+            $mdp = $results ["mdp"];
+            $douzCoin = $results ["douzCoin"];
+            $email = $results ["email"];
+            $bio = $results ["biographie"];
+            $dateInsc = $results ["dateInscription"];
+            $idPartieEnCours = $results ["idPartieEnCours"];
+            
+            return new Joueur ($pseudo, $mdp, $douzCoin, $email, $bio, $dateInsc, $idPartieEnCours);
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
 }
 
 /**
@@ -215,7 +223,7 @@ function readJoueur(int $id): ?Joueur {
  * @param int $id id du joueur dont on cherche l'id partie
  * @return int -1 si le joueur n'existe pas, l'id Partie correspondant à au param id du joueur sinon
  */
-function readIdPartieJoueur(int $id): int{
+function readIdPartieJoueur(int $id): int {
     return (readJoueur($id) != null) ? readJoueur($id)->getIdPartie() : -1;
 }
 
@@ -233,6 +241,75 @@ function deleteJoueur(int $id): bool {
 }
 
 
+/**
+ * Retourne une liste d'instances de SkinAchete qui reflète les skins achetés par le joueur ayant l'idJ, null si aucun skin ou aucun joueur ayant idJ
+ * @param int $idJ id du Joueur dont on souhaite obtenir les skins achetés
+ * @return array|null
+ * @deprecated fonction implémentée suite à un malentendu sur des besoins. peut-être utile malgré tout
+ */
+function readBoughtSkinsById(int $idJ) : ?array {
+    $connexion = ConnexionSingleton::getInstance();
+
+    $Records = "SELECT * FROM EffectueAchat WHERE idJoueur = :idJoueur";
+
+    $statement = $connexion->prepare($Records);
+
+    $statement->bindParam("idJ", $idJ);
+
+    $success = $statement->execute();
+
+    if ($success) {
+        $resultsFromEffAchat = $statement->fetchAll(PDO::FETCH_DEFAULT);
+        $idAchats = [];
+    
+        foreach($resultsFromEffAchat as $record) {
+            array_push($idAchats,  $record["idAchat"]);
+        }
+
+        $arrayOfSkins = []; // collection de skins achetés
+
+        for ($idAchat = 0; $idAchat < count($idAchats); $idAchat++ ) {
+            $SelectQuery = "SELECT * FROM SkinAchetable WHERE idAchat = :idAchat";
+
+            $statement = $connexion->prepare($SelectQuery);
+
+            $statement->bindParam("idAchat", $idAchat);
+
+            $success_ = $statement->execute();
+
+            if($success_) {
+                $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+                $idAchat = $results["idAchat"];
+                $idSkin = $results["idSkin"];
+                $dateAchat = $results["dateAchat"];
+                $etatSkin = $results["etatSkin"];
+                $typeSkin = $results["typeSkin"];
+    
+                array_push($arrayOfSkins, new SkinAchete($idAchat, $idSkin, $dateAchat, $etatSkin, $typeSkin));
+            } else {
+                return null;
+            }
+        }
+        
+        return $arrayOfSkins;
+    } else {
+        return null;
+    }
+}
+
+
+/**
+ * @author Mael
+ * @brief renvoie une liste des joueurs possédent le skin idSkin
+ * @param $idSkin l'id du skin que les joueurs dans la liste retournée possèdent
+ * @return array|null une collection de joueurs si des joueurs possèdent le skin, null sinon
+ */
+function readJoueursThatHaveSkins(int $idSkin): ?array {
+    $connexion = ConnexionSingleton::getInstance();
+
+    return null;
+}
 
 /**
  * @param mixed $argument la chose sur laquelle on veut tester la nullité

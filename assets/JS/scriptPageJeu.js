@@ -9,8 +9,8 @@ let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant l
 let button = document.getElementById('roll'); //bouton permettant de lancer les dés
 let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 
-let joueur1 = new Player(1);
-let game = new GameDataManager(1);
+let joueur1 = new Player(1, 1);
+let game = new GameDataManager(2);
 
 let nbRoll = 3; //nombre de lancés possible
 let nbDouzhee = 0; //nombre de Douzhee effectués
@@ -93,12 +93,13 @@ function affichePointsCombinaisons(reset = false){
     }
 
     for(let i = 0 ; i<13 ; i++){
-        if(inputs[i].disabled != true){
+        let y = joueur1.getPostion() + (game.getNbJoueurs() * i) - 1;
+        if(inputs[y].disabled != true){
             if(!reset){
-                inputs[i].placeholder = pointsCombinaisons[i];
-                inputs[i].value = pointsCombinaisons[i];
+                inputs[y].placeholder = pointsCombinaisons[i];
+                inputs[y].value = pointsCombinaisons[i];
             } else{
-                inputs[i].value = '';
+                inputs[y].value = '';
             }
         }
     }

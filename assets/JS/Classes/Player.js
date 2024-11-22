@@ -10,12 +10,14 @@ export class Player{
     #sectionSuperieure; //score de la section supérieure (chiffres)
     #sectionInferieure; //score de la section inférieure (combinaison)
     #listeDes; //liste d'instance de Dice, correspond aux dés du joueur
+    #positionJoueur; //position du joueur
 
-    constructor(id){
+    constructor(id, positionJoueur){
         this.#id = id;
         this.#sectionSuperieure = 0;
         this.#sectionInferieure = 0;
         this.#listeDes = [];
+        this.#positionJoueur = positionJoueur;
     }
 
     getId(){
@@ -36,6 +38,10 @@ export class Player{
 
     getListeDesAtIndex(index){
         return this.#listeDes[index];
+    }
+
+    getPostion(){
+        return this.#positionJoueur;
     }
 
     /**

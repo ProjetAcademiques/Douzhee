@@ -10,6 +10,10 @@ export class GameDataManager{
         this.#nbJoueurs = nbJoueurs;
     }
 
+    getNbJoueurs(){
+        return this.#nbJoueurs;
+    }
+
     /**
      * @brief Permet de vérifier toutes les combinaisons validées par les dés du joueur
      * @param {array Dice} listeDes liste des dés du joueur soumis à la vérification des combinaisons

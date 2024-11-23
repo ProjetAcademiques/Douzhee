@@ -142,7 +142,7 @@ function readAllUsersByIdPartie (int $idP): ?array {
 
     $SelectQuery = "SELECT pseudo FROM Joueur J 
     JOIN JouerPartie JP 
-    ON J.id = JP.idJoueurJouee AND JP.idPartie = :idP ORDER BY JP.positionJoueur ASC";
+    ON J.id = JP.idJoueurJouee WHERE P.idPartie = :idP ORDER BY JP.positionJoueur ASC";
 
     $statement = $connexion->prepare($SelectQuery);
 
@@ -151,7 +151,7 @@ function readAllUsersByIdPartie (int $idP): ?array {
     $success = $statement->execute();
 
     if($success) {
-        
+
         $resultsArray = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $returnedArray = [];

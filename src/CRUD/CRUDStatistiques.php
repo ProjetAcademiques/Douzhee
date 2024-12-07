@@ -85,8 +85,8 @@
         $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
-        if(readVictory($connection, $idUser, $idGame)){ //Fonction qui devra etre codée dans CRUDJouerPartie.php
-            $updateVictory = 'UPDATE statistiques SET nbPartiesGagnees = nbPartiesGagnees + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
+        if(readEstGagnant($idUser, $idGame)){
+            $updateVictory = 'UPDATE statistiques SET nbPartiesGagnees = nbPartiesGagnees + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
             $statement = $connection->prepare($updateVictory);
             $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
             $statement->execute();
@@ -99,12 +99,13 @@
         $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
-        $partie = readPartieByIdUserAndIdGame($idUser, $idGame); //Fonction qui devra etre codée dans CRUDJouerPartie.php
+        $partie = readJouerPartie($idUser, $idGame);
         if($partie->getScoreJoueur() > $stats->getScoreMaximal()){
             $updateBestScore = 'UPDATE statistiques SET scoreMaximal = newScore WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
             $statement = $connection->prepare($updateBestScore);
-            $statement->bindParam('newScore', $partie->getScoreJoueur(), PDO::PARAM_INT);
-            $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
+            $scoreJoueur = $partie->getScoreJoueur();
+            $statement->bindParam(':newScore', $scoreJoueur,  PDO::PARAM_INT);
+            $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
             $statement->execute();
         } 
     }

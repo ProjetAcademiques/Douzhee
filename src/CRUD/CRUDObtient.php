@@ -1,7 +1,7 @@
 <?PHP 
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Obtient.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/CRUD/CRUDStatistiques.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Classes/Obtient.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/CRUD/CRUDStatistiques.php";
 
     //FONCTIONS CREATE
 
@@ -75,8 +75,9 @@
         $connection = ConnexionSingleton::getInstance();
 
         $readAllUserSucces = 'SELECT * FROM obtient WHERE idSucces = :idSucces';
+        $readAllUserSucces = 'SELECT * FROM obtient WHERE idSucces = :idSucces';
         $statement = $connection->prepare($readAllUserSucces);
-        $statement->bindParam(':idSucces', $idSucces, PDO::PARAM_INT);
+        $statement->bindValue(':idSucces', $idSucces, PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

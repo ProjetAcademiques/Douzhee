@@ -11,7 +11,7 @@
         private float $ratioVictoire;
         private int $nbSucces;
         private int $nbDouzhee;
-        private int $nbPartiesJoues;
+        private int $nbPartieJoues;
 
         /**
          * @param int $id
@@ -21,9 +21,9 @@
          * @param float $ratioVictoire
          * @param int $nbSucces
          * @param int $nbDouzhee
-         * @param int $nbPartiesJoues
+         * @param int $nbPartieJoues
          */
-        public function __construct(int $id, int $nbPartiesGagnees, int $scoreMaximal, string $tempsJeu, float $ratioVictoire, int $nbSucces, int $nbDouzhee, int $nbPartiesJoues) {
+        public function __construct(int $id, int $nbPartiesGagnees, int $scoreMaximal, string $tempsJeu, float $ratioVictoire, int $nbSucces, int $nbDouzhee, int $nbPartieJoues) {
             $this->id = $id;
             $this->nbPartiesGagnees = $nbPartiesGagnees;
             $this->scoreMaximal = $scoreMaximal;
@@ -31,7 +31,7 @@
             $this->ratioVictoire = $ratioVictoire;
             $this->nbSucces = $nbSucces;
             $this->nbDouzhee = $nbDouzhee;
-            $this->nbPartiesJoues = $nbPartiesJoues;
+            $this->nbPartieJoues = $nbPartieJoues;
         }
 
         /**
@@ -149,16 +149,16 @@
         /**
          * @return int
          */
-        public function getNbPartiesJoues(): int {
-            return $this->nbPartiesJoues;
+        public function getnbPartieJoues(): int {
+            return $this->nbPartieJoues;
         }
         
         /**
-         * @param int $nbPartiesJoues 
+         * @param int $nbPartieJoues 
          * @return self
          */
-        public function setNbPartiesJoues(int $nbPartiesJoues): self {
-            $this->nbPartiesJoues = $nbPartiesJoues;
+        public function setnbPartieJoues(int $nbPartieJoues): self {
+            $this->nbPartieJoues = $nbPartieJoues;
             return $this;
         }
     }

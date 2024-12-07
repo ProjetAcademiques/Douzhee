@@ -1,7 +1,7 @@
 <?PHP 
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Classes/Classement.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/Utils/connectionSingleton.php";
-  //  require_once $_SERVER['DOCUMENT_ROOT'] . "/SAE/Douzhee/src/CRUD/CRUDSeTrouve.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Classes/Classement.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/CRUD/CRUDSeTrouve.php";
 
     //FONCTIONS CREATE
 
@@ -14,11 +14,14 @@
      */
     function createClassement(String $pseudo, int $idUser): void{
         $connection = ConnexionSingleton::getInstance();
-
-        $insertClassement = 'INSERT INTO classement VALUES (NULL, 0, 0, :pseudo)';
+        $placeQuery = 'SELECT COUNT(*) + 1 AS place FROM classement';
+        $placeStatement = $connection->query($placeQuery);
+        $place = $placeStatement->fetchColumn();
+        $insertClassement = 'INSERT INTO classement VALUES (NULL, :place, 0, :pseudo)';
 
         $statement = $connection->prepare($insertClassement);
         $statement->bindParam(':pseudo', $pseudo, PDO::PARAM_STR);
+        $statement->bindParam(':place', $place);
         $statement->execute();
 
         $idClassement = $connection->lastInsertId();
@@ -68,7 +71,7 @@
     //FONCTIONS UPDATE
 
     /**
-     * @brief Met à jour le classment d'un joueur et le change de place si possible
+     * @brief Met à jour le classement d'un joueur et le change de place si possible
      * @author Nathan
      * @param int $idUser identifiant de l'utilisateur
      * @param int $newScore nouveau score de l'utilisateur
@@ -76,38 +79,58 @@
      */
     function updateClassement(int $idUser, int $newScore): void {
         $connection = ConnexionSingleton::getInstance();
-
+    
+        // Récupérer l'idClassement de l'utilisateur
         $getClassementId = "SELECT idClassement FROM seTrouve WHERE idJoueur = :idUser";
         $stmt = $connection->prepare($getClassementId);
         $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $stmt->execute();
         $idClassement = $stmt->fetchColumn();
     
+        if (!$idClassement) {
+            throw new Exception("Classement introuvable pour l'utilisateur ID $idUser.");
+        }
+    
+        // Mettre à jour le score
         $updateScore = "UPDATE Classement SET score = :newScore WHERE id = :idClassement";
         $stmt = $connection->prepare($updateScore);
         $stmt->bindParam(':newScore', $newScore, PDO::PARAM_INT);
         $stmt->bindParam(':idClassement', $idClassement, PDO::PARAM_INT);
         $stmt->execute();
     
-        $getRankings = "SELECT id, score FROM Classement ORDER BY score DESC, placeClassement ASC";
-        $rankings = $connection->query($getRankings)->fetchAll(PDO::FETCH_ASSOC);
+        // Récupérer les informations du joueur mis à jour
+        $getPlayer = "SELECT placeClassement, score FROM Classement WHERE id = :idClassement";
+        $stmt = $connection->prepare($getPlayer);
+        $stmt->bindParam(':idClassement', $idClassement, PDO::PARAM_INT);
+        $stmt->execute();
+        $player = $stmt->fetch(PDO::FETCH_ASSOC);
     
-        foreach ($rankings as $index => $player) {
-            if ($player['id'] == $idClassement) {
-                $currentIndex = $index;
+        $currentPlace = $player['placeClassement'];
+    
+        // Vérifier si le joueur doit monter
+        $getAbove = "SELECT id, placeClassement, score FROM Classement 
+                     WHERE placeClassement < :currentPlace 
+                     ORDER BY placeClassement DESC";
+        $stmt = $connection->prepare($getAbove);
+        $stmt->bindParam(':currentPlace', $currentPlace, PDO::PARAM_INT);
+        $stmt->execute();
+        $abovePlayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        foreach ($abovePlayers as $above) {
+            if ($newScore > $above['score']) {
+                // Inverser les places
+                $swapPlace = "UPDATE Classement SET placeClassement = :newPlace WHERE id = :id";
+                $stmt = $connection->prepare($swapPlace);
+    
+                // Le joueur actuel prend la place de celui au-dessus
+                $stmt->execute([':newPlace' => $above['placeClassement'], ':id' => $idClassement]);
+    
+                // Celui au-dessus descend d'une place
+                $stmt->execute([':newPlace' => $above['placeClassement'] + 1, ':id' => $above['id']]);
+    
+            } else {
+                // Dès qu'il ne dépasse plus un joueur, arrêter
                 break;
-            }
-        }
-    
-        if (isset($currentIndex) && $currentIndex > 0) {
-            $playerAbove = $rankings[$currentIndex - 1];
-            
-            if ($newScore > $playerAbove['score']) {
-                $updatePlace = "UPDATE Classement SET placeClassement = :newPlace WHERE id = :id";
-
-                $stmt = $connection->prepare($updatePlace);
-                $stmt->execute([':newPlace' => $currentIndex, ':id' => $idClassement]);
-                $stmt->execute([':newPlace' => $currentIndex + 1, ':id' => $playerAbove['id']]);
             }
         }
     }    

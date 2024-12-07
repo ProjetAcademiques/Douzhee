@@ -1,19 +1,20 @@
 <?php
+require_once("../CRUD/CRUDEffectueAchat.php");
 
-function createSkinAchete(int $idSkin, int $idAchat, string $etatSkin, string $typeSkin, string $date): bool {
+function createSkinAchete(int $idSkin,int $idJoueur, string $etatSkin, string $typeSkin, string $date) {
     $connection = ConnexionSingleton::getInstance();
 
-    $InsertQuery = "INSERT INTO SkinAchete (idSkin, idAchat, etatSkin, typeSkin, dateAchat) VALUES (:idSkin, :idAchat, :etatSkin, :typeSkin, :bio, :dateInsc)";
+    $InsertQuery = "INSERT INTO skinacheter (idSkin, etatSkin, typeSkin, dateAchat) VALUES (:idSkin,  :etatSkin, :typeSkin, :dateInsc)";
 
     $statement = $connection->prepare($InsertQuery);
 
     $statement->bindParam(":idSkin", $idSkin);
-    $statement->bindParam(":idAchat", $idAchat);
     $statement->bindParam(":etatSkin", $etatSkin);
     $statement->bindParam(":typeSkin", $typeSkin);
-    $statement->bindParam(":date", $date);
-
-    return $statement->execute();
+    $statement->bindParam(":dateInsc", $date);
+    $statement->execute();
+    $idAchat = $connection->lastInsertId();
+    createEffectueAchat($idJoueur,$idAchat);
 }
 
 function readSkinAchete(int $idSkin, int $idAchat): ?SkinAchete {
@@ -46,3 +47,52 @@ function readSkinAchete(int $idSkin, int $idAchat): ?SkinAchete {
     }
 
 }
+
+/**
+ * @author Milan
+ * @brief retourne une collection associative des achats de l'utilisateur userId
+ * @param int $userId
+ * @return array
+ */
+function readAllAchatByUser(int $userId): array{
+ 
+    $connection = ConnexionSingleton::getInstance();
+    $selectedQuery = "Select sa.idSkin, sa.typeSkin, sa.etatSkin
+                    from skinacheter sa 
+                    join effectueachat eff 
+                    on eff.idAchat = sa.id
+                    where eff.idJoueur = :idUser";
+
+    $statement = $connection->prepare($selectedQuery);
+    $statement->bindParam(":idUser", $userId);
+    $statement->execute();
+    return  $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * @author Milan
+ * @param int $idSkin
+ * @param int $etatSkin
+ * @param int $idUser
+ * @return void
+ */
+function updateEtatSkin(int $idSkin, int $etatSkin, int $idUser){
+    $connection = ConnexionSingleton::getInstance();
+    $selectedQuery = "Select eff.idAchat from effectueachat eff join skinacheter sk on sk.id = eff.idAchat  where idJoueur = :idUser and idSkin = :idSkin";
+    $statement = $connection->prepare($selectedQuery);
+    $statement->bindParam(":idUser", $idUser);
+    $statement->bindParam(":idSkin",$idSkin);
+    $statement->execute();
+
+    if ($statement->rowCount() > 0) {
+        $idAchat = $statement->fetchColumn();
+        $updateQuery = "UPDATE skinacheter SET etatSkin = :etat WHERE idSkin = :idSkin AND id = :idAchat";
+        $statement = $connection->prepare($updateQuery);
+        $statement->bindParam(":etat", $etatSkin);
+        $statement->bindParam(":idSkin", $idSkin);
+        $statement->bindParam(":idAchat", $idAchat);
+        $statement->execute();
+
+}
+}
+

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Mael 
+ * @brief Modélise un enregistrement de table JouerPartie
+ */
 class JouerPartie {
 
     private int $idJoueurJoue;

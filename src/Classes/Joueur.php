@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Mael
+ * @contributors Cédric, Milan
+ * @brief Modélise un joueur
+ */
+
 class Joueur {
 
     private string $pseudo;

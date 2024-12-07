@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c2adcc;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 100px 0 0;
+}
+.Boutique{
+        display: flex;
+        flex-direction: column;
+        background-color: #d4d0d6;
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 700px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        justify-content: flex-start;
+}
+.Dés img, .Theme img{
+    width: 80px;
+    height: 80px;
+}
+#fenModal{
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.content{
+    background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+}

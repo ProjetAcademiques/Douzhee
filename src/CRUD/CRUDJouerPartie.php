@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @brief retourne une instance de JouerPartie si une ligne dans la BD correspond aux param
+ * @param int $idJoueurJoue 
+ * @param int $idPartieJoue
+ * @return JouerPartie|null retourne null si aucune ligne ne correspond aux paramètres
+ */
 function readJouerPartie(int $idJoueurJoue, int $idPartieJoue): ?JouerPartie {
     $connection = ConnexionSingleton::getInstance();
 
@@ -7,44 +13,98 @@ function readJouerPartie(int $idJoueurJoue, int $idPartieJoue): ?JouerPartie {
 
     $statement = $connection->prepare($SelectQuery);
 
-    $statement->bindParam(":idJoueurJoue", $idJoueurJoue);
-    $statement->bindParam(":idPartieJoue", $idPartieJoue);
+    $statement->bindParam("idJoueurJoue", $idJoueurJoue);
+    $statement->bindParam("idPartieJoue", $idPartieJoue);
 
-    $statement->execute();
+    $success = $statement->execute();
 
-    $results = $statement->fetch(PDO::FETCH_ASSOC);
+    if($success) {
 
-    $scoreJoueur = $results["scoreJoueur"];
-    $positionJoueur = $results["positionJoueur"];
-    $dateParticipation = $results["dateParticipation"];
-    $estGagnant = $results["estGagnant"];
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
 
-    return new JouerPartie($idJoueurJoue, $idPartieJoue, $scoreJoueur, $positionJoueur, $dateParticipation, $estGagnant);
+        if(gettype($results) == "boolean") {
+
+            $scoreJoueur = $results["scoreJoueur"];
+            $positionJoueur = $results["positionJoueur"];
+            $dateParticipation = $results["dateParticipation"];
+            $estGagnant = $results["estGagnant"];
+        
+            return new JouerPartie($idJoueurJoue, $idPartieJoue, $scoreJoueur, $positionJoueur, $dateParticipation, $estGagnant);
+        }
+
+    } else {
+        return null;
+    }
 }
+
 /**
- * @param int $idJJ
- * @param int $idPJ
- * @param int $position
- * @return bool|null
+ * @brief ??
+ * @author ??
+ * @return mixed
  */
-function readPositionIsUsed(int $idJJ, int $idPJ, int $position) : bool {
+function readConnectedPlayers(): mixed {
+    $connection = ConnexionSingleton::getInstance();
+
+    $SelectQuery = "SELECT COUNT(*) FROM JouerPartie WHERE idPartieJouee  = :idPartie";
+
+    $statement = $connection->prepare($SelectQuery);
+    $statement->execute(['idPartie' => $_SESSION['idPartie']]);
+
+    return $statement->fetchColumn();
+}
+
+/**
+ * @author Mael 
+ * @param int $idPJ id Partie Jouée
+ * @param int $position position à tester
+ * @return int retourne 0 si la position est libre et existante, 1 si la position n'est pas libre mais existante, -1 si la position n'existe pas
+ */
+function readPositionIsUsed(int $idPJ, int $position) : int {
     $connexion = ConnexionSingleton::getInstance();
 
-    $SelectQuery = "SELECT positionJoueur FROM JouerPartie WHERE idJoueurJouee = :idJJ AND idPartieJouee = :idPJ";
+    $existenceQuery = "SELECT COUNT(idPartieJouee) AS C FROM `JouerPartie` WHERE idPartieJouee = :idPJ";
+    $existStatement = $connexion->prepare($existenceQuery);
+    $existStatement->bindParam("idPJ", $idPJ);
 
-    $statement = $connexion->prepare($SelectQuery);
+    $existRqSuccess = $existStatement->execute();
+    $existResults = $existStatement->fetch(PDO::FETCH_ASSOC);
 
-    $statement->bindParam("idJJ", $idJJ);
-    $statement->bindParam("idPJ", $idPJ);
-    
-    $Rqsuccess = $statement->execute();
+    if($existResults["C"] > 0 && $existRqSuccess) {
 
-    $results = $statement->fetch(PDO::FETCH_ASSOC);
-    $fetchedPos = $results["positionJoueur"];
+        $SelectQuery = "SELECT positionJoueur FROM `JouerPartie` WHERE idPartieJouee = :idPJ";
 
-    return $fetchedPos != $position && $Rqsuccess;
+        $statement = $connexion->prepare($SelectQuery);
+
+        $statement->bindParam("idPJ", $idPJ);
+        
+        $Rqsuccess = $statement->execute();
+
+        if($Rqsuccess) {
+            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+            
+            if(count($results) == 0) {
+                return -1;
+            }
+
+            foreach ($results as $row) {
+                if ($row["positionJoueur"] == $position) {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+    }
+    return -1;
 }
 
+
+/**
+ * @brief Créé un eneregistrement dans la table JouerPartie
+ * @param int $idJoueurJoue
+ * @param int $idPartieJoue
+ * @param int $positionJoueur
+ * @return bool true si la requête fonctionne, false sinon
+ */
 function createJouerPartie(int $idJoueurJoue, int $idPartieJoue, int $positionJoueur): bool {
     $connection = ConnexionSingleton::getInstance();
 
@@ -57,27 +117,48 @@ function createJouerPartie(int $idJoueurJoue, int $idPartieJoue, int $positionJo
 
     $statement = $connection->prepare($InsertQuery);
 
-    $statement->bindParam(":idJoueurJoue", $idJoueurJoue);
-    $statement->bindParam(":idPartieJoue", $idPartieJoue);
-    $statement->bindParam(":scoreJoueur", $scoreJoueur);
-    $statement->bindParam(":positionJoueur", $positionJoueur);
-    $statement->bindParam(":dateParticipation", $dateParticipation);
-    $statement->bindParam(":estGagnant", $estGagnant);
+    $statement->bindParam("idJoueurJoue", $idJoueurJoue);
+    $statement->bindParam("idPartieJoue", $idPartieJoue);
+    $statement->bindParam("scoreJoueur", $scoreJoueur);
+    $statement->bindParam("positionJoueur", $positionJoueur);
+    $statement->bindParam("dateParticipation", $dateParticipation);
+    $statement->bindParam("estGagnant", $estGagnant);
 
     return $statement->execute();
 }
 
-
-function readPositionJoueur(int $idJoueurJoue, int $idPartieJoue):int {
-    return (readJouerPartie($idJoueurJoue, $idPartieJoue))->getPositionJoueur();
+/**
+ * @author Mael
+ * @param int $idJoueurJoue
+ * @param int $idPartieJoue
+ * @return int|null la position en entier, null si un problème dans readJouerPartie
+ */
+function readPositionJoueur(int $idJoueurJoue, int $idPartieJoue): int|null{
+    return (readJouerPartie($idJoueurJoue, $idPartieJoue) != null) ? 
+    readJouerPartie($idJoueurJoue, $idPartieJoue)->getPositionJoueur() : null;
 }
 
+/**
+ * @author Mael
+ * @param int $idJoueurJoue
+ * @param int $idPartieJoue
+ * @return string une chaîne de caractère qui représente la date de participation
+ */
 function readDateParticipation(int $idJoueurJoue, int $idPartieJoue): string {
-    return (readJouerPartie($idJoueurJoue, $idPartieJoue))->getDateParticipation();
+    return (readJouerPartie($idJoueurJoue, $idPartieJoue) != null) ? 
+    (readJouerPartie($idJoueurJoue, $idPartieJoue))->getDateParticipation() : null;
 }
 
+/**
+ * @author Mael
+ * @brief renvoie si le joueur décrit par les paramètre est gagnant ou perdant
+ * @param int $idJoueurJoue
+ * @param int $idPartieJoue
+ * @return bool renvoie si le joueur décrit par les paramètre est gagnant (true) ou perdant (false)
+ */
 function readEstGagnant(int $idJoueurJoue, int $idPartieJoue): bool {
-    return (readJouerPartie($idJoueurJoue, $idPartieJoue))->isEstGagnant();
+    return (readJouerPartie($idJoueurJoue, $idPartieJoue) != null) ? 
+    (readJouerPartie($idJoueurJoue, $idPartieJoue))->isEstGagnant() : null;
 }
 
 
@@ -94,7 +175,7 @@ function readPartieCount(int $idJJ): int {
 
     $statement = $connexion->prepare($SelectQuery);
 
-    $statement->bindParam(":idJJ", $idJJ);
+    $statement->bindParam("idJJ", $idJJ);
 
     $statement->execute();
 
@@ -105,4 +186,41 @@ function readPartieCount(int $idJJ): int {
     }
 
     return -1;
+}
+
+/**
+ * @brief donne une liste des Joueurs classé par leurs position à partir du param idPartie
+ * @param $idP id de la Partie d'où on sélectionne les joueurs
+ * @return ?array une collection d'instances de Joueurs, 
+ */
+function readAllUsersByIdPartie(int $idP): ?array {
+    $connexion = ConnexionSingleton::getInstance();
+
+    $SelectQuery = "SELECT pseudonyme FROM Joueur J 
+    JOIN JouerPartie JP 
+    ON J.id = JP.idJoueurJouee WHERE JP.idPartieJouee = :idP ORDER BY JP.positionJoueur ASC";
+
+    $statement = $connexion->prepare($SelectQuery);
+
+    $statement->bindParam("idP", $idP);
+
+    $success = $statement->execute();
+
+    if($success) {
+        $resultsArray = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($resultsArray)) {
+            $returnedArray = [];
+
+            foreach($resultsArray as $results) {
+                array_push($returnedArray, $results["pseudonyme"]);
+            }
+
+            return $returnedArray;
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    } 
 }

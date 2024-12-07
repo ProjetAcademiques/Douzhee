@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Mael
+ * @brief Modélise un skin achetable par un utilisateur
+ */
 class SkinAchetable {
 
     private int $idSkin;

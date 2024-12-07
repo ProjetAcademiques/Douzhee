@@ -9,12 +9,12 @@
 function createSeTrouve(int $idJ, int $idC) : bool {
     $connexion = ConnexionSingleton::getInstance();
 
-    $SelectQuery = "SELECT * FROM setrouve WHERE idJoueur = :idJ AND idClassement = :idC";
+    $SelectQuery = "INSERT INTO setrouve (idJoueur, idClassement) VALUES (:idJ, :idC)";
 
     $statement = $connexion->prepare($SelectQuery);
 
-    $statement->bindParam("idJ", $idJ);
-    $statement->bindParam("idC", $idC);
+    $statement->bindParam(":idJ", $idJ);
+    $statement->bindParam(":idC", $idC);
 
     return $statement->execute();
 }
@@ -28,8 +28,8 @@ function createSeTrouve(int $idJ, int $idC) : bool {
 function readSeTrouve(int $idJ, int $idC): ?SeTrouve {
     $connexion = ConnexionSingleton::getInstance();
 
-    $InsertQuery = "INSERT INTO setrouve (idJoueur, idClassement) VALUES (idJoueur = :idJ, idClassement = :idC)";
-
+    $InsertQuery = "SELECT * FROM setrouve WHERE idJoueur = :idJ AND idClassement = :idC";
+   
     $statement = $connexion->prepare($InsertQuery);
 
     $statement->bindParam("idJ", $idJ);

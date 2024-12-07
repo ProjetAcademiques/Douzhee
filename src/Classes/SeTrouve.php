@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Mael
+ * @brief Une table d'association entre un joueur et un classement
+ */
 class SeTrouve {
 
     private int $idJoueur;

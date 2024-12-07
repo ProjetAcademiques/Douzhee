@@ -1,4 +1,8 @@
 <?
+/**
+ * @author Mael
+ * @brief Modélisation d'une table d'association
+ */
 
 class ParticiperA {
 

@@ -9,7 +9,7 @@ body {
     padding: 100px 0 0;
 }
 
-.Profil {
+.Personnalisation {
     display: flex;
     flex-direction: column;
     background-color: #d4d0d6;
@@ -59,16 +59,14 @@ label {
     border: 1px solid #DDD;
     border-radius: 10px;
     font-size: 14px;
-    text-align: left; 
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: left;          
+    box-sizing: border-box;    
+    resize: vertical;  
     
 }
 
 .file-label{
-    background-image: url('../../assets/images/imageavatars/photodefault.jpg');
+    background-image: url('');
     border-radius: 50%; 
     margin-right: 10px;
     background-size: cover;
@@ -85,10 +83,6 @@ input[type="file"]{
 }
 
 
-textarea {
-    height: 100px;
-    resize: vertical;
-}
 
 .radio-group {
     display: flex;
@@ -121,22 +115,22 @@ textarea {
 #buttonPers:hover {
     background-color: #4A2F9D;
 }
-input[type="radio"]#Themes_1{
-    background-image: url('../../assets/images/imagePersonnalisation/Theme_1.png');
+input[type="radio"]#Themes1{
+    background-image: url('../../assets/images/imagePersonnalisation/Theme1.png');
 }
-input[type="radio"]#Themes_2{
-    background-image: url('../../assets/images/imagePersonnalisation/Theme_2.png');
+input[type="radio"]#Themes2{
+    background-image: url('../../assets/images/imagePersonnalisation/Theme_2_verrouillé.png');
 }
-input[type="radio"]#Themes_3{
-    background-image: url('../../assets/images/imagePersonnalisation/Theme_3.png');
+input[type="radio"]#Themes3{
+    background-image: url('../../assets/images/imagePersonnalisation/Theme_3_verrouillé.png');
 }
-input[type="radio"]#Des_1{
+input[type="radio"]#Des1{
     background-image: url('../../assets/images/imagePersonnalisation/dés_2.png');
 }
-input[type="radio"]#Des_2{
+input[type="radio"]#Des2{
     background-image: url('../../assets/images/imagePersonnalisation/dés_2.png');
 }
-input[type="radio"]#Des_3{
+input[type="radio"]#Des3{
     background-image: url('../../assets/images/imagePersonnalisation/dés_2.png');
 }
 input[type="radio"]:checked {
@@ -153,3 +147,5 @@ input[type="radio"]:checked:after{
     font-size: 28px;
     color: green;
 }
+
+

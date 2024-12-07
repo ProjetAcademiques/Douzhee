@@ -1,0 +1,528 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, 
+        #642581 0%, 
+        #421956 52%, 
+        #421956 70%, 
+        #421956 79%, 
+        #391549 88%, 
+        #341343 95%, 
+        #341343 96%, 
+        #351444 100%, 
+        #15081B 100%
+    );
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+.waiting-room {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    height: 100%;
+    color: white;
+    text-align: center;
+}
+
+.waiting-room h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.waiting-room p {
+    font-size: 1.2em;
+}
+
+.chat-container {
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    margin-bottom: 0px; 
+    max-width: 20%;
+    max-height: 65%;
+    padding: 10px;
+    width: 20%;
+    border: 2px solid black;
+    text-align: center;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: #fafafaac;
+}
+
+.chat-messages {
+    height: 500px;
+    overflow-y: hidden;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.chat-input {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-input input {
+    border: none;
+    flex : 1;
+    background : #ffffff9d;
+    margin-right: 10px;
+}
+
+.chat-input button {
+    border: none;
+    background: lightgray;
+    color: black;
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+
+.dé-table {
+    bottom: 0;
+    width: 75%;
+    height: 22%;
+    max-height: 100%;
+    text-align: center;
+    color: white;
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+@media (min-width: 521px) {
+    .dé-table {
+        left: 0;
+    }
+}
+
+.table {
+    background: rgba(0, 0, 0, 0.534);
+    width: 75%;
+    height: 85%;
+    max-height: 100%;
+    max-width: 75%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.dé {
+    width: 100px;
+    height: 100px;
+}
+
+#roll {
+    background: #AB00E7;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    height: 50%;
+    width: 15%; 
+    border-radius: 10px;
+    font: 2.5em sans-serif;
+}
+
+
+.score {
+    top: 0;
+    left: 0;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 0px;
+    padding-top: 20px;
+    width: 70%;
+    height: 70%;
+    text-align: center;
+    color: white;
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+
+table{
+    width: 50%;
+    height: 100%;
+    border-collapse: collapse;
+    border: 5px solid black;
+}
+
+tbody{
+    background: #C2ADCC;
+    color: black;
+}
+
+thead{
+    background: #5F0061;
+}
+
+tfoot{
+    background: #5F0061;
+    text-align: left;
+}
+
+.col-score{
+    width: 50%;
+    height: 14.28%;
+    border: 2px solid black;
+}
+
+.combinaison, .bonus {
+    width: 65%;
+    height: 65%;
+    max-width: 50px;
+    max-height: 50px;
+    background: #6E6B6B;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    }
+
+    .combinaison:hover, .bonus:hover {
+        transform: scale(1.1);
+}
+
+.Upper{
+    border-right: 3px solid black;
+}
+
+.Lower, .Lower td, .Lower th{
+    border-left: none;
+}
+
+img{
+    width: 3.75em;
+    height: 100%;
+    margin-left: 10px;
+}
+
+.img-dé{
+    width: 30%;
+    height: 3.75em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tite-score{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+}
+
+.tite-score-spé{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.rect-score{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+p{
+    margin: 0;
+}
+
+.score-dé {
+    font-weight: bold;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.tite-score-spé .score-dé {
+    font-weight: bold;
+    font-size: 26px;
+    margin-bottom: 0px;
+}
+
+.tite-score-spé .info-score {
+    font-size: 15px;
+}
+
+.foot-score{
+    padding-left: 10px;
+}
+
+.head-joueur{
+    border-bottom: 2px solid black;
+}
+
+.foot-joueur{
+    border-top: 2px solid black;
+}
+
+.versus {
+    top: 0;
+    right: 0;
+    height: 25%;
+    width: 380px;
+    text-align: center;
+    color: white;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+.ligne1, .ligne2, .ligne3{
+    height: 33%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.joueur-avatar{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.img-joueur img{
+    border: 3px solid rgb(0, 0, 0);
+    padding: 0%;
+    margin: 0%;
+    border-radius: 50%;  
+}
+
+.joueur-nom{
+    font: 1em sans-serif;
+    font-size: 25px;
+}
+
+.ligne2{
+    font-size: 45px;
+    transform: rotate(15deg);
+}
+
+#chat-toggle {
+    display: none;
+}
+
+
+@media (max-width: 1480px) and (min-width: 521px) {
+    .joueur-nom{
+        display: none;
+    }
+
+    .versus {
+        top: 0;
+        right: 0;
+        height: 27%;
+        width: 320px;
+        text-align: center;
+        color: white;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .ligne1, .ligne2, .ligne3{
+        width: 100%;
+    }
+
+    .img-joueur img{
+        width: 80px;
+        padding: 0%;
+        margin: 0%;
+        border-radius: 50%;  
+    }
+
+    .chat-container{
+        min-width: 263.68px;
+        margin-left: 0px;
+    }
+
+    .rect-score{
+        min-width: 231.75px;
+    }
+
+    .col-joueur{
+        min-width: 39.76px;
+    }
+}
+
+@media (max-width: 520px) {
+    .chat-container{
+        display: none;
+    }
+
+    .chat {
+        display: flex;
+        flex-direction: column;
+        border: 2px solid red;
+    }
+
+    #chat-toggle {
+        display: block;
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        font-size: 20px;
+        z-index: 1000;
+    }
+
+    .chat-container.active {
+        display: flex;
+        position: fixed;
+        bottom: 60px;
+        right: 10px;
+        width: 70%;
+        max-width: 400px;
+        background: #ccccccf1;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .score{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 0%;
+        width: 60%;
+    }
+
+    table{
+        height: 50%;
+        width: 100%;
+        border: none;
+    }
+    
+    .rect-score{
+        min-width: 127.35px;
+        min-height: none;
+        max-width: 137.71px;
+    }
+
+    .col-joueur{
+        min-width: none;
+    }
+
+    img{
+        width: clamp(1.95rem, 2vw, 2.5rem);
+        height: 100%;
+        margin-left: 10px;
+    }
+
+    .score-dé {
+        font-size: 1.25em;
+        margin-bottom: 0px;
+    }
+
+    .tite-score-spé .score-dé {
+        font-size: 1.25em;
+        margin-bottom: 0px;
+    }
+
+    .info-score, .tite-score-spé .info-score{
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: clamp(0.5rem, 2vw, 1.2rem);
+    }
+
+    #gt1, #gt2{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: clamp(0.8rem, 2vw, 1.2rem);
+    }
+
+    .dé-table{
+        bottom: 0;
+        right: 0;
+        display: flex;
+        height: 65%;
+        width: 35%;
+        flex-direction: column;
+        justify-content: space-around;
+        margin-bottom: 25%;
+        margin-right: 2%;        
+    }
+
+    .versus {
+        top: 0;
+        right: 0;
+        height: 17%;
+        width: 32%;
+        text-align: center;
+        color: white;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .joueur-nom{
+        display: none;
+    }
+
+    .ligne1, .ligne2, .ligne3{
+        font-size: 22px;
+        width: 100%;
+    }
+
+    .img-joueur img{
+        width: clamp(2.2rem, 2vw, 1.5rem);;
+        padding: 0%;
+        margin: 0%;
+        border-radius: 50%;  
+    }
+
+    .combinaison, .bonus{
+        min-width: 20px;
+    }
+
+    .table{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .dé{
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+        border: 2px solid white;
+    }
+
+    #roll {
+        width: 75%;
+        height: 10%;
+        border-radius: 0%;
+        font: 1.75em sans-serif;
+    }
+}

@@ -7,7 +7,7 @@
  * @brief insère un nouveau joueur dans la table Joueur selon les paramètres spécifiés. tout les paramètres sont obligatoires.
  * @return bool false si la requête a échoué true sinon
  */
-function createJoueur(string $pseudo, string $mdp, int $douzCoin = 0, string $email, string $bio = null) :bool {
+function createJoueur(string $pseudo, string $mdp, string $email, int $douzCoin = 0, string $bio = null) :bool {
     $connection = ConnexionSingleton::getInstance();
     $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
     $InsertQuery = "INSERT INTO Joueur (pseudonyme, mdp, douzCoin, email, biographie, dateInscription) VALUES (:pseudo, :mdp, :douzCoin, :email, :bio, CURRENT_TIMESTAMP)";
@@ -16,9 +16,10 @@ function createJoueur(string $pseudo, string $mdp, int $douzCoin = 0, string $em
 
     $statement->bindParam("pseudo", $pseudo);
     $statement->bindParam("mdp", $hashedPassword);
+    $statement->bindParam("douzCoin", $douzCoin);
     $statement->bindParam("email", $email);
     $statement->bindParam("bio", $bio);
-    $statement->bindParam("douzCoin", $douzCoin);
+   
 
     return $statement->execute();
 }
@@ -332,13 +333,14 @@ function getIdUser($email){
 /**
  * @brief vérifie si un utilisateur existe dans la base de données
  */
-function verifUser($email) {
+function verifUser($email, $mdp) {  
     $connexion = ConnexionSingleton::getInstance();
-    $sql = "SELECT email FROM joueur WHERE email = :email";
+    $sql = "SELECT email, mdp FROM joueur WHERE email = :email";
     $stmt = $connexion->prepare($sql);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+    return $user && password_verify($mdp,$user['mdp']);
 }
 function getPseudoById($id){
     $connexion = ConnexionSingleton::getInstance();
@@ -396,5 +398,28 @@ function updatePassword($mdp,$email){
     $stmt->bindParam(1,$hashedPassword);
     $stmt->bindParam(2,$id);
     $stmt->execute();
+}
+function readAvatarById(int $idUser): string{
+    
+    $connection = ConnexionSingleton::getInstance();
+    $selectedQuery = "Select avatarChemin from Joueur  WHERE id = :idUser";
+    $statement = $connection->prepare($selectedQuery);
+    $statement->bindParam(":idUser", $idUser);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['avatarChemin'];
+}
+
+
+function updateAvatar(String $path, int $idUser) {
+    $connection = ConnexionSingleton::getInstance();
+    $updateQuery = "UPDATE Joueur SET avatarChemin = :chemin WHERE id = :id";
+
+    $statement = $connection->prepare($updateQuery);
+    $statement->bindParam(":chemin", $path);
+    $statement->bindParam(":id", $idUser);
+
+    return $statement->execute();
+
 }
 ?>

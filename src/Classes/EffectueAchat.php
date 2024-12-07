@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @author Mael
+ * @brief Modélise un enregistrement d'achat d'un joueur
+ */
 class EffectueAchat {
 
     private int $idJoueur;

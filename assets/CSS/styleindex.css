@@ -41,25 +41,30 @@ input[type="submit"] {
     border: none;
     cursor: pointer;
     margin: 30px;
+    
 }
 
 #regles {
-    background-image: url("imageindex/regles.png");
+    border-radius: 35px;
+    background-image: url("../../assets/images/imageindex/imgregles.png");
     
 }
 
 #classement {
-    background-image: url("imageindex/imgclassement.png");
+    border-radius: 35px;
+    background-image: url("../../assets/images/imageindex/imgclassement.png");
 }
 
 #versusrobot {
+    border-radius: 70px;
     width: 300px;
-    height: 156.62px;
-    background-image: url("imageindex/imgvsrobot.png");
+    height: 145px;
+    background-image: url("../../assets/images/imageindex/imgvsrobot.png");
 }
 
 #versushuman {
+    border-radius: 70px;
     width: 300px;
-    height: 156.62px;
-    background-image: url("imageindex/imgvshuman.png");
+    height: 145px;
+    background-image: url("../../assets/images/imageindex/imgvshuman.png");
 }

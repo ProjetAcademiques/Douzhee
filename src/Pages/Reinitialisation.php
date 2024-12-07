@@ -5,12 +5,12 @@
     use PHPMailer\PHPMailer\Exception;
     require_once("../Utils/headerInit.php");
 ?>
-    <link rel="stylesheet" href="../../assets/css/style_PCIR.css">
+    <link rel="stylesheet" href="../../assets/css/styleCIRV.css">
 </head>
 <body>
     <div class="PCIR">
         <h2>Réinitialisation</h2>
-        <form action="Page_Réinitialisation.php" method="POST">
+        <form action="Reinitialisation.php" method="POST">
             <input name ="E-mail" type="email" placeholder="E-mail"required>   
             <input name="NewPassword" type="password" placeholder="newPassword" required maxlength="25">
             <button type="submit">Envoyer le code de vérification</button>
@@ -20,7 +20,7 @@
 </html>
 <?php
 if (!empty($_POST['E-mail']) &&  !empty($_POST['NewPassword'])){
-    $trouve = verifUser($_POST['E-mail']);
+    $trouve = verifEmail($_POST['E-mail']);
     if ($trouve){
         $code = rand(0,100000);
         $_SESSION['codeVerification'] = $code;
@@ -37,12 +37,13 @@ if (!empty($_POST['E-mail']) &&  !empty($_POST['NewPassword'])){
             $mail->Port = 465;
 
             $mail->setFrom('douzhee12@gmail.com', 'Douzhee');
-            $mail->addAddress($_SESSION['E-mail'], 'Joueur'); // Adresse du destinataire
+            $mail->addAddress($_SESSION['E-mail'], 'Joueur');
             $mail->isHTML(true);
             $mail->Subject = 'Changement de mot de passe';
             $mail->Body    = 'Voici le code de vérification : '.$code;
             if ($mail->send()) {
-                header('Location: PageVerification.php');
+                header('Location: Verification.php');
+                exit();
             } else {
                 echo 'Échec de l\'envoi: ' . $mail->ErrorInfo;
             }

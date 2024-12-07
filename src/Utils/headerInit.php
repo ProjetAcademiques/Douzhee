@@ -3,6 +3,12 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    function debugSession(){
+        echo '<pre style="color:white;"> '; 
+        print_r($_SESSION);
+        echo '</pre>';
+    }
 ?>
 
 <!DOCTYPE html>

@@ -9,8 +9,12 @@ let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant l
 let button = document.getElementById('roll'); //bouton permettant de lancer les dés
 let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 
-let joueur1 = new Player(1, 1);
-let game = new GameDataManager(2);
+let joueur1 = new Player(playerId, position);
+let game = new GameDataManager(nbPlayers);
+
+console.log("Joueur : " + joueur1.getId());
+console.log("Position : " + joueur1.getPostion());
+console.log("Nombre de joueurs : " + game.getNbJoueurs());
 
 let nbRoll = 3; //nombre de lancés possible
 let nbDouzhee = 0; //nombre de Douzhee effectués
@@ -22,10 +26,22 @@ inputs.forEach(input => {
         event.target.placeholder = "-1";
         event.target.disabled = true;
 
-        ajoutScore(event);
-        resetManche();
+        socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId });
+        console.log('gameId : ' + gameId);
     })
 })
+
+socket.on('inputValue', (data) => {
+    console.log('inputValue received');
+    console.log(data);
+    let inputElements = document.getElementById(data.idInput);
+    inputElements.value = data.value;
+    inputElements.placeholder = "-1";
+    inputElements.disabled = true;
+
+    ajoutScore({ target: inputElements });
+    resetManche();
+});
 
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
 des.forEach(de => {
@@ -94,6 +110,7 @@ function affichePointsCombinaisons(reset = false){
 
     for(let i = 0 ; i<13 ; i++){
         let y = joueur1.getPostion() + (game.getNbJoueurs() * i) - 1;
+        console.log(y);
         if(inputs[y].disabled != true){
             if(!reset){
                 inputs[y].placeholder = pointsCombinaisons[i];

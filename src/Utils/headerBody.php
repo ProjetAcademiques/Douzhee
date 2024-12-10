@@ -22,9 +22,9 @@ if (isset($_SESSION['userId'])){
             }
         ?>
             <div class="selection_droite">
-            <span id="money"><?php echo getMoneyById($_SESSION['userId']); ?></span>
+            <span id="money"><?php echo getMoneyById($_SESSION['userId'])['douzCoin']; ?></span>
                 <img src="../../assets/images/imgheader/coin_dollar_finance_icon_125510 1.png" alt="Money du Jeu" width="27" height="27" id="coin">
-                <span id="pseudo"><?php echo getPseudoById($_SESSION['userId']); ?></span>
+                <span id="pseudo"><?php echo getPseudoById($_SESSION['userId'])['pseudonyme']; ?></span>
                 <form action="Profil.php" method="GET">
                     <input id="profil" type="submit" value="">
                 </form>
@@ -60,7 +60,7 @@ if (isset($_SESSION['userId'])){
                         case 1:
                             ?>
                             <script>
-                                document.body.style.backgroundColor = "#c2adcc";
+                                document.body.style.background = "linear-gradient(to bottom, #642581 0%, #421956 52%, #421956 70%, #421956 79%, #391549 88%, #341343 95%, #341343 96%, #351444 100%, #15081B 100% )";
                                 document.querySelector("header").style.backgroundColor = "#401753";
                             </script>
                             <?php
@@ -68,7 +68,7 @@ if (isset($_SESSION['userId'])){
                         case 2:
                             ?>
                             <script>
-                                document.body.style.backgroundColor = "#95ca97";
+                                document.body.style.background = "linear-gradient(to bottom, #2a7d2e 0%,  #1e5d1c 52%,  #1e5d1c 70%,  #1e5d1c 79%,  #164017 88%,  #133514 95%,  #133514 96%, #143516 100%, #0d1f0f 100%)";
                                 document.querySelector("header").style.backgroundColor = "#195426";
                             </script>
                             <?php
@@ -76,7 +76,7 @@ if (isset($_SESSION['userId'])){
                         case 3:
                             ?>
                             <script>
-                            document.body.style.backgroundColor = "#927272";
+                            document.body.style.background = "linear-gradient(to bottom, #A52A2A 0%, #6F4F4F 100%)";
                             document.querySelector("header").style.backgroundColor = "#6f4b4d";
                         </script>
                         <?php

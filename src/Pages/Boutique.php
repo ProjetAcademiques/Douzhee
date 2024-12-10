@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../assets/CSS/styleBoutique.css">
     <link rel="stylesheet" href="../../assets/CSS/styleHeader.css">
 </head>
-<body>
     <div class="Boutique">
         <h2>Bienvenue sur notre boutique !</h2>
         <div class="Theme">
@@ -38,25 +37,23 @@
         $themeId = null;
         foreach($allAchats as $achats){
             $themeId = $achats['idSkin'];
-            
-        
-        if ($themeId !=null){
-        ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', () =>{
-                const themeId = parseInt("<?php echo $themeId; ?>", 10);
-                const theme = document.getElementById(`${themeId}`);
-                if (themeId === 2){
-                    theme.src = "../../assets/images/imageBoutique/Theme2Acheter.png";
-                    theme.style.pointerEvents = "none";
-                }if(themeId === 3){
-                    theme.src = "../../assets/images/imageBoutique/Theme3Acheter.png";
-                    theme.style.pointerEvents = "none";
-                }
-            
+            if ($themeId !=null){
+            ?>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () =>{
+                        const themeId = parseInt("<?php echo $themeId; ?>", 10);
+                        const theme = document.getElementById(`${themeId}`);
+                        if (themeId === 2){
+                            theme.src = "../../assets/images/imageBoutique/Theme2Acheter.png";
+                            theme.style.pointerEvents = "none";
+                        }if(themeId === 3){
+                            theme.src = "../../assets/images/imageBoutique/Theme3Acheter.png";
+                            theme.style.pointerEvents = "none";
+                        }
+                    
 
-            });
-        </script>
+                    });
+                </script>
         <?php
         }
     }
@@ -101,7 +98,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    userId: <?php echo json_encode($_SESSION['userId']); ?>, // Injecte l'ID utilisateur
+                    userId: <?php echo json_encode($_SESSION['userId']); ?>, 
                     idSkin: idSkin, 
                     cost: 350
                 })

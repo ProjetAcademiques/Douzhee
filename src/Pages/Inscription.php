@@ -5,10 +5,10 @@
     require_once("../CRUD/CRUDClassement.php");
     require_once("../CRUD/CRUDObtient.php");
     require_once("../CRUD/CRUDSkinAchete.php");
+    $regexEmail = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
 ?>
     <link rel="stylesheet" href="../../assets/css/styleCIRV.css">
 </head>
-<body>
     <div class="PCIR">
         <h2>Inscription</h2>
         <form action = "Inscription.php" method="POST">
@@ -28,18 +28,25 @@
                 echo '<script 
                 type="text/javascript"> window.onload = function () { alert("Utilisateur déja existant pour cette adresse mail!"); }
                 </script>';
+                exit();
             }
             else{
-                insertUser($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
-                $_SESSION['userId'] = getIdUser($_POST['E-mail']);
-                createStatistiques($_SESSION['userId']);
-                createClassement(getPseudoById($_SESSION['userId']),$_SESSION['userId']);
-                createObtient($_SESSION['userId'],1);
-                $_SESSION['timeStart'] = microtime(true); 
-                createSkinAchete(1,$_SESSION['userId'],1,"Theme",date("Y/m/d"));
-                $_SESSION['messageSucces1'] = "Bravo, vous venez d'obtenir le succès suivant : Se connecter pour la première fois";
-                header('Location: Index.php');
+                if (preg_match($regexEmail, $_POST['E-mail'])){
+                    insertUser($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
+                    $_SESSION['userId'] = getIdUser($_POST['E-mail']);
+                    createStatistiques($_SESSION['userId']);
+                    $pseudo = getPseudoById($_SESSION['userId']);
+                    createClassement($pseudo['pseudonyme'],$_SESSION['userId']);
+                    createObtient($_SESSION['userId'],1);
+                    $_SESSION['timeStart'] = microtime(true); 
+                    createSkinAchete(1,$_SESSION['userId'],1,"Theme",date("Y/m/d"));
+                    $_SESSION['messageSucces1'] = "Bravo, vous venez d'obtenir le succès suivant : Se connecter pour la première fois";
+                    header('Location: Index.php');
+             }else{
+                echo '<script  type="text/javascript"> window.onload = function () { alert("Votre email est syntaxiquement incorrect voici un exemple de mail attendu : zikette@gmail.com"); }
+                </script>';
              }
         }
     }
+}
 ?>

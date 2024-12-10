@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom,
+    #642581 0%,
+    #421956 52%,
+    #421956 70%,
+    #421956 79%,
+    #391549 88%,
+    #341343 95%,
+    #341343 96%,
+    #351444 100%,
+    #15081B 100%
+    );
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 20px;
+    padding: 90px;
+    overflow-y: auto;
+}
+
+.Visualisation{
+    display: flex;
+    flex-direction: column;
+    background-color: #d4d0d6;
+    border-radius: 20px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    align-items: center;
+}
+.Group{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    padding: 10px;
+}
+
+.Input-Group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+}
+.AvatarVisu{
+    border-radius: 50%; 
+    margin-right: 10px;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    width: 56px;
+    height: 56px;
+    display: inline-block;
+    font-size: 30px;
+}
+.Radio-Group {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.Radio-Group input[type="radio"] {
+    appearance: none;
+    width: 82px;
+    height: 80px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px;
+
+}
+input[type="radio"]#Themes1{
+    background-image: url('../../assets/images/imagePersonnalisation/Theme1.png');
+}
+input[type="radio"]#Themes2{
+    background-image: url('../../assets/images/imagePersonnalisation/Theme2.png');
+}
+input[type="radio"]#Themes3{
+    background-image: url('../../assets/images/imagePersonnalisation/Theme3.png');
+}
+
+input[type="radio"]:checked {
+    position: relative;
+    border: 2px solid green;
+    border-radius: 50%;
+}
+input[type="radio"]:checked:after{
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    color: green;
+}
+#Biog{
+    width: 550px;
+    height: 150px;
+    padding: 20px;
+    border: 1px solid #DDD;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: left;          
+    box-sizing: border-box;    
+    resize: vertical;  
+    margin: 10px;
+}
+#Pseu{
+    width: 200px;
+    height: 38px;
+    padding: 20px;
+    border: 1px solid #DDD;
+    border-radius: 10px;
+    font-size: 14px;
+    margin: 10px;
+}
+.State {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
+span {
+    font-size: 14px;
+    color: #642581;
+    font-weight: 500;
+}

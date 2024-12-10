@@ -82,3 +82,17 @@ a:visited{
     color: grey;
     text-decoration: none;
 }
+.PCIR form input[name="codeVerification"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 200px;
+        margin-bottom: 10px;
+}
+
+.PCIR form input[name="codeVerification"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+

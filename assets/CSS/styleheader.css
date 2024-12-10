@@ -1,6 +1,7 @@
 body {
     margin: 0; 
     overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
 header {
@@ -35,8 +36,8 @@ header {
 
 #pseudo {
     font-size: 16px; 
-    margin-right: 10px;
-    color: white;
+    color: white; 
+    padding: 10px;
 }
 
 #profil {
@@ -62,11 +63,11 @@ button {
 }
 #Logo{
     background-image: url("../../assets/images/imgheader/logo.png");
-    margin-right: 10px;
     background-size: cover;
     border: none;
     cursor: pointer;
     width: 70px;
     height: 70px;
     border-radius: 10px;
+    margin-left: auto;
 }

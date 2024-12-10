@@ -333,7 +333,7 @@ function getIdUser($email){
 /**
  * @brief vérifie si un utilisateur existe dans la base de données
  */
-function verifUser($email, $mdp) {  
+function verifUser(String $email, String $mdp) {  
     $connexion = ConnexionSingleton::getInstance();
     $sql = "SELECT email, mdp FROM joueur WHERE email = :email";
     $stmt = $connexion->prepare($sql);
@@ -342,23 +342,35 @@ function verifUser($email, $mdp) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC); 
     return $user && password_verify($mdp,$user['mdp']);
 }
-function getPseudoById($id){
+/**
+ * @author Mael
+ * @brief renvoie le pseudonyme en fonction de l'identifiant
+ * @param $id l'id du joueur
+ * @return array le pseudo du joueur
+ */
+function getPseudoById(int $id){
     $connexion = ConnexionSingleton::getInstance();
     $sql = "Select pseudonyme from joueur where id =?";
     $stmt = $connexion->prepare($sql);
     $stmt->bindParam(1,$id);
     $stmt->execute();
     $pseudo = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $pseudo['pseudonyme'];
+    return $pseudo;
 }
-function getMoneyById($id){
+/**
+ * @author Mael
+ * @brief renvoie le nombre de douzcoin en fonction de l'identifiant
+ * @param $id l'id du joueur
+ * @return array le nombre de douzcoin
+ */
+function getMoneyById(int $id){
     $connexion = ConnexionSingleton::getInstance();
     $sql = "Select douzCoin from joueur where id =?";
     $stmt = $connexion->prepare($sql);
     $stmt->bindParam(1,$id);
     $stmt->execute();
     $money = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $money['douzCoin'];
+    return $money;
 }
 function verifEmail($email){
     $connexion = ConnexionSingleton::getInstance();
@@ -376,7 +388,7 @@ function getBioById($id){
     $stmt->bindParam(1,$id);
     $stmt->execute();
     $bio = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $bio['biographie'];
+    return $bio;
 }
 function insertUser($email,$mdp,$pseudonyme){
     $connexion = ConnexionSingleton::getInstance();
@@ -422,4 +434,18 @@ function updateAvatar(String $path, int $idUser) {
     return $statement->execute();
 
 }
-?>
+function cryptage($data,$key){
+    $iv = random_bytes(16); //Génération d'une valeur aléatoire de 16 octets
+    $chiffrement = openssl_encrypt($data,'aes-256-cbc',$key,0,$iv); //chiffrement de la donnée en utilisant l'algo de chiffrage AES la clé et la valeur aléatoire 
+    return base64_encode($iv.$chiffrement); //concaténation de la valeur aléatoire au chiffrement
+}
+function decryptage($data,$key){
+    if ($data != null){
+        $data = base64_decode($data); //décryptage des données pour séparer la valeur random et le texte chiffré
+        $iv = substr($data,0,16); //Récupère la valeur aléatoire ( 16 premiers octets)
+        $chiffre = substr($data,16); // Extraction du texte chiffré (le reste après la valeur aléatoire)
+        return openssl_decrypt($chiffre,'aes-256-cbc',$key,0,$iv); //Déchiffrement des données en utilisant la clé et la valeur aléatoire
+    }else{
+        return null;
+    }
+}

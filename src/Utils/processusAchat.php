@@ -14,13 +14,11 @@
         $cost = $input['cost'] ?? 0;
     
         if ($userId && $idSkin && $cost > 0) {
-            $userMoney = getMoneyById($userId);
-    
+            $userMoney = getMoneyById($userId)['douzCoin'];
             if ($userMoney >= $cost) {
                 $newMoney = $userMoney - $cost;
                 updateDouzCoin($userId, $newMoney);
                 createSkinAchete($idSkin, $userId, 0, "Theme", date("Y-m-d"));
-    
                 echo json_encode(['success' => true]);
             } else {
                 echo json_encode(['success' => false, 'error' => 'Fonds insuffisants.']);

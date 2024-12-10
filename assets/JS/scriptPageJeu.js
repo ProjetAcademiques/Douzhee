@@ -61,8 +61,7 @@ button.addEventListener('click', () => {
 
     joueur1.setListeDes(desGardes);
 
-    socket.emit('afficheDes', {listeDes: joueur1.getListeDes(), desGardes: desGardes});
-    //afficheDes(desGardes);
+    afficheDes(desGardes);
 
     affichePointsCombinaisons();
 
@@ -86,21 +85,6 @@ function afficheDes(desGardes){
         }
     });
 }
-
-socket.on('afficheDes', (data) => {
-    let listeDes = data.listeDes;
-    let desGardes = data.desGardes;
-
-    des.forEach((de, i) => {
-        if (i < desGardes.length) {
-            de.innerHTML = desGardes[i];
-            de.classList.replace("libre", "selected");
-        } else {
-            de.innerHTML = listeDes[i];
-            de.classList.replace("selected", "libre");
-        }
-    });
-})
 
 /**
  * @brief Permet d'afficher les points disponibles des combinaisons

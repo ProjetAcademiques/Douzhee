@@ -10,15 +10,6 @@ inputChat.addEventListener('keypress', function(event) {
     }
 });
 
-// Rejoindre la salle de chat pour la partie spécifique
-socket.emit('player joined', gameId);
-
-socket.on('player joined', function(connectedPlayersCount) {
-    console.log('Player joined game: ' + connectedPlayersCount);
-    document.getElementById('connected-players').innerText = connectedPlayersCount;
-    connectedPlayers = connectedPlayersCount;
-    checkPlayers();
-});
 
 socket.on('player disconnected', function(connectedPlayersCount) {
     console.log('Player disconnected from game: ' + gameId);

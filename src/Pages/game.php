@@ -17,16 +17,6 @@
 
         //debugSession();
     ?>
-    <div class="waiting-room">
-        <h1>En attente des autres joueurs...</h1>
-        <p>Nombre de joueurs connectés: <span id="connected-players"><?php echo $connectedPlayers; ?></span> / <?php echo $requiredPlayers; ?></p>
-        <br>
-        <h3>
-            <p>Lien de la partie:</p> 
-            <?php echo $_SESSION['lienPartie']; ?>
-        </h2>
-        <p>Veuillez patienter pendant que les autres joueurs rejoignent la partie.</p>
-    </div>
     <div class="score">
         <table class="Upper">
             <thead>
@@ -362,21 +352,22 @@
     <button id="chat-toggle">💬</button>
     
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="../../assets/JS/connectionWebSocket.js"></script>
     <script>
         let playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
         let position = <?= json_encode($_SESSION["position"]); ?>; // Récupérer la position du joueur
         let nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
 
-        let socket = io('http://localhost:8080'); // Initialiser le socket client pour se connecter au serveur socket.io sur le même domaine 
-        // let socket = io('https://douzhee.fr'); // Sur le VPS
         let gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
         let pseudo = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
 
         let requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
         let connectedPlayers = <?= json_encode($connectedPlayers); ?>; // Récupérer le nombre de joueurs connectés
+
+        // Rejoindre la salle de chat pour la partie spécifique
+        socket.emit('player joined', gameId);
     </script>
     <script src="../../assets/JS/scriptPageJeu.js" type="module"></script>
     <script src="../../assets/JS/scriptChatEnLigne.js"></script>
-    <script src="../../assets/JS/scriptPageAttente.js"></script>
 </body>
 </html>

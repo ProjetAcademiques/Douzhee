@@ -26,7 +26,7 @@
         $_SESSION['idPartie'] = $idPartie;
         $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 1);
         $_SESSION["position"] = 1;
-        header("Location: ./game.php");
+        header("Location: ./loading.php");
         exit();
     }
 
@@ -46,17 +46,17 @@
         if (readPositionIsUsed($idPartie, 2) == 0 && $nbJoueurs >= 2) {
             $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 2);
             $_SESSION["position"] = 2;
-            header("Location: ./game.php");
+            header("Location: ./loading.php");
             exit();
         } elseif (readPositionIsUsed($idPartie, 3) == 0 && $nbJoueurs >= 3) {
             $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 3);
             $_SESSION["position"] = 3;
-            header("Location: ./game.php");
+            header("Location: ./loading.php");
             exit();
         } elseif (readPositionIsUsed($idPartie, 4) == 0 && $nbJoueurs >= 4) {
             $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 4);
             $_SESSION["position"] = 4;
-            header("Location: ./game.php");
+            header("Location: ./loading.php");
             exit();
         } else {
             echo '<script type="text/javascript"> window.onload = function () { alert("Partie pleine"); }</script>';

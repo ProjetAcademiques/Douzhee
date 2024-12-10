@@ -47,3 +47,16 @@ function readEffectueAchat(int $idA, int $idJ) : ?EffectueAchat {
         return null;
     }
 }
+
+function readEffecuteAchatById(int $idJ){
+    $connexion = ConnexionSingleton::getInstance();
+    $SelectQuery = 'SELECT sk.etatSkin, sk.idSkin from skinacheter sk
+                    join effectueachat eff on eff.idAchat = sk.id
+                    where eff.idJoueur = :idUser';
+
+    $statement = $connexion->prepare($SelectQuery);
+    $statement->bindParam(":idUser", $idJ);
+    $statement->execute();
+    return $statement->fetchAll();
+
+}

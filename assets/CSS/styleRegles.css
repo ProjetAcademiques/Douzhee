@@ -4,7 +4,17 @@ body{
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    background-color: #c2adcc;
+    background: linear-gradient(to bottom,
+    #642581 0%,
+    #421956 52%,
+    #421956 70%,
+    #421956 79%,
+    #391549 88%,
+    #341343 95%,
+    #341343 96%,
+    #351444 100%,
+    #15081B 100%
+    );
 }
 .container {
     display: flex;
@@ -25,11 +35,12 @@ body{
     font-size: 18px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
     margin: 10px;
-    position: absolute; /* Centrer avec les coordonnées */
+    position: absolute; 
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Ajustement pour le centrer parfaitement */
+    transform: translate(-50%, -50%); 
     text-align: center;
+    border: 2px solid #000; 
 }
 
 .bulle::after {
@@ -41,6 +52,21 @@ body{
     border-style: solid;
     border-color: transparent #f0f0f0 transparent transparent;
     transform: translateY(-50%);
+}
+.bulle.left::after {
+    left: auto;
+    right: -10px;
+    border-color: transparent transparent transparent #f0f0f0;
+}
+
+.bulle.right {
+    transform: translate(-50%, -50%) scaleX(-1); 
+}
+
+.bulle.right::after {
+    left: auto;
+    right: -10px;
+    border-color: transparent #f0f0f0 transparent transparent;
 }
 
 .Bouton{
@@ -73,4 +99,11 @@ body{
     display: none;
     transform: scale(-1,1);
     z-index: 2;
+}
+#ThirdMascotte{
+    position: absolute;
+    transform: scale(1,-1);
+    z-index: 3;
+    left: -100px;
+    top: 50%;
 }

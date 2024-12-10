@@ -3,7 +3,6 @@ const speechText = document.getElementById('Texte');
 const flèche = document.getElementById('flèche');
 const Valider = document.getElementById('Valider');
 const Refuser = document.getElementById('Refuser');
-const audio = document.getElementById('audio');
 const messages = [ 
     'But du jeu : Obtenir le maximum de points en réalisant des combinaisons spécifiques avec 5 dés.',
     'Nombre de joueurs : Le jeu peut être joué seul ou avec vos amis.',
@@ -56,6 +55,22 @@ anime({
     easing: 'easeOutExpo', 
 });
 }
+function moveMascotte3(){
+    const thirdMascotte = document.getElementById('ThirdMascotte');
+    thirdMascotte.style.position = 'fixed';
+    thirdMascotte.style.left = '-100%'; 
+
+    anime({
+        targets: thirdMascotte,
+        left: '20%', 
+        top: '50%', 
+        translateY: '-50%', 
+        scale: [1.5, 1], 
+        duration: 1200, 
+        easing: 'easeOutExpo',
+    });
+}
+
 function showSecondMascotte() {
     const secondMascotte = document.getElementById('SecondMascotte');
     const firstMascotte = document.getElementById('FirstMascotte');
@@ -76,6 +91,7 @@ function showSecondMascotte() {
 
 
     document.addEventListener('DOMContentLoaded',move);
+    document.addEventListener('DOMContentLoaded',moveMascotte3);
     document.addEventListener('DOMContentLoaded',changeStyleText);
     Valider.addEventListener('click',() =>{
         hideButton(Refuser);

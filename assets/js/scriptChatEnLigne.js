@@ -10,7 +10,6 @@ inputChat.addEventListener('keypress', function(event) {
     }
 });
 
-
 socket.on('player disconnected', function(connectedPlayersCount) {
     console.log('Player disconnected from game: ' + gameId);
     document.getElementById('connected-players').innerText = connectedPlayersCount;
@@ -23,12 +22,13 @@ function sendMessage() {
     var input = document.getElementById('chat-input'); // Récupérer l'input
     var message = input.value;
     input.value = ''; // Réinitialiser l'input
-    socket.emit('chat message game', { gameId: gameId, message: message, userName: pseudo }); // Émettre le message
+    let cc = "cc"
+    socket.emit('chat message game', { gameId: gameId, message: message, userName: pseudoid }); // Envoyer le message au serveur
     console.log('Sending message: ' + message);
 }
 
 socket.on('chat message game', function(data) {
-    console.log('Received message: ' + data);
+    console.log('Received message: ', data);
     
     var messages = document.getElementById('chat-messages'); // Récupérer les messages
     var messageElement = document.createElement('p'); // Créer un élément div

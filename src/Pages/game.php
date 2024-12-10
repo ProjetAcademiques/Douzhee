@@ -359,7 +359,7 @@
         let nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
 
         let gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
-        let pseudo = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
+        let pseudoid = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
 
         let requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
         let connectedPlayers = <?= json_encode($connectedPlayers); ?>; // Récupérer le nombre de joueurs connectés

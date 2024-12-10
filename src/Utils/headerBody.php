@@ -18,7 +18,7 @@ if (isset($_SESSION['userId'])){
                 $_SESSION['douzeCoin'] = getMoneyById($_SESSION['userId']); // Pour éviter de faire des requêtes inutiles
             }
             if (!isset($_SESSION['pseudo'])){
-                $_SESSION['pseudo'] = getPseudoById($_SESSION['userId']);
+                $_SESSION['pseudo'] = getPseudoById($_SESSION['userId'])['pseudonyme']; // Pour éviter de faire des requêtes inutiles;
             }
         ?>
             <div class="selection_droite">

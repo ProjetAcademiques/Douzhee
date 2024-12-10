@@ -23,16 +23,16 @@
         $nbDouzhee = 0;
         $nbPartiesJoues = 0;
 
-        $insertStatsQuery = "INSERT INTO statistiques VALUES (nbPartiesGagnees, scoreMaximal, tempsJeu, ratioVictoire, nbSucces, nbDouzhee, nbPartieJoues)";
+        $insertStatsQuery = "INSERT INTO statistiques VALUES (null,:nbPartiesGagnees, :scoreMaximal, :tempsJeu, :ratioVictoire, :nbSucces, :nbDouzhee, :nbPartieJoues)";
 
         $statement = $connection->prepare($insertStatsQuery);
-        $statement->bindParam("nbPartiesGagnees", $nbPartiesGagnees, PDO::PARAM_INT);
-        $statement->bindParam("scoreMaximal", $scoreMaximal, PDO::PARAM_INT);
-        $statement->bindParam("tempsJeu", $tempsJeu, PDO::PARAM_STR);
-        $statement->bindParam("ratioVictoire", $ratioVictoire);
-        $statement->bindParam("nbSucces", $nbSucces, PDO::PARAM_INT);
-        $statement->bindParam("nbDouzhee", $nbDouzhee, PDO::PARAM_INT);
-        $statement->bindParam("nbPartieJoues", $nbPartiesJoues, PDO::PARAM_INT);
+        $statement->bindParam(":nbPartiesGagnees", $nbPartiesGagnees, PDO::PARAM_INT);
+        $statement->bindParam(":scoreMaximal", $scoreMaximal, PDO::PARAM_INT);
+        $statement->bindParam(":tempsJeu", $tempsJeu, PDO::PARAM_STR);
+        $statement->bindParam(":ratioVictoire", $ratioVictoire);
+        $statement->bindParam(":nbSucces", $nbSucces, PDO::PARAM_INT);
+        $statement->bindParam(":nbDouzhee", $nbDouzhee, PDO::PARAM_INT);
+        $statement->bindParam(":nbPartieJoues", $nbPartiesJoues, PDO::PARAM_INT);
         $statement->execute();
 
         $idStats = $connection->lastInsertId();
@@ -124,7 +124,7 @@
     function updateNbSucces(int $idUser): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $updateSucces = 'UPDATE statistiques SET nbSucces = nbSucces + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
+        $updateSucces = 'UPDATE statistiques SET nbSucces = nbSucces + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
         $statement = $connection->prepare($updateSucces);
         $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();

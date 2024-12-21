@@ -9,12 +9,8 @@ let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant l
 let button = document.getElementById('roll'); //bouton permettant de lancer les dés
 let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 
-let joueur1 = new Player(playerId, position);
+let joueur = new Player(playerId, position);
 let game = new GameDataManager(nbPlayers);
-
-console.log("Joueur : " + joueur1.getId());
-console.log("Position : " + joueur1.getPostion());
-console.log("Nombre de joueurs : " + game.getNbJoueurs());
 
 let nbRoll = 3; //nombre de lancés possible
 let nbDouzhee = 0; //nombre de Douzhee effectués
@@ -22,58 +18,53 @@ let nbDouzhee = 0; //nombre de Douzhee effectués
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
     input.addEventListener('click', (event) => {
-        event.target.value = event.target.placeholder;
-        event.target.placeholder = "-1";
-        event.target.disabled = true;
-
-        socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId });
-        console.log('gameId : ' + gameId);
+        if(event.target.value != ""){
+            socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId });
+        }
     })
 })
 
 socket.on('inputValue', (data) => {
-    console.log('inputValue received');
-    console.log(data);
     let inputElements = document.getElementById(data.idInput);
-    inputElements.value = data.value;
     inputElements.placeholder = "-1";
     inputElements.disabled = true;
 
-    ajoutScore({ target: inputElements });
+    //ajoutScore({ target: inputElements });
     resetManche();
 });
 
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
-des.forEach(de => {
-    de.addEventListener("click", (event) => {
+document.querySelector('.table').addEventListener('click', (event) => {
+    if (event.target.classList.contains('des')) {
         event.target.classList.toggle('libre');
         event.target.classList.toggle('selected');
-
         verifDesTousGardes();
-    })
-})
+    }
+});
+
 
 //ajout d'un event listener au bouton de lancés qui permet de lancer les dés
 button.addEventListener('click', () => {
-    let desGardes = gardeDes();
+    let desAGarder = gardeDes();
 
     activeInput();
 
-    joueur1.setListeDes(desGardes);
+    joueur.setListeDes(desAGarder);
 
-    afficheDes(desGardes);
+    socket.emit('afficheDes', { desGardes: desAGarder, listeDes: joueur.getListeDes(), gameId: gameId});
 
-    affichePointsCombinaisons();
+    socket.emit('calculCombinaisons', { listeDes: joueur.getListeDes(), joueur: joueur, position: joueur.getPostion(), reset: false, gameId: gameId});
 
     decrementRoll();
 });
 
 /**
  * @brief Permet d'afficher les dés du joueur en vérifiant si un dé est sélectionné ou non
- * @param {array Dice} desGardes liste des dés gardés par le joueur
+ * @param {Object} data liste des dés du joueur avec les dés qu'il faut garder
  */
-function afficheDes(desGardes){
-    let listeDes = joueur1.getListeDes();
+socket.on('afficheDes', (data) => {
+    let listeDes = data.listeDes;
+    let desGardes = data.desGardes;
 
     des.forEach((de, i) => {
         if (i < desGardes.length) {
@@ -84,43 +75,44 @@ function afficheDes(desGardes){
             de.classList.replace("selected", "libre");
         }
     });
-}
+})
 
 /**
  * @brief Permet d'afficher les points disponibles des combinaisons
- * @param {bool} reset true = vide l'affichage / false = affiche normalement les points
+ * @param {Object} data
  */
-function affichePointsCombinaisons(reset = false){
-    let pointsCombinaisons = GameDataManager.checkCombinaisons(joueur1.getListeDes());
+socket.on('affichePointsCombinaisons', (result) => {
+    const pointsCombinaisons = result.pointsCombinaisons;
 
-    if(pointsCombinaisons[12] != 0){
+    if (pointsCombinaisons[12] !== 0) {
         nbDouzhee++;
-        if(pointsCombinaisons[12] == 50 && inputs[12].value == 50){
-            inputs[12].value += 25;
-            joueur1.ajoutSectionInferieure(25);
-    
-            if(nbRoll == 3){
-                //zikette pour le succès du premier coup
-            }
-            if(nbDouzhee == 3){
-                //zikette pour le succès des 3 Douzhee
+        if (pointsCombinaisons[12] === 50 && inputs[12].value == 50) {
+            inputs[12].value = parseInt(inputs[12].value) + 25; // Ajout de 25 points
+            if (result.joueur === joueur) {
+                joueur.ajoutSectionInferieure(25);
+
+                if (nbRoll === 3) {
+                    // Succès pour le premier coup
+                }
+                if (nbDouzhee === 3) {
+                    // Succès pour 3 Douzhee
+                }
             }
         }
     }
 
-    for(let i = 0 ; i<13 ; i++){
-        let y = joueur1.getPostion() + (game.getNbJoueurs() * i) - 1;
-        console.log(y);
-        if(inputs[y].disabled != true){
-            if(!reset){
-                inputs[y].placeholder = pointsCombinaisons[i];
+    for (let i = 0; i < 13; i++) {
+        const y = result.position + (game.getNbJoueurs() * i) - 1;
+        if (inputs[y].placeholder !== "-1" || result.position !== joueur.getPostion()) {
+            if (!result.reset) {
                 inputs[y].value = pointsCombinaisons[i];
-            } else{
+            } else {
                 inputs[y].value = '';
             }
         }
     }
-}
+});
+
 
 /**
  * Permet de réduire de 1 le nombre de lancés
@@ -199,16 +191,16 @@ function activeRoll(){
  */
 function ajoutScore(event){
     if(event.target.name == 'section-superieure'){
-        joueur1.ajoutSectionSuperieure(parseInt(event.target.value));
+        joueur.ajoutSectionSuperieure(parseInt(event.target.value));
 
-        if(joueur1.getSectionSuperieure() > 62){
-            joueur1.ajoutSectionSuperieure(25);
+        if(joueur.getSectionSuperieure() > 62){
+            joueur.ajoutSectionSuperieure(25);
         }
     } else{
-        joueur1.ajoutSectionInferieure(parseInt(event.target.value));
+        joueur.ajoutSectionInferieure(parseInt(event.target.value));
     }
 
-    if(joueur1.getScore() >= 300){
+    if(joueur.getScore() >= 300){
         //zikette pour ajouter un succès
     }
 }
@@ -217,7 +209,7 @@ function ajoutScore(event){
  * @brief Permet de rénitialiser la manche
  */
 function resetManche(){
-    joueur1.resetTab()
+    joueur.resetTab()
 
     //libère tous les dés
     des.forEach(de => {
@@ -225,7 +217,7 @@ function resetManche(){
         de.innerHTML = '';
     })
 
-    affichePointsCombinaisons(true);
+    socket.emit('calculCombinaisons', { listeDes: joueur.getListeDes(), joueur: joueur, position: joueur.getPostion(), reset: true, gameId: gameId});
 
     activeRoll();
 

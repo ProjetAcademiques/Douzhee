@@ -3,6 +3,7 @@ const http = require('http'); // Importer le module HTTP de Node.js
 const socketIo = require('socket.io'); // Importer le module Socket.IO
 const path = require('path'); // Importer le module Path de Node.js
 const cors = require('cors'); // Importer le module CORS
+const { GameDataManager } = require('../assets/JS/Classes/GameDataManager');
 
 const app = express(); // Créer une application Express
 const server = http.createServer(app); // Créer un serveur HTTP en utilisant l'application Express
@@ -63,8 +64,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('inputValue', (data) => {
-        console.log('inputValue received');
-        console.log(data);
         io.to(data.gameId).emit('inputValue', data);
     });
 
@@ -113,6 +112,26 @@ io.on('connection', (socket) => {
         console.log(`Message received for game ${data.gameId} de ${data.userName}: ${data.message}`);
         io.to(data.gameId).emit('chat message game', data); // Diffuser le message à tous les clients dans la salle spécifique
     });
+
+    socket.on('afficheDes', (data) => {
+        io.to(data.gameId).emit('afficheDes', data);
+    });
+
+    socket.on('calculCombinaisons', (data) => {
+        let pointsCombi = [];
+        if(!data.reset){
+            pointsCombi = GameDataManager.checkCombinaisons(data.listeDes);
+        }
+
+        const results = {
+            pointsCombinaisons: pointsCombi,
+            joueur: data.joueur,
+            position: data.position,
+            reset: data.reset
+        }
+
+        io.to(data.gameId).emit('affichePointsCombinaisons', results);
+    })
 });
 
 // Écouter sur le port 8080

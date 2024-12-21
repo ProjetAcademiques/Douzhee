@@ -201,7 +201,7 @@ function readJoueur(int $id): ?Joueur {
     if($statement->execute()) {
         $results = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if(gettype($results) == "boolean") {
+        if(gettype($results) != "boolean") {
             $pseudo = $results ["pseudonyme"];
             $mdp = $results ["mdp"];
             $douzCoin = $results ["douzCoin"];

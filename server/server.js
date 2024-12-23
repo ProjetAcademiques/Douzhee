@@ -76,7 +76,7 @@ app.post('/start-game', async (req, res) => {
             listeDes: [],
             listeDesGardes: [],
             listePointsCombi: [],
-            listePointsObt: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            listePointsObt: [],
             scoreSecSup: 0,
             scoreSecInf: 0,
             scoreTot: 0,
@@ -291,6 +291,10 @@ io.on('connection', (socket) => {
 
     socket.on('transmitionPoints', (data) => {
         io.to(data.gameId).emit('transmitionPoints', data);
+    });
+
+    socket.on('transmitionDes', (data) => {
+        io.to(data.gameId).emit('transmitionDes', data);
     });
 });
 

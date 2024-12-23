@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             joinPartie();
         } else{
             const data = response.json();
-            reloadInfo(data);
+            socket.emit('reloadPage', {playerId: playerId, gameId: gameId});
         }
     } catch(error){
         console.error('Erreur réseau :', error);
@@ -133,9 +133,16 @@ socket.on('reloadPage', (data) => {
         const listePointsCombi = getInfo('listePointsCombi');
         const position = getInfo('position');
 
-        socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: listePointsCombi, listePointsObt: listePointsObt, position: position});
+        if(listePointsObt.length !== 0 || listePointsCombi !== 0){
+            socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: listePointsCombi, listePointsObt: listePointsObt, position: position});
+        }
+
+        const listeDes = getInfo('listeDes');
+        if(listeDes.length !== 0){
+            socket.emit('transmitionDes', {gameId: gameId, listeDes: listeDes});
+        }
     }
-})
+});
 
 socket.on('transmitionPoints', (data) => {
     let valueSrc;
@@ -151,7 +158,15 @@ socket.on('transmitionPoints', (data) => {
     if(inputElements.value !== valueSrc){
         affichePoints({listePointsObt: data.listePointsObt, listePointsCombi: data.listePointsCombi, position: data.position});
     }
-})
+});
+
+socket.on('transmitionDes', (data) => {
+    if(data.listeDes[0] !== parseInt(des[0].textContent)){
+        for(let i = 0; i < 5; i++){
+            des[i].textContent = data.listeDes[i];
+        }
+    }
+});
 
 socket.on('inputValue', (data) => {
     let inputElements = document.getElementById(data.idInput);
@@ -207,12 +222,6 @@ socket.on('affichePointsCombinaisons', (result) => {
         }
     }
 });
-
-function reloadInfo(data){
-    afficheListeDes({listeDes: data.listeDes, desGardes: data.listeDesGardes});
-
-    socket.emit('reloadPage', {playerId: playerId, gameId: gameId});
-}
 
 function afficheListeDes(data){
     const listeDes = data.listeDes;

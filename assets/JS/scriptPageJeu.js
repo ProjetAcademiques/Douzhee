@@ -1,4 +1,3 @@
-import { Player } from "./Classes/Player.js";
 import { GameDataManager } from "./Classes/GameDataManager.js";
 
 /**
@@ -6,15 +5,6 @@ import { GameDataManager } from "./Classes/GameDataManager.js";
  */
 
 let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant les points des combinaisons
-let button = document.getElementById('roll'); //bouton permettant de lancer les dés
-let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
-
-let joueur = new Player(playerId, position);
-let game = new GameDataManager(nbPlayers);
-
-let nbRoll = 3; //nombre de lancés possible
-let nbDouzhee = 0; //nombre de Douzhee effectués
-
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
     input.addEventListener('click', (event) => {
@@ -22,6 +12,145 @@ inputs.forEach(input => {
             socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId });
         }
     })
+})
+
+let button = document.getElementById('roll'); //bouton permettant de lancer les dés
+//ajout d'un event listener au bouton de lancés qui permet de lancer les dés
+button.addEventListener('click', actionRoll());
+
+let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
+//ajout d'un event listener à tous les dés pour permettre de les garder ou non
+document.querySelector('.table').addEventListener('click', (event) => {
+    if (event.target.classList.contains('des')) {
+        event.target.classList.toggle('libre');
+        event.target.classList.toggle('selected');
+        verifDesTousGardes();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try{
+        const response = await fetch(`/get-player-data?gameId=${gameId}&playerId=${playerId}`);
+        if(!response.ok){
+            joinPartie();
+        } else{
+            const data = response.json();
+            reloadInfo(data);
+        }
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+});
+
+async function joinPartie(){
+    try{
+        const response = await fetch('/start-game', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                gameId,
+                playerId,
+                position
+            }),
+        });
+
+        if(response.ok){
+            const result = await response.json();
+            console.log('Partie démarrée :', result);
+        } else {
+            console.error('Erreur lors de la création de la partie');
+        }
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+}
+
+async function getNbJoueurs(){
+    try {
+        const response = await fetch(`/game-player-count?gameId=${gameId}`);
+        const data = await JSON.parse(response.json());
+        console.log('Nombre de joueurs :', data);
+        return data;
+    } catch (error) {
+        console.error('Erreur réseau :', error);
+    }
+}
+
+async function getInfo(info){
+    try{
+        const response = await fetch(`/get-player-info?gameId=${gameId}$playerId=${playerId}&info=${info}`);
+        const data = await JSON.parse(response.json());
+        return data;
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+}
+
+async function updateInfo(info){
+    let action;
+    if(info.listeDes){
+        action += {listeDes: info.listeDes};
+    }
+    if(info.decrementRoll){
+        action += {decrementRoll: true};
+    }
+    if(info.scoreSecSup){
+        action += {scoreSecSup: info.scoreSecSup};
+    }
+    if(info.scoreSecInf){
+        action += {scoreSecInf: info.scoreSecInf};
+    }
+
+    try{
+        const response = fetch('/update-player', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                gameId: gameId,
+                playerId: playerId,
+                action: action
+            })
+        })
+
+        if(response.ok){
+            const data = response.json();
+            console.log(data);
+        } else{
+            console.error('Erreur lors de la mise à jour des dés');
+        }
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+}
+
+socket.on('reloadPage', (data) => {
+    if(data.playerId !== playerId){
+        const listePointsObt = getInfo('listePointsObt');
+        const listePointsCombi = getInfo('listePointsCombi');
+        const position = getInfo('position');
+
+        socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: listePointsCombi, listePointsObt: listePointsObt, position: position});
+    }
+})
+
+socket.on('transmitionPoints', (data) => {
+    let valueSrc;
+    if(data.listePointsObt[0] !== 0){
+        valueSrc = data.listePointsObt[0];
+    } else{
+        valueSrc = data.listePointsCombi[0];
+    }
+
+    const id = `${data.position - 1}`;
+    let inputElements = document.getElementById(id);
+
+    if(inputElements.value !== valueSrc){
+        affichePoints({listePointsObt: data.listePointsObt, listePointsCombi: data.listePointsCombi, position: data.position});
+    }
 })
 
 socket.on('inputValue', (data) => {
@@ -33,49 +162,13 @@ socket.on('inputValue', (data) => {
     resetManche();
 });
 
-//ajout d'un event listener à tous les dés pour permettre de les garder ou non
-document.querySelector('.table').addEventListener('click', (event) => {
-    if (event.target.classList.contains('des')) {
-        event.target.classList.toggle('libre');
-        event.target.classList.toggle('selected');
-        verifDesTousGardes();
-    }
-});
-
-
-//ajout d'un event listener au bouton de lancés qui permet de lancer les dés
-button.addEventListener('click', () => {
-    let desAGarder = gardeDes();
-
-    activeInput();
-
-    joueur.setListeDes(desAGarder);
-
-    socket.emit('afficheDes', { desGardes: desAGarder, listeDes: joueur.getListeDes(), gameId: gameId});
-
-    socket.emit('calculCombinaisons', { listeDes: joueur.getListeDes(), joueur: joueur, position: joueur.getPostion(), reset: false, gameId: gameId});
-
-    decrementRoll();
-});
-
 /**
  * @brief Permet d'afficher les dés du joueur en vérifiant si un dé est sélectionné ou non
  * @param {Object} data liste des dés du joueur avec les dés qu'il faut garder
  */
 socket.on('afficheDes', (data) => {
-    let listeDes = data.listeDes;
-    let desGardes = data.desGardes;
-
-    des.forEach((de, i) => {
-        if (i < desGardes.length) {
-            de.innerHTML = desGardes[i];
-            de.classList.replace("libre", "selected");
-        } else {
-            de.innerHTML = listeDes[i];
-            de.classList.replace("selected", "libre");
-        }
-    });
-})
+    afficheListeDes({listeDes: data.listeDes, desGardes: data.desGardes});
+});
 
 /**
  * @brief Permet d'afficher les points disponibles des combinaisons
@@ -88,7 +181,7 @@ socket.on('affichePointsCombinaisons', (result) => {
         nbDouzhee++;
         if (pointsCombinaisons[12] === 50 && inputs[12].value == 50) {
             inputs[12].value = parseInt(inputs[12].value) + 25; // Ajout de 25 points
-            if (result.joueur === joueur) {
+            if (result.playerId === playerId) {
                 joueur.ajoutSectionInferieure(25);
 
                 if (nbRoll === 3) {
@@ -102,8 +195,10 @@ socket.on('affichePointsCombinaisons', (result) => {
     }
 
     for (let i = 0; i < 13; i++) {
-        const y = result.position + (game.getNbJoueurs() * i) - 1;
-        if (inputs[y].placeholder !== "-1" || result.position !== joueur.getPostion()) {
+        const nbJoueurs = getNbJoueurs();
+        const y = result.position + (nbJoueurs * i) - 1;
+
+        if (inputs[y].placeholder !== "-1" || result.position !== getInfo('position')) {
             if (!result.reset) {
                 inputs[y].value = pointsCombinaisons[i];
             } else {
@@ -113,14 +208,65 @@ socket.on('affichePointsCombinaisons', (result) => {
     }
 });
 
+function reloadInfo(data){
+    afficheListeDes({listeDes: data.listeDes, desGardes: data.listeDesGardes});
 
-/**
- * Permet de réduire de 1 le nombre de lancés
- */
-function decrementRoll(){
-    nbRoll--;
-    if(nbRoll == 0){
-        button.disabled = true;
+    socket.emit('reloadPage', {playerId: playerId, gameId: gameId});
+}
+
+function afficheListeDes(data){
+    const listeDes = data.listeDes;
+    const desGardes = data.desGardes;
+
+    des.forEach((de, i) => {
+        if (i < desGardes.length) {
+            de.innerHTML = desGardes[i];
+            de.classList.replace("libre", "selected");
+        } else {
+            de.innerHTML = listeDes[i];
+            de.classList.replace("selected", "libre");
+        }
+    });
+}
+
+function affichePoints(data){
+    const nbJoueurs = getNbJoueurs();
+    data.listePointsObt.forEach((pointsObt, index) => {
+        const id = `${data.position + (nbJoueurs * index) - 1}`;
+        let inputElements = document.getElementById(id);
+
+        let value;
+        if(pointsObt !== 0){
+            inputElements.placeholder = "-1";
+            inputElements.disabled = true;
+            value = pointsObt;
+        } else{
+            value = data.listePointsCombi[index];
+        }
+        inputElements.value = value;
+    })
+}
+
+function actionRoll(){
+    verifDesTousGardes()
+    if(!button.disabled){
+        const desAGarder = gardeDes(); // constante représentant les dés gardés par le joueur
+        updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
+        updateInfo({listeDes: true}); // stocke la liste des dés du joueur
+
+        const listeDes = getInfo('listeDes');
+        const position = getInfo('position');
+    
+        // affiche les dés du joueur à tout le monde
+        socket.emit('afficheDes', { desGardes: desAGarder, listeDes: listeDes, gameId: gameId});
+    
+        activeInput(); // active tous les input afin que le joueur marque ses points
+    
+        // calcule toutes les combinaisons possibles avec les dés du joueur et les affiche
+        socket.emit('calculCombinaisons', { listeDes: listeDes, playerId: playerId, position: position, reset: false, gameId: gameId});
+    
+        updateInfo({decrementRoll: true}); // décrémente le nombre de roll du joueur
+        verifRoll();
     }
 }
 
@@ -145,16 +291,28 @@ function gardeDes(){
  */
 function verifDesTousGardes(){
     let nbDesGardes = 0;
+    const nbRoll = getInfo('nbRoll');
     des.forEach(de => {
         if(de.classList.contains("selected")){
             nbDesGardes++;
         }
     })
     if(nbDesGardes == 5){
-        button.disabled = true;
+        desactiveButtonRoll();
     } else if(nbRoll != 0){
         button.disabled = false;
     }
+}
+
+function verifRoll(){
+    const nbRoll = getInfo('nbRoll');
+    if(nbRoll === 0){
+        desactiveButtonRoll();
+    }
+}
+
+function desactiveButtonRoll(){
+    button.disabled = true;
 }
 
 /**
@@ -191,16 +349,16 @@ function activeRoll(){
  */
 function ajoutScore(event){
     if(event.target.name == 'section-superieure'){
-        joueur.ajoutSectionSuperieure(parseInt(event.target.value));
+        updateInfo({scoreSecSup: parseInt(event.target.value)});
 
-        if(joueur.getSectionSuperieure() > 62){
-            joueur.ajoutSectionSuperieure(25);
+        if(getInfo('scoreSecSup') > 62){
+            updateInfo({scoreSecSup: 25});
         }
     } else{
-        joueur.ajoutSectionInferieure(parseInt(event.target.value));
+        updateInfo({scoreSecInf: parseInt(event.target.value)});
     }
 
-    if(joueur.getScore() >= 300){
+    if(getInfo('scoreTot') >= 300){
         //zikette pour ajouter un succès
     }
 }
@@ -209,7 +367,7 @@ function ajoutScore(event){
  * @brief Permet de rénitialiser la manche
  */
 function resetManche(){
-    joueur.resetTab()
+    updateInfo({listeDes: []});
 
     //libère tous les dés
     des.forEach(de => {
@@ -217,7 +375,7 @@ function resetManche(){
         de.innerHTML = '';
     })
 
-    socket.emit('calculCombinaisons', { listeDes: joueur.getListeDes(), joueur: joueur, position: joueur.getPostion(), reset: true, gameId: gameId});
+    socket.emit('calculCombinaisons', { listeDes: getInfo('listeDes'), playerId: playerId, position: getInfo('position'), reset: true, gameId: gameId});
 
     activeRoll();
 

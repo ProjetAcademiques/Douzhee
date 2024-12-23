@@ -6,17 +6,21 @@ const path = require('path'); // Importer le module Path de Node.js
 const cors = require('cors'); // Importer le module CORS
 const { GameDataManager } = require('../assets/JS/Classes/GameDataManager');
 
-const client = redis.createClient();
+const client = redis.createClient({
+    host: '127.0.0.1',
+    port: 6379
+});
 
 const app = express(); // Créer une application Express
-const server = http.createServer(app); // Créer un serveur HTTP en utilisant l'application Express
-const io = socketIo(server, {
-    cors: {
-        origin: "http://localhost", // Autoriser les requêtes depuis http://localhost
-        methods: ["GET", "POST"]
-    }
-}); // Créer un serveur Socket.IO en utilisant le serveur HTTP
-app.use(cors()); // Utiliser le middleware CORS
+
+const corsOptions = { 
+    origin: 'http://localhost:8080', // Assurez-vous que cette URL correspond à l'origine de votre client 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+
+app.use(cors(corsOptions)); // Utiliser le middleware CORS
 
 /* a changer sur le VPS :
 const express = require('express'); // Importer le module Express.js
@@ -42,16 +46,21 @@ const io = socketIo(server, {
     }
 }); // Créer un serveur Socket.IO en utilisant le serveur HTTPS */
 
-app.use(express.static(path.join(__dirname))); // Servir les fichiers statiques dans le dossier public 
+app.use(express.static(path.join(__dirname, 'public'))); // Servir les fichiers statiques dans le dossier public 
+
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
 
 // Afficher le fichier index.html lorsqu'un client accède à la racine du serveur
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Afficher le fichier game.php lorsqu'un client accède à /game.php
 app.get('/game.php', (req, res) => { 
-    res.sendFile(__dirname + '../src/Pages/game.php'); // Envoi du fichier game.php
+    res.sendFile(path.join(__dirname, '../src/Pages/game.php')); // Envoi du fichier game.php
 });
 
 app.post('/start-game', async (req, res) => {
@@ -72,7 +81,7 @@ app.post('/start-game', async (req, res) => {
         }
 
         // Si ce n'est pas le cas, l'ajoute à la partie
-        await client.hmset(playerKey, {
+        await client.hSet(playerKey, {
             listeDes: [],
             listeDesGardes: [],
             listePointsCombi: [],
@@ -98,22 +107,29 @@ app.post('/start-game', async (req, res) => {
 
 app.get('/get-player-data', (req, res) => {
     const { gameId, playerId } = req.query; // Exemple: ?gameId=123&playerId=1
+    console.log(1);
 
     if(!gameId || !playerId){
         return res.status(400).send('ID de la partie et du joueur requis.');
     }
+    console.log(2);
 
     const key = `game:${gameId}:player:${playerId}`;
+    console.log(3);
 
-    client.hgetall(key, (err, data) => {
+    client.hGetAll(key, (err, data) => {
+        console.log(4);
         if (err || !data) {
             return res.status(404).send('Données non trouvées.');
         }
+        console.log(5);
         res.json(data);
+        console.log(6);
     });
 });
 
 app.get('/get-player-info', async (req, res) => {
+    console.log("Route /get-player-info atteinte avec les paramètres :", req.query);
     const { gameId, playerId, info } = req.query;
 
     if(!gameId || !playerId){
@@ -121,12 +137,12 @@ app.get('/get-player-info', async (req, res) => {
     }
 
     try{
-        const infoRecherchee = await client.get(`game:${gameId}:player:${playerId}:${info}`);
+        const infoRecherchee = await client.get(`gameId:${gameId}:player:${playerId}:${info}`);
 
         res.status(200).json({gameId, infoRecherchee: infoRecherchee});
     } catch(err){
         console.error(err);
-        res.status(500).send('Erreur lors de la récupération de la position du joueur.');
+        res.status(500).send('Erreur lors de la récupération des infos du joueur.');
     }
 });
 
@@ -149,41 +165,41 @@ app.get('/game-player-count', async (req, res) => {
 });
 
 app.post('/update-player', async (req, res) => {
-    const { gameId, playerId, action } = req.body; // Exemple: { gameId: 123, playerId: 1, action: { score: 10, position: { x: 1, y: 1 } } }
+    const { gameId, playerId, action } = req.query; // Exemple: { gameId: 123, playerId: 1, action: { score: 10, position: { x: 1, y: 1 } } }
     const key = `game:${gameId}:player:${playerId}`;
 
     // Mettre à jour les données spécifiques
     if (action.scoreSecSup) {
-        client.hincrby(key, 'scoreSecSup', action.scoreSecSup); // Incrémente le score de la section supérieure
-        client.hincrby(key, 'scoreTot', action.scoreSecSup); // Incrémente le score total
+        client.hIncrBy(key, 'scoreSecSup', action.scoreSecSup); // Incrémente le score de la section supérieure
+        client.hIncrBy(key, 'scoreTot', action.scoreSecSup); // Incrémente le score total
     }
 
     if (action.scoreSecInf) {
-        client.hincrby(key, 'scoreSecInf', action.scoreSecInf); // Incrémente le score de la section inférieure
-        client.hincrby(key, 'scoreTot', action.scoreSecInf); // Incrémente le score total
+        client.hIncrBy(key, 'scoreSecInf', action.scoreSecInf); // Incrémente le score de la section inférieure
+        client.hIncrBy(key, 'scoreTot', action.scoreSecInf); // Incrémente le score total
     }
 
     if (action.setNbRoll) {
-        client.hmset(key, 'nbRoll', action.setNbRoll); // met le nombre de roll du joueur à action.setNbRoll
+        client.hSet(key, 'nbRoll', action.setNbRoll); // met le nombre de roll du joueur à action.setNbRoll
     }
 
     if(action.decrementRoll){
-        client.hincrby(key, 'nbRoll', -1); // Décrémente le nombre de roll du joueur
+        client.hIncrBy(key, 'nbRoll', -1); // Décrémente le nombre de roll du joueur
     }
 
     if(action.listeDesGardes){
-        await client.hmset(key, 'listeDesGardes', action.listeDesGardes);
+        await client.hSet(key, 'listeDesGardes', action.listeDesGardes);
     }
 
     if(action.listeDes){
-        const listeDesGardes = await client.get(`game:${gameId}:player:${playerId}:listeDesGardes`);
+        const listeDesGardes = client.get(`game:${gameId}:player:${playerId}:listeDesGardes`);
         let listeDes = [...listeDesGardes];
             
         while (listeDes.length < 5) {
             const de = new Dice();
             listeDes.push(de.getFace());
         }
-        client.hmset(key, 'listeDes', listeDes); //change la liste des dés du joueur
+        client.hSet(key, 'listeDes', listeDes); //change la liste des dés du joueur
     }
 
     res.send('Données du joueur mises à jour !');
@@ -201,6 +217,16 @@ app.post('/end-game', (req, res) => {
     });
 });
 
+// Créer un serveur HTTP en utilisant l'application Express
+const server = http.createServer((req, res) => {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('API server: route not found');
+});
+
+const io = socketIo(server, {
+    cors: corsOptions
+}); // Créer un serveur Socket.IO en utilisant le serveur HTTP
+
 // Suivre les connexions des joueurs
 const connectedPlayers = {};
 
@@ -214,6 +240,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('inputValue', (data) => {
+        const key = `game:${data.gameId}:player:${data.playerId}`;
         client.json.set(key, `$.listePointsObt[${data.index}]`, data.value);
         io.to(data.gameId).emit('inputValue', data);
     });
@@ -272,7 +299,8 @@ io.on('connection', (socket) => {
         let pointsCombi = [];
         if(!data.reset){
             pointsCombi = GameDataManager.checkCombinaisons(data.listeDes);
-            client.hmset(key, 'listePointsCombi', pointsCombi);
+            const key = `game:${data.gameId}:player:${data.playerId}`;
+            client.hSet(key, 'listePointsCombi', pointsCombi);
         }
 
         const results = {

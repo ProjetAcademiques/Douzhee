@@ -1,22 +1,18 @@
-import { GameDataManager } from "./Classes/GameDataManager.js";
-
 /**
  * @author Nathan
  */
+
+const URL = "http://localhost:8080/";
 
 let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant les points des combinaisons
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
     input.addEventListener('click', (event) => {
         if(event.target.value != ""){
-            socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId });
+            socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId, playerId: playerId});
         }
     })
 })
-
-let button = document.getElementById('roll'); //bouton permettant de lancer les dés
-//ajout d'un event listener au bouton de lancés qui permet de lancer les dés
-button.addEventListener('click', actionRoll());
 
 let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
@@ -28,9 +24,15 @@ document.querySelector('.table').addEventListener('click', (event) => {
     }
 });
 
+let button = document.getElementById('roll'); //bouton permettant de lancer les dés
+//ajout d'un event listener au bouton de lancés qui permet de lancer les dés
+button.addEventListener('click', actionRoll);
+
 document.addEventListener('DOMContentLoaded', async () => {
     try{
-        const response = await fetch(`/get-player-data?gameId=${gameId}&playerId=${playerId}`);
+        console.log(gameId);
+        console.log(playerId);
+        const response = await fetch(URL + `douzhee/server/server.js/get-player-data?gameId=${gameId}&playerId=${playerId}`);
         if(!response.ok){
             joinPartie();
         } else{
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function joinPartie(){
     try{
-        const response = await fetch('/start-game', {
+        const response = await fetch(URL + 'douzhee/server/server.js/start-game', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,8 +71,8 @@ async function joinPartie(){
 
 async function getNbJoueurs(){
     try {
-        const response = await fetch(`/game-player-count?gameId=${gameId}`);
-        const data = await JSON.parse(response.json());
+        const response = await fetch(URL + `douzhee/server/server.js/game-player-count?gameId=${gameId}`);
+        const data = await response.json();
         console.log('Nombre de joueurs :', data);
         return data;
     } catch (error) {
@@ -80,8 +82,9 @@ async function getNbJoueurs(){
 
 async function getInfo(info){
     try{
-        const response = await fetch(`/get-player-info?gameId=${gameId}$playerId=${playerId}&info=${info}`);
-        const data = await JSON.parse(response.json());
+        const response = await fetch(URL + `douzhee/server/server.js/get-player-info?gameId=${gameId}&playerId=${playerId}&info=${info}`);
+        console.log(response);
+        const data = await response.json();
         return data;
     } catch(error){
         console.error('Erreur réseau :', error);
@@ -104,7 +107,7 @@ async function updateInfo(info){
     }
 
     try{
-        const response = fetch('/update-player', {
+        const response = fetch(URL + 'douzhee/server/server.js/update-player', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,4 +1,8 @@
 <?php
+    header("Access-Control-Allow-Origin: http://localhost:8080");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../CRUD/CRUDPartie.php");

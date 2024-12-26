@@ -7,14 +7,16 @@ const cors = require('cors'); // Importer le module CORS
 const { GameDataManager } = require('../assets/JS/Classes/GameDataManager');
 
 const client = redis.createClient({
-    host: '127.0.0.1',
-    port: 6379
+    url: 'redis://127.0.0.1:6379',
 });
+client.connect()
+    .then(() => console.log('Connected to Redis'))
+    .catch((err) => console.error('Redis connection error:', err));
 
 const app = express(); // Créer une application Express
 
 const corsOptions = { 
-    origin: 'http://localhost:8080', // Assurez-vous que cette URL correspond à l'origine de votre client 
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -107,24 +109,18 @@ app.post('/start-game', async (req, res) => {
 
 app.get('/get-player-data', (req, res) => {
     const { gameId, playerId } = req.query; // Exemple: ?gameId=123&playerId=1
-    console.log(1);
 
     if(!gameId || !playerId){
         return res.status(400).send('ID de la partie et du joueur requis.');
     }
-    console.log(2);
 
     const key = `game:${gameId}:player:${playerId}`;
-    console.log(3);
 
     client.hGetAll(key, (err, data) => {
-        console.log(4);
         if (err || !data) {
             return res.status(404).send('Données non trouvées.');
         }
-        console.log(5);
         res.json(data);
-        console.log(6);
     });
 });
 
@@ -224,8 +220,14 @@ const server = http.createServer((req, res) => {
 });
 
 const io = socketIo(server, {
-    cors: corsOptions
-}); // Créer un serveur Socket.IO en utilisant le serveur HTTP
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        allowedHeaders: ["my-custom-header"],
+        credentials: true
+    }
+});
+
 
 // Suivre les connexions des joueurs
 const connectedPlayers = {};

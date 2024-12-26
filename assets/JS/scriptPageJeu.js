@@ -32,11 +32,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     try{
         console.log(gameId);
         console.log(playerId);
-        const response = await fetch(URL + `douzhee/server/server.js/get-player-data?gameId=${gameId}&playerId=${playerId}`);
+        const response = await fetch(`${URL}get-player-data?gameId=${gameId}&playerId=${playerId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
         if(!response.ok){
             joinPartie();
         } else{
-            const data = response.json();
+            const data = await response.json();
             socket.emit('reloadPage', {playerId: playerId, gameId: gameId});
         }
     } catch(error){
@@ -46,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function joinPartie(){
     try{
-        const response = await fetch(URL + 'douzhee/server/server.js/start-game', {
+        const response = await fetch(`${URL}start-game`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -56,13 +62,14 @@ async function joinPartie(){
                 playerId,
                 position
             }),
+            mode: 'cors'
         });
 
         if(response.ok){
             const result = await response.json();
             console.log('Partie démarrée :', result);
         } else {
-            console.error('Erreur lors de la création de la partie');
+            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
         }
     } catch(error){
         console.error('Erreur réseau :', error);
@@ -71,7 +78,13 @@ async function joinPartie(){
 
 async function getNbJoueurs(){
     try {
-        const response = await fetch(URL + `douzhee/server/server.js/game-player-count?gameId=${gameId}`);
+        const response = await fetch(`${URL}game-player-count?gameId=${gameId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
         const data = await response.json();
         console.log('Nombre de joueurs :', data);
         return data;
@@ -82,8 +95,13 @@ async function getNbJoueurs(){
 
 async function getInfo(info){
     try{
-        const response = await fetch(URL + `douzhee/server/server.js/get-player-info?gameId=${gameId}&playerId=${playerId}&info=${info}`);
-        console.log(response);
+        const response = await fetch(`${URL}get-player-info?gameId=${gameId}&playerId=${playerId}&info=${info}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
         const data = await response.json();
         return data;
     } catch(error){
@@ -92,22 +110,22 @@ async function getInfo(info){
 }
 
 async function updateInfo(info){
-    let action;
-    if(info.listeDes){
-        action += {listeDes: info.listeDes};
+    let action = {};
+    if (info.listeDes) {
+        action = { ...action, listeDes: info.listeDes };
     }
-    if(info.decrementRoll){
-        action += {decrementRoll: true};
+    if (info.decrementRoll) {
+        action = { ...action, decrementRoll: true };
     }
-    if(info.scoreSecSup){
-        action += {scoreSecSup: info.scoreSecSup};
+    if (info.scoreSecSup) {
+        action = { ...action, scoreSecSup: info.scoreSecSup };
     }
-    if(info.scoreSecInf){
-        action += {scoreSecInf: info.scoreSecInf};
-    }
+    if (info.scoreSecInf) {
+        action = { ...action, scoreSecInf: info.scoreSecInf };
+    }    
 
     try{
-        const response = fetch(URL + 'douzhee/server/server.js/update-player', {
+        const response = fetch(`${URL}update-player`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,38 +134,39 @@ async function updateInfo(info){
                 gameId: gameId,
                 playerId: playerId,
                 action: action
-            })
+            }),
+            mode: 'cors'
         })
 
         if(response.ok){
-            const data = response.json();
+            const data = await response.json();
             console.log(data);
         } else{
-            console.error('Erreur lors de la mise à jour des dés');
+            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
         }
     } catch(error){
         console.error('Erreur réseau :', error);
     }
 }
 
-socket.on('reloadPage', (data) => {
+socket.on('reloadPage', async (data) => {
     if(data.playerId !== playerId){
-        const listePointsObt = getInfo('listePointsObt');
-        const listePointsCombi = getInfo('listePointsCombi');
-        const position = getInfo('position');
+        const listePointsObt = await getInfo('listePointsObt');
+        const listePointsCombi = await getInfo('listePointsCombi');
+        const position = await getInfo('position');
 
         if(listePointsObt.length !== 0 || listePointsCombi !== 0){
             socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: listePointsCombi, listePointsObt: listePointsObt, position: position});
         }
 
-        const listeDes = getInfo('listeDes');
+        const listeDes = await getInfo('listeDes');
         if(listeDes.length !== 0){
             socket.emit('transmitionDes', {gameId: gameId, listeDes: listeDes});
         }
     }
 });
 
-socket.on('transmitionPoints', (data) => {
+socket.on('transmitionPoints', async (data) => {
     let valueSrc;
     if(data.listePointsObt[0] !== 0){
         valueSrc = data.listePointsObt[0];
@@ -159,7 +178,7 @@ socket.on('transmitionPoints', (data) => {
     let inputElements = document.getElementById(id);
 
     if(inputElements.value !== valueSrc){
-        affichePoints({listePointsObt: data.listePointsObt, listePointsCombi: data.listePointsCombi, position: data.position});
+        await affichePoints({listePointsObt: data.listePointsObt, listePointsCombi: data.listePointsCombi, position: data.position});
     }
 });
 
@@ -184,15 +203,15 @@ socket.on('inputValue', (data) => {
  * @brief Permet d'afficher les dés du joueur en vérifiant si un dé est sélectionné ou non
  * @param {Object} data liste des dés du joueur avec les dés qu'il faut garder
  */
-socket.on('afficheDes', (data) => {
-    afficheListeDes({listeDes: data.listeDes, desGardes: data.desGardes});
+socket.on('afficheDes', async (data) => {
+    afficheListeDes({ listeDes: data.listeDes, desGardes: data.desGardes });
 });
 
 /**
  * @brief Permet d'afficher les points disponibles des combinaisons
  * @param {Object} data
  */
-socket.on('affichePointsCombinaisons', (result) => {
+socket.on('affichePointsCombinaisons', async (result) => {
     const pointsCombinaisons = result.pointsCombinaisons;
 
     if (pointsCombinaisons[12] !== 0) {
@@ -213,7 +232,7 @@ socket.on('affichePointsCombinaisons', (result) => {
     }
 
     for (let i = 0; i < 13; i++) {
-        const nbJoueurs = getNbJoueurs();
+        const nbJoueurs = await getNbJoueurs();
         const y = result.position + (nbJoueurs * i) - 1;
 
         if (inputs[y].placeholder !== "-1" || result.position !== getInfo('position')) {
@@ -241,8 +260,8 @@ function afficheListeDes(data){
     });
 }
 
-function affichePoints(data){
-    const nbJoueurs = getNbJoueurs();
+async function affichePoints(data){
+    const nbJoueurs = await getNbJoueurs();
     data.listePointsObt.forEach((pointsObt, index) => {
         const id = `${data.position + (nbJoueurs * index) - 1}`;
         let inputElements = document.getElementById(id);
@@ -259,15 +278,15 @@ function affichePoints(data){
     })
 }
 
-function actionRoll(){
+async function actionRoll(){
     verifDesTousGardes()
     if(!button.disabled){
         const desAGarder = gardeDes(); // constante représentant les dés gardés par le joueur
-        updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
-        updateInfo({listeDes: true}); // stocke la liste des dés du joueur
+        await updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
+        await updateInfo({listeDes: true}); // stocke la liste des dés du joueur
 
-        const listeDes = getInfo('listeDes');
-        const position = getInfo('position');
+        const listeDes = await getInfo('listeDes');
+        const position = await getInfo('position');
     
         // affiche les dés du joueur à tout le monde
         socket.emit('afficheDes', { desGardes: desAGarder, listeDes: listeDes, gameId: gameId});
@@ -277,7 +296,7 @@ function actionRoll(){
         // calcule toutes les combinaisons possibles avec les dés du joueur et les affiche
         socket.emit('calculCombinaisons', { listeDes: listeDes, playerId: playerId, position: position, reset: false, gameId: gameId});
     
-        updateInfo({decrementRoll: true}); // décrémente le nombre de roll du joueur
+        await updateInfo({decrementRoll: true}); // décrémente le nombre de roll du joueur
         verifRoll();
     }
 }
@@ -291,7 +310,10 @@ function gardeDes(){
 
     des.forEach(de => {
         if(de.classList.contains("selected")){
-            desGardes.push(parseInt(de.textContent));
+            if(!isNaN(de.textContent)) {
+                desGardes.push(parseInt(de.textContent));
+            }
+            
         }
     })
 
@@ -301,9 +323,9 @@ function gardeDes(){
 /**
  * @brief Permet de vérifier si le joueur garde tous les dés pour désactiver le bouton de lancés
  */
-function verifDesTousGardes(){
+async function verifDesTousGardes(){
     let nbDesGardes = 0;
-    const nbRoll = getInfo('nbRoll');
+    const nbRoll = await getInfo('nbRoll');
     des.forEach(de => {
         if(de.classList.contains("selected")){
             nbDesGardes++;
@@ -316,8 +338,8 @@ function verifDesTousGardes(){
     }
 }
 
-function verifRoll(){
-    const nbRoll = getInfo('nbRoll');
+async function verifRoll(){
+    const nbRoll = await getInfo('nbRoll');
     if(nbRoll === 0){
         desactiveButtonRoll();
     }
@@ -359,18 +381,18 @@ function activeRoll(){
  * @brief Met à jour le score du joueur en fonction de la section sélectionnée
  * @param {event} event input sélectionné pour être rempli
  */
-function ajoutScore(event){
+async function ajoutScore(event){
     if(event.target.name == 'section-superieure'){
-        updateInfo({scoreSecSup: parseInt(event.target.value)});
+        await updateInfo({scoreSecSup: parseInt(event.target.value)});
 
         if(getInfo('scoreSecSup') > 62){
-            updateInfo({scoreSecSup: 25});
+            await updateInfo({scoreSecSup: 25});
         }
     } else{
-        updateInfo({scoreSecInf: parseInt(event.target.value)});
+        await updateInfo({scoreSecInf: parseInt(event.target.value)});
     }
 
-    if(getInfo('scoreTot') >= 300){
+    if(await getInfo('scoreTot') >= 300){
         //zikette pour ajouter un succès
     }
 }
@@ -378,16 +400,18 @@ function ajoutScore(event){
 /**
  * @brief Permet de rénitialiser la manche
  */
-function resetManche(){
-    updateInfo({listeDes: []});
+async function resetManche(){
+    await updateInfo({listeDes: []});
 
     //libère tous les dés
     des.forEach(de => {
-        de.classList.replace("selected", "libre");
+        if (de.classList.contains('selected')) {
+            de.classList.replace('selected', 'libre');
+        }        
         de.innerHTML = '';
     })
 
-    socket.emit('calculCombinaisons', { listeDes: getInfo('listeDes'), playerId: playerId, position: getInfo('position'), reset: true, gameId: gameId});
+    socket.emit('calculCombinaisons', { listeDes: await getInfo('listeDes'), playerId: playerId, position: await getInfo('position'), reset: true, gameId: gameId});
 
     activeRoll();
 

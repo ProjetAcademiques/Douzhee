@@ -28,12 +28,10 @@ let button = document.getElementById('roll'); //bouton permettant de lancer les 
 //ajout d'un event listener au bouton de lancés qui permet de lancer les dés
 button.addEventListener('click', actionRoll);
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const donnees = localStorage.getItem('donneesJoueur');
-    if(donnees){
-        socket.emit('reloadPage', gameId);
-    } else{
-       const donneesJoueur = {
+document.addEventListener('DOMContentLoaded', () => {
+    let donneesJoueur = localStorage.getItem('donneesJoueur');
+    if (!donneesJoueur) {
+        donneesJoueur = {
             listeDes: [],
             listeDesGardes: [],
             listePointsCombi: [],
@@ -41,11 +39,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             scoreSecSup: 0,
             scoreSecInf: 0,
             scoreTot: 0,
-            nbRoll: 0,
+            nbRoll: 3,
             nbDouzhee: 0,
             position: position
-        }
-        localStorage.setItem('donneesJoueur', donneesJoueur);
+        };
+        localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
     }
 });
 
@@ -154,30 +152,41 @@ async function updateInfo(info){
 
 */
 
-function updateInfo(info){
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
-    if(info.listeDes){
-        donneesJoueur.listeDes = setListeDes(donneesJoueur.listeDesGardes);
-    } else if(info.decrementRoll){
-        donneesJoueur.nbRoll -= 1;
-    } else if(info.listeDesGardes){
-        donneesJoueur.listeDesGardes = info.listeDesGardes;
-    } else if(info.listePointsCombi){
-        donneesJoueur.listePointsCombi = info.listePointsCombi;
-    } else if(info.listePointsObt){
-        donneesJoueur.listePointsObt[info.index] = info.listePointsObt;
-    } else if(info.scoreSecSup){
-        donneesJoueur.scoreSecSup = info.scoreSecSup;
-    } else if(info.scoreSecInf){
-        donneesJoueur.scoreSecInf = info.scoreSecInf;
+function updateInfo(info) {
+    let donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    if (!donneesJoueur) {
+        console.error("Les données du joueur sont introuvables.");
+        return;
     }
 
-    localStorage.setItem('donnneesJoueur', donneesJoueur);
+    if (info.listeDes) {
+        donneesJoueur.listeDes = setListeDes(Array.isArray(info.listeDesGardes) ? info.listeDesGardes : []);
+    }
+    if (info.decrementRoll) {
+        donneesJoueur.nbRoll -= 1;
+    }
+    if (info.listeDesGardes) {
+        donneesJoueur.listeDesGardes = Array.isArray(info.listeDesGardes) ? info.listeDesGardes : [];
+    }
+    if (info.listePointsCombi) {
+        donneesJoueur.listePointsCombi = Array.isArray(info.listePointsCombi) ? info.listePointsCombi : [];
+    }
+    if (info.listePointsObt) {
+        donneesJoueur.listePointsObt[info.index] = info.listePointsObt.value;
+    }
+    if (info.scoreSecSup) {
+        donneesJoueur.scoreSecSup = info.scoreSecSup.value;
+    }
+    if (info.scoreSecInf) {
+        donneesJoueur.scoreSecInf = info.scoreSecInf.value;
+    }
+
+    localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
 }
 
 socket.on('reloadPage', () => {
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
-
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    
     if(donneesJoueur.listePointsObt.length !== 0 || donneesJoueur.listePointsCombi.length !== 0){
         socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: donneesJoueur.listePointsCombi, listePointsObt: donneesJoueur.listePointsObt, position: donneesJoueur.position});
     }
@@ -237,7 +246,7 @@ socket.on('afficheDes', (data) => {
  * @param {Object} data
  */
 socket.on('affichePointsCombinaisons', (result) => {
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     const pointsCombinaisons = result.pointsCombinaisons;
 
     if(data.playerId === playerId){
@@ -279,8 +288,8 @@ function setListeDes(desGardes){
     let listeDes = [...desGardes];
         
     while (listeDes.length < 5) {
-        let de = new Dice();
-        listeDes.push(de.getFace());
+        let de = Math.floor(Math.random() * 6) + 1;
+        listeDes.push(de);
     }
 
     return listeDes;
@@ -325,7 +334,7 @@ function actionRoll(){
         updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
         updateInfo({listeDes: true}); // stocke la liste des dés du joueur
 
-        const donneesJoueur = localStorage.getItem('donneesJoueur');
+        const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     
         // affiche les dés du joueur à tout le monde
         socket.emit('afficheDes', { desGardes: desAGarder, listeDes: donneesJoueur.listeDes, gameId: gameId});
@@ -363,7 +372,8 @@ function gardeDes(){
  * @brief Permet de vérifier si le joueur garde tous les dés pour désactiver le bouton de lancés
  */
 function verifDesTousGardes(){
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
+    console.log(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     let nbDesGardes = 0;
     const nbRoll = donneesJoueur.nbRoll;
     des.forEach(de => {
@@ -379,7 +389,7 @@ function verifDesTousGardes(){
 }
 
 function verifRoll(){
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     const nbRoll = donneesJoueur.nbRoll;
     if(nbRoll === 0){
         desactiveButtonRoll();
@@ -433,7 +443,7 @@ function ajoutScore(event){
         updateInfo({scoreSecInf: parseInt(event.target.value)});
     }
 
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     if(donneesJoueur.scoreTot >= 300){
         //zikette pour ajouter un succès
     }
@@ -453,7 +463,7 @@ function resetManche(){
         de.innerHTML = '';
     })
 
-    const donneesJoueur = localStorage.getItem('donneesJoueur');
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
 
     activeRoll();

@@ -29,7 +29,7 @@ let button = document.getElementById('roll'); //bouton permettant de lancer les 
 button.addEventListener('click', actionRoll);
 
 document.addEventListener('DOMContentLoaded', () => {
-    let donneesJoueur = localStorage.getItem('donneesJoueur');
+    let donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     if (!donneesJoueur) {
         donneesJoueur = {
             listeDes: [],
@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
             position: position
         };
         localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
+    } else{
+        socket.emit('reloadPage', gameId);
     }
 });
 
@@ -159,26 +161,30 @@ function updateInfo(info) {
         return;
     }
 
-    if (info.listeDes) {
+    if(info.listeDes){
         donneesJoueur.listeDes = setListeDes(Array.isArray(info.listeDesGardes) ? info.listeDesGardes : []);
     }
-    if (info.decrementRoll) {
+    if(info.decrementRoll){
         donneesJoueur.nbRoll -= 1;
     }
-    if (info.listeDesGardes) {
+    if(info.listeDesGardes){
         donneesJoueur.listeDesGardes = Array.isArray(info.listeDesGardes) ? info.listeDesGardes : [];
     }
-    if (info.listePointsCombi) {
+    if(info.listePointsCombi){
         donneesJoueur.listePointsCombi = Array.isArray(info.listePointsCombi) ? info.listePointsCombi : [];
+        console.log(donneesJoueur.listePointsCombi);
     }
-    if (info.listePointsObt) {
+    if(info.listePointsObt){
         donneesJoueur.listePointsObt[info.index] = info.listePointsObt.value;
     }
-    if (info.scoreSecSup) {
+    if(info.scoreSecSup){
         donneesJoueur.scoreSecSup = info.scoreSecSup.value;
     }
-    if (info.scoreSecInf) {
+    if(info.scoreSecInf){
         donneesJoueur.scoreSecInf = info.scoreSecInf.value;
+    }
+    if(info.nbDouzhee){
+        donneesJoueur.nbDouzhee += 1;
     }
 
     localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
@@ -188,6 +194,7 @@ socket.on('reloadPage', () => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     
     if(donneesJoueur.listePointsObt.length !== 0 || donneesJoueur.listePointsCombi.length !== 0){
+        console.log('lezgong' + donneesJoueur.listePointsCombi);
         socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: donneesJoueur.listePointsCombi, listePointsObt: donneesJoueur.listePointsObt, position: donneesJoueur.position});
     }
 
@@ -249,12 +256,15 @@ socket.on('affichePointsCombinaisons', (result) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     const pointsCombinaisons = result.pointsCombinaisons;
 
-    if(data.playerId === playerId){
+    console.log(result.playerId);
+    console.log(playerId);
+    if(result.playerId === playerId){
+        console.log('djibril');
         updateInfo({listePointsCombi: pointsCombinaisons});
     }
 
     if (pointsCombinaisons[12] !== 0) {
-        nbDouzhee++;
+        updateInfo({nbDouzhee: true});
         if (pointsCombinaisons[12] === 50 && inputs[12].value == 50) {
             inputs[12].value = parseInt(inputs[12].value) + 25; // Ajout de 25 points
             if (result.playerId === playerId) {

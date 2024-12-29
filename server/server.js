@@ -300,6 +300,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('reloadPage', (gameId) => {
+        console.log(gameId);
         io.to(gameId).emit('reloadPage');
     });
 

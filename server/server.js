@@ -1,5 +1,4 @@
 const express = require('express'); // Importer le module Express.js
-// const redis = require('redis'); // Importer le module Redis.js
 const http = require('http'); // Importer le module HTTP de Node.js
 const socketIo = require('socket.io'); // Importer le module Socket.IO
 const path = require('path'); // Importer le module Path de Node.js
@@ -7,26 +6,15 @@ const cors = require('cors'); // Importer le module CORS
 
 const { GameDataManager } = require('../assets/JS/Classes/GameDataManager');
 
-/*const client = redis.createClient({
-    url: 'redis://127.0.0.1:6379',
-});
-client.connect()
-    .then(() => console.log('Connected to Redis'))
-    .catch((err) => console.error('Redis connection error:', err));*/
-
 const app = express(); // Créer une application Express
-
-// Créer un serveur HTTP en utilisant l'application Express
-const server = http.createServer(app);
-
+const server = http.createServer(app); // Créer un serveur HTTP en utilisant l'application Express
 const io = socketIo(server, {
     cors: {
         origin: "http://localhost", // Autoriser les requêtes depuis http://localhost
         methods: ["GET", "POST"]
     }
-});
-
-app.use(cors());
+}); // Créer un serveur Socket.IO en utilisant le serveur HTTP
+app.use(cors()); // Utiliser le middleware CORS
 
 /* a changer sur le VPS :
 const express = require('express'); // Importer le module Express.js
@@ -67,6 +55,15 @@ app.get('/game.php', (req, res) => {
 /*
 
 FONCTIONS LIEES A REDIS !!!
+
+const redis = require('redis');
+
+const client = redis.createClient({
+    url: 'redis://127.0.0.1:6379',
+});
+client.connect()
+    .then(() => console.log('Connected to Redis'))
+    .catch((err) => console.error('Redis connection error:', err));
 
 app.post('/start-game', async (req, res) => {
     const { gameId, playerId, position } = req.body;
@@ -231,6 +228,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('inputValue', (data) => {
+        console.log('inputValue received');
+        console.log(data);
         io.to(data.gameId).emit('inputValue', data);
     });
 

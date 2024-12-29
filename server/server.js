@@ -14,13 +14,15 @@ client.connect()
     .catch((err) => console.error('Redis connection error:', err));*/
 
 const app = express(); // Créer une application Express
+// Créer un serveur HTTP en utilisant l'application Express
+const server = http.createServer((req, res) => {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('API server: route not found');
+});
 
-const corsOptions = { 
-    origin: 'http://localhost',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-};
+const io = socketIo(server, corsOptions);
 
-app.use(cors(corsOptions)); // Utiliser le middleware CORS
+app.use(cors());
 
 /* a changer sur le VPS :
 const express = require('express'); // Importer le module Express.js
@@ -46,16 +48,16 @@ const io = socketIo(server, {
     }
 }); // Créer un serveur Socket.IO en utilisant le serveur HTTPS */
 
-app.use(express.static(path.join(__dirname, 'public'))); // Servir les fichiers statiques dans le dossier public 
+app.use(express.static(path.join(__dirname))); // Servir les fichiers statiques dans le dossier public 
 
 // Afficher le fichier index.html lorsqu'un client accède à la racine du serveur
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(__dirname + '/index.html');
 });
 
 // Afficher le fichier game.php lorsqu'un client accède à /game.php
 app.get('/game.php', (req, res) => { 
-    res.sendFile(path.join(__dirname, '../src/Pages/game.php')); // Envoi du fichier game.php
+    res.sendFile(__dirname + '../src/Pages/game.php'); // Envoi du fichier game.php
 });
 
 /*
@@ -211,14 +213,6 @@ app.post('/end-game', (req, res) => {
 });
 
 */
-
-// Créer un serveur HTTP en utilisant l'application Express
-const server = http.createServer((req, res) => {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('API server: route not found');
-});
-
-const io = socketIo(server, corsOptions);
 
 // Suivre les connexions des joueurs
 const connectedPlayers = {};

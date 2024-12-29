@@ -15,12 +15,11 @@ client.connect()
 
 const app = express(); // Créer une application Express
 // Créer un serveur HTTP en utilisant l'application Express
-const server = http.createServer((req, res) => {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('API server: route not found');
-});
+const server = http.createServer(app);
 
-const io = socketIo(server, corsOptions);
+const io = socketIo(server, {
+    
+});
 
 app.use(cors());
 

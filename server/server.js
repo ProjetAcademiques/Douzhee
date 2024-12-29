@@ -4,6 +4,7 @@ const http = require('http'); // Importer le module HTTP de Node.js
 const socketIo = require('socket.io'); // Importer le module Socket.IO
 const path = require('path'); // Importer le module Path de Node.js
 const cors = require('cors'); // Importer le module CORS
+
 const { GameDataManager } = require('../assets/JS/Classes/GameDataManager');
 
 /*const client = redis.createClient({
@@ -14,11 +15,15 @@ client.connect()
     .catch((err) => console.error('Redis connection error:', err));*/
 
 const app = express(); // Créer une application Express
+
 // Créer un serveur HTTP en utilisant l'application Express
 const server = http.createServer(app);
 
 const io = socketIo(server, {
-    
+    cors: {
+        origin: "http://localhost", // Autoriser les requêtes depuis http://localhost
+        methods: ["GET", "POST"]
+    }
 });
 
 app.use(cors());

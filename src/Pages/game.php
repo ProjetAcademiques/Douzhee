@@ -358,15 +358,15 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="../../assets/JS/connectionWebSocket.js"></script>
     <script>
-        let playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
-        let position = <?= json_encode($_SESSION["position"]); ?>; // Récupérer la position du joueur
-        let nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
+        const playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
+        const position = <?= json_encode($_SESSION["position"]); ?>; // Récupérer la position du joueur
+        const nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
 
-        let gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
-        let pseudoid = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
+        const gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
+        const pseudoid = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
 
-        let requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
-        let connectedPlayers = <?= json_encode($connectedPlayers); ?>; // Récupérer le nombre de joueurs connectés
+        const requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
+        const connectedPlayers = <?= json_encode($connectedPlayers); ?>; // Récupérer le nombre de joueurs connectés
 
         // Rejoindre la salle de chat pour la partie spécifique
         socket.emit('player joined', gameId);

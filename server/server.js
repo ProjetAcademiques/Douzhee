@@ -1,25 +1,23 @@
 const express = require('express'); // Importer le module Express.js
-const redis = require('redis'); // Importer le module Redis.js
+// const redis = require('redis'); // Importer le module Redis.js
 const http = require('http'); // Importer le module HTTP de Node.js
 const socketIo = require('socket.io'); // Importer le module Socket.IO
 const path = require('path'); // Importer le module Path de Node.js
 const cors = require('cors'); // Importer le module CORS
 const { GameDataManager } = require('../assets/JS/Classes/GameDataManager');
 
-const client = redis.createClient({
+/*const client = redis.createClient({
     url: 'redis://127.0.0.1:6379',
 });
 client.connect()
     .then(() => console.log('Connected to Redis'))
-    .catch((err) => console.error('Redis connection error:', err));
+    .catch((err) => console.error('Redis connection error:', err));*/
 
 const app = express(); // Créer une application Express
 
 const corsOptions = { 
-    origin: '*',
+    origin: 'http://localhost',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
 };
 
 app.use(cors(corsOptions)); // Utiliser le middleware CORS
@@ -50,11 +48,6 @@ const io = socketIo(server, {
 
 app.use(express.static(path.join(__dirname, 'public'))); // Servir les fichiers statiques dans le dossier public 
 
-app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    next();
-});
-
 // Afficher le fichier index.html lorsqu'un client accède à la racine du serveur
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -64,6 +57,10 @@ app.get('/', (req, res) => {
 app.get('/game.php', (req, res) => { 
     res.sendFile(path.join(__dirname, '../src/Pages/game.php')); // Envoi du fichier game.php
 });
+
+/*
+
+FONCTIONS LIEES A REDIS !!!
 
 app.post('/start-game', async (req, res) => {
     const { gameId, playerId, position } = req.body;
@@ -213,21 +210,15 @@ app.post('/end-game', (req, res) => {
     });
 });
 
+*/
+
 // Créer un serveur HTTP en utilisant l'application Express
 const server = http.createServer((req, res) => {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('API server: route not found');
 });
 
-const io = socketIo(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true
-    }
-});
-
+const io = socketIo(server, corsOptions);
 
 // Suivre les connexions des joueurs
 const connectedPlayers = {};
@@ -242,8 +233,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('inputValue', (data) => {
-        const key = `game:${data.gameId}:player:${data.playerId}`;
-        client.json.set(key, `$.listePointsObt[${data.index}]`, data.value);
         io.to(data.gameId).emit('inputValue', data);
     });
 
@@ -301,8 +290,6 @@ io.on('connection', (socket) => {
         let pointsCombi = [];
         if(!data.reset){
             pointsCombi = GameDataManager.checkCombinaisons(data.listeDes);
-            const key = `game:${data.gameId}:player:${data.playerId}`;
-            client.hSet(key, 'listePointsCombi', pointsCombi);
         }
 
         const results = {
@@ -315,8 +302,8 @@ io.on('connection', (socket) => {
         io.to(data.gameId).emit('affichePointsCombinaisons', results);
     });
 
-    socket.on('reloadPage', (data) => {
-        io.to(data.gameId).emit('reloadPage', {playerId: data.playerId});
+    socket.on('reloadPage', (gameId) => {
+        io.to(gameId).emit('reloadPage');
     });
 
     socket.on('transmitionPoints', (data) => {

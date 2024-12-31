@@ -187,9 +187,9 @@ function updateInfo(info) {
         const pointsIndex = Math.floor(inputId / nbPlayers);
         donneesJoueur.listePointsObt[pointsIndex] = info.listePointsObt;
     } else if(info.scoreSecSup){
-        donneesJoueur.scoreSecSup = info.scoreSecSup;
+        donneesJoueur.scoreSecSup += info.scoreSecSup;
     } else if(info.scoreSecInf){
-        donneesJoueur.scoreSecInf = info.scoreSecInf;
+        donneesJoueur.scoreSecInf += info.scoreSecInf;
     } else if(info.nbDouzhee){
         donneesJoueur.nbDouzhee += 1;
     } else if(info.bonusSecSup){
@@ -210,7 +210,7 @@ socket.on('reloadPage', (playerId) => {
         socket.emit('transmitionDes', {playerIdDest: playerId, gameId: gameId, listeDes: donneesJoueur.listeDes});
     }
 
-    if(donneesJoueur.scoreSecSup !== 0 && donneesJoueur.scoreSecInf !== 0){
+    if(donneesJoueur.scoreSecSup !== 0 || donneesJoueur.scoreSecInf !== 0){
         socket.emit('transmitionScore', {playerIdDest: playerId, gameId: gameId, scoreSecSup: donneesJoueur.scoreSecSup, scoreSecInf: donneesJoueur.scoreSecInf, position: donneesJoueur.position});
     }
 });

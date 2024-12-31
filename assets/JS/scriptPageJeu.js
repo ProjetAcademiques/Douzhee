@@ -50,17 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
             bonusSecSup: false,
             scoreSecInf: 0,
             scoreTot: 0,
-            nbRoll: 3,
+            nbRoll: 0,
             nbDouzhee: 0,
             position: position
         };
         localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
+
+        if(position === nbPlayers){
+            socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
+        }
     } else{
         socket.emit('reloadPage', {gameId: gameId, playerId: playerId});
-    }
-
-    if(position === nbPlayers){
-        socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
     }
 });
 
@@ -207,9 +207,13 @@ function updateInfo(info) {
 
 socket.on('debutNvTour', (positionNvJoueur) => {
     if(positionNvJoueur === position){
-        activeInput();
-        button.disabled = false;
-        updateInfo({nbRoll: 3});
+        if(!verifCombiRemplies()){
+            activeInput();
+            button.disabled = false;
+            updateInfo({nbRoll: 3});
+        } else{
+            finDePartie();
+        }
     }
 });
 
@@ -264,6 +268,16 @@ socket.on('inputValue', (data) => {
 socket.on('affichageScore', (data) => {
     afficheScore(data);
 });
+
+function verifCombiRemplies(){
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    for(let i = 0 ; i <= 12 ; i++){
+        if(donneesJoueur[i] === undefined || donneesJoueur[i] === null){
+            return false;
+        }
+    }
+    return true;
+}
 
 function afficheScore(data){
     if(data.scoreSecSup){

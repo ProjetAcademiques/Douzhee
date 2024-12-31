@@ -270,7 +270,7 @@
             <div class="des libre" id="dé4"></div>
             <div class="des libre" id="dé5"></div>
         </div>
-        <button id="roll"><p>Roll</p></button>
+        <button id="roll" disabled><p>Roll</p></button>
     </div>
 
     <div class="versus">

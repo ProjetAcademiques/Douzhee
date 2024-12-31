@@ -58,6 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } else{
         socket.emit('reloadPage', {gameId: gameId, playerId: playerId});
     }
+
+    if(position === nbPlayers){
+        socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
+    }
 });
 
 /*
@@ -194,10 +198,20 @@ function updateInfo(info) {
         donneesJoueur.nbDouzhee += 1;
     } else if(info.bonusSecSup){
         donneesJoueur.bonusSecSup = true;
+    } else if(info.nbRoll){
+        donneesJoueur.nbRoll = info.nbRoll;
     }
 
     localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
 }
+
+socket.on('debutNvTour', (positionNvJoueur) => {
+    if(positionNvJoueur === position){
+        activeInput();
+        button.disabled = false;
+        updateInfo({nbRoll: 3});
+    }
+});
 
 socket.on('reloadPage', (playerId) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
@@ -531,4 +545,6 @@ function resetManche(){
     socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
 
     desactiveInput();
+
+    socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
 }

@@ -297,8 +297,8 @@ io.on('connection', (socket) => {
         io.to(data.gameId).emit('affichePointsCombinaisons', results);
     });
 
-    socket.on('reloadPage', (gameId) => {
-        io.to(gameId).emit('reloadPage');
+    socket.on('reloadPage', (data) => {
+        io.to(data.gameId).emit('reloadPage', data.playerId);
     });
 
     socket.on('transmitionPoints', (data) => {
@@ -307,6 +307,14 @@ io.on('connection', (socket) => {
 
     socket.on('transmitionDes', (data) => {
         io.to(data.gameId).emit('transmitionDes', data);
+    });
+
+    socket.on('transmitionScore', (data) => {
+        io.to(data.gameId).emit('transmitionScore', data);
+    });
+
+    socket.on('affichageScore', (data) => {
+        io.to(data.gameId).emit('affichageScore', data);
     });
 });
 

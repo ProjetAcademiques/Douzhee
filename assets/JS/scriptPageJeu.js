@@ -8,8 +8,13 @@ let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant l
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
     input.addEventListener('click', (event) => {
-        if(event.target.value != ""){
-            socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId, playerId: playerId});
+        const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+        if(verifInputOwner(donneesJoueur.position, event.target.id)){
+            if(event.target.value !== ""){
+                socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId, playerId: playerId});
+            }
+        } else{
+            window.alert('Petit coquin va');
         }
     })
 })
@@ -17,10 +22,15 @@ inputs.forEach(input => {
 let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
 document.querySelector('.table').addEventListener('click', (event) => {
-    if (event.target.classList.contains('des')) {
-        event.target.classList.toggle('libre');
-        event.target.classList.toggle('selected');
-        verifDesTousGardes();
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    if(verifDiceOwner(donneesJoueur.listeDes)){
+        if (event.target.classList.contains('des')) {
+            event.target.classList.toggle('libre');
+            event.target.classList.toggle('selected');
+            verifDesTousGardes();
+        }
+    } else{
+        window.alert('Petit coquin va');
     }
 });
 
@@ -155,14 +165,16 @@ async function updateInfo(info){
 */
 
 function updateInfo(info) {
-    let donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     if (!donneesJoueur) {
         console.error("Les données du joueur sont introuvables.");
         return;
     }
 
-    if(info.listeDes){
-        donneesJoueur.listeDes = setListeDes(Array.isArray(info.listeDesGardes) ? info.listeDesGardes : []);
+    if(info.listeDes && !info.reset){
+        donneesJoueur.listeDes = setListeDes(Array.isArray(donneesJoueur.listeDesGardes) ? donneesJoueur.listeDesGardes : []);
+    } else if(info.reset && info.listeDes){
+        donneesJoueur.listeDes = info.listeDes;
     }
     if(info.decrementRoll){
         donneesJoueur.nbRoll -= 1;
@@ -172,10 +184,12 @@ function updateInfo(info) {
     }
     if(info.listePointsCombi){
         donneesJoueur.listePointsCombi = Array.isArray(info.listePointsCombi) ? info.listePointsCombi : [];
-        console.log(donneesJoueur.listePointsCombi);
     }
     if(info.listePointsObt){
-        donneesJoueur.listePointsObt[info.index] = info.listePointsObt.value;
+        const inputId = parseInt(info.index);
+        const pointsIndex = Math.floor(inputId / nbPlayers);
+        donneesJoueur.listePointsObt[pointsIndex] = info.listePointsObt;
+        console.log(donneesJoueur.listePointsObt);
     }
     if(info.scoreSecSup){
         donneesJoueur.scoreSecSup = info.scoreSecSup.value;
@@ -194,7 +208,6 @@ socket.on('reloadPage', () => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     
     if(donneesJoueur.listePointsObt.length !== 0 || donneesJoueur.listePointsCombi.length !== 0){
-        console.log('lezgong' + donneesJoueur.listePointsCombi);
         socket.emit('transmitionPoints', {gameId: gameId, listePointsCombi: donneesJoueur.listePointsCombi, listePointsObt: donneesJoueur.listePointsObt, position: donneesJoueur.position});
     }
 
@@ -229,10 +242,10 @@ socket.on('transmitionDes', (data) => {
 
 socket.on('inputValue', (data) => {
     if(data.playerId === playerId){
-        updateInfo({listePointsObt: data.value, index: data.index});
+        updateInfo({listePointsObt: data.value, index: data.idInput});
     }
 
-    let inputElements = document.getElementById(data.idInput);
+    const inputElements = document.getElementById(data.idInput);
     inputElements.placeholder = "-1";
     inputElements.disabled = true;
 
@@ -256,25 +269,22 @@ socket.on('affichePointsCombinaisons', (result) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     const pointsCombinaisons = result.pointsCombinaisons;
 
-    console.log(result.playerId);
-    console.log(playerId);
     if(result.playerId === playerId){
-        console.log('djibril');
         updateInfo({listePointsCombi: pointsCombinaisons});
-    }
 
-    if (pointsCombinaisons[12] !== 0) {
-        updateInfo({nbDouzhee: true});
-        if (pointsCombinaisons[12] === 50 && inputs[12].value == 50) {
-            inputs[12].value = parseInt(inputs[12].value) + 25; // Ajout de 25 points
-            if (result.playerId === playerId) {
-                joueur.ajoutSectionInferieure(25);
-
-                if (nbRoll === 3) {
-                    // Succès pour le premier coup
-                }
-                if (nbDouzhee === 3) {
-                    // Succès pour 3 Douzhee
+        if (pointsCombinaisons[12] !== 0) {
+            updateInfo({nbDouzhee: true});
+            if (pointsCombinaisons[12] === 50 && inputs[12].value == 50) {
+                inputs[12].value = parseInt(inputs[12].value) + 25; // Ajout de 25 points
+                if (result.playerId === playerId) {
+                    joueur.ajoutSectionInferieure(25);
+    
+                    if (nbRoll === 3) {
+                        // Succès pour le premier coup
+                    }
+                    if (nbDouzhee === 3) {
+                        // Succès pour 3 Douzhee
+                    }
                 }
             }
         }
@@ -293,6 +303,24 @@ socket.on('affichePointsCombinaisons', (result) => {
         }
     }
 });
+
+function verifInputOwner(position, id){
+    const indexJoueur = id % nbPlayers;
+    if(indexJoueur+1 !== position){
+        return false;
+    } else{
+        return true;
+    }
+}
+
+function verifDiceOwner(listeDes){
+    des.forEach((de, index) => {
+        if(de !== listeDes[index]){
+            return false;
+        }
+    });
+    return true;
+}
 
 function setListeDes(desGardes){
     let listeDes = [...desGardes];
@@ -321,24 +349,29 @@ function afficheListeDes(data){
 }
 
 function affichePoints(data){
-    data.listePointsObt.forEach((pointsObt, index) => {
-        const id = `${data.position + (nbPlayers * index) - 1}`;
+    for(let i = 0 ; i <= 12 ; i++){
+        const pointsObt = data.listePointsObt[i];
+        const pointsCombi = data.listePointsCombi[i];
+
+        const id = `${data.position + (nbPlayers * i) - 1}`;
         const inputElements = document.getElementById(id);
 
-        let value;
-        if(pointsObt !== 0){
+        let value = '';
+        if(pointsObt !== undefined && pointsObt !== null){
             inputElements.placeholder = "-1";
             inputElements.disabled = true;
             value = pointsObt;
-        } else{
-            value = data.listePointsCombi[index];
+        } else if(pointsCombi !== undefined){
+            inputElements.disabled = false;
+            value = pointsCombi;
         }
         inputElements.value = value;
-    })
+    }
 }
 
 function actionRoll(){
-    verifDesTousGardes()
+    verifDesTousGardes();
+    verifRoll();
     if(!button.disabled){
         const desAGarder = gardeDes(); // constante représentant les dés gardés par le joueur
         updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
@@ -355,7 +388,6 @@ function actionRoll(){
         socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: false, gameId: gameId});
     
         updateInfo({decrementRoll: true}); // décrémente le nombre de roll du joueur
-        verifRoll();
     }
 }
 
@@ -371,7 +403,6 @@ function gardeDes(){
             if(!isNaN(de.textContent)) {
                 desGardes.push(parseInt(de.textContent));
             }
-            
         }
     })
 
@@ -382,7 +413,6 @@ function gardeDes(){
  * @brief Permet de vérifier si le joueur garde tous les dés pour désactiver le bouton de lancés
  */
 function verifDesTousGardes(){
-    console.log(localStorage.getItem('donneesJoueur'));
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     let nbDesGardes = 0;
     const nbRoll = donneesJoueur.nbRoll;
@@ -393,7 +423,7 @@ function verifDesTousGardes(){
     })
     if(nbDesGardes == 5){
         desactiveButtonRoll();
-    } else if(nbRoll != 0){
+    } else if(nbRoll !== 0){
         button.disabled = false;
     }
 }
@@ -401,7 +431,7 @@ function verifDesTousGardes(){
 function verifRoll(){
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     const nbRoll = donneesJoueur.nbRoll;
-    if(nbRoll === 0){
+    if(nbRoll <= 0){
         desactiveButtonRoll();
     }
 }
@@ -431,14 +461,6 @@ function desactiveInput(){
 }
 
 /**
- * rénitialise le nombre de lancés et active le bouton de lancés
- */
-function activeRoll(){
-    nbRoll = 3;
-    button.disabled = false;
-}
-
-/**
  * @brief Met à jour le score du joueur en fonction de la section sélectionnée
  * @param {event} event input sélectionné pour être rempli
  */
@@ -463,7 +485,8 @@ function ajoutScore(event){
  * @brief Permet de rénitialiser la manche
  */
 function resetManche(){
-    updateInfo({listeDes: []});
+    updateInfo({listeDes: [], reset: true});
+    updateInfo({listePointsCombi: []});
 
     //libère tous les dés
     des.forEach(de => {
@@ -475,8 +498,6 @@ function resetManche(){
 
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
-
-    activeRoll();
 
     desactiveInput();
 }

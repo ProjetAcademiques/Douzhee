@@ -228,8 +228,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('inputValue', (data) => {
-        console.log('inputValue received');
-        console.log(data);
         io.to(data.gameId).emit('inputValue', data);
     });
 
@@ -300,7 +298,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('reloadPage', (gameId) => {
-        console.log(gameId);
         io.to(gameId).emit('reloadPage');
     });
 

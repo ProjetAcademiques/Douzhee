@@ -264,11 +264,11 @@
 
     <div class="dé-table">
         <div class="table">
-            <div class="des libre" id="dé1"></div>
-            <div class="des libre" id="dé2"></div>
-            <div class="des libre" id="dé3"></div>
-            <div class="des libre" id="dé4"></div>
-            <div class="des libre" id="dé5"></div>
+            <button class="des libre" id="dé1" disabled></button>
+            <button class="des libre" id="dé2" disabled></button>
+            <button class="des libre" id="dé3" disabled></button>
+            <button class="des libre" id="dé4" disabled></button>
+            <button class="des libre" id="dé5" disabled></button>
         </div>
         <button id="roll" disabled><p>Roll</p></button>
     </div>

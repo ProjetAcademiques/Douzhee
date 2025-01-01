@@ -219,6 +219,7 @@ socket.on('debutNvTour', (positionNvJoueur) => {
 function reprisePartie(nbRoll){
     if(!verifCombiRemplies()){
         nbRoll === 3 ? false : activeInput();
+        nbRoll < 3 ? activeDes() : false;
         button.disabled = false;
     } else{
         finDePartie();
@@ -397,6 +398,7 @@ function afficheListeDes(data){
             }
         } else{
             de.innerHTML = '';
+            de.classList.replace("selected", "libre");
         }
     });
 }
@@ -415,7 +417,6 @@ function affichePoints(data){
             inputElements.disabled = true;
             value = pointsObt;
         } else if(pointsCombi !== undefined){
-            inputElements.disabled = false;
             value = pointsCombi;
         }
         inputElements.value = value;
@@ -436,6 +437,7 @@ function actionRoll(){
         socket.emit('afficheDes', { desGardes: desAGarder, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: false});
     
         activeInput(); // active tous les input afin que le joueur marque ses points
+        activeDes();
     
         // calcule toutes les combinaisons possibles avec les dés du joueur et les affiche
         socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: false, gameId: gameId});
@@ -496,9 +498,11 @@ function desactiveButtonRoll(){
 /**
  * @brief Permet d'activer tous les input qui n'ont pas encore été remplis
  */
-function activeInput(){
-    inputs.forEach(input => {
-        if(input.placeholder !== "-1"){
+function activeInput() {
+    inputs.forEach((input, index) => {
+        const joueurIndex = index % nbPlayers;
+        
+        if(joueurIndex === position - 1 && input.placeholder !== "-1"){
             input.disabled = false;
         }
     });
@@ -510,7 +514,19 @@ function activeInput(){
 function desactiveInput(){
     inputs.forEach(input => {
         input.disabled = true;
-    })
+    });
+}
+
+function activeDes(){
+    des.forEach(de => {
+        de.disabled = false;
+    });
+}
+
+function desactiveDes(){
+    des.forEach(de => {
+        de.disabled = true;
+    });
 }
 
 /**
@@ -558,14 +574,6 @@ function resetManche(){
     updateInfo({listeDesGardes: []});
     updateInfo({listePointsCombi: []});
 
-    //libère tous les dés
-    des.forEach(de => {
-        if (de.classList.contains('selected')) {
-            de.classList.replace('selected', 'libre');
-        }        
-        de.innerHTML = '';
-    });
-
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     socket.emit('afficheDes', { desGardes: donneesJoueur.listeDesGardes, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: true});
     socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
@@ -573,6 +581,7 @@ function resetManche(){
     updateInfo({nbRoll: 0});
 
     desactiveInput();
+    desactiveDes();
 
     socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
 }

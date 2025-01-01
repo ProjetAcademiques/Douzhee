@@ -19,52 +19,72 @@ body {
 }
 
 #fonctionnalites {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: 50vh;
+    row-gap: 30vh;
+}
+
+.taches {
+    width: 250px;
+    height: 115px;
+    border-radius: 30px;
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    justify-content: space-around;
     align-items: center;
+    text-decoration: none;
 }
 
-#sectionHaut, #sectionBas {
-    display: flex;
-    flex-direction: row;
-    gap: 100px;
-    justify-content: center;
-    padding: 150px;
-    
+#regles, #classement{
+    background-color: #421956;
 }
 
-input[type="submit"] {
-    width: 223px;
-    height: 85px;
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    margin: 30px;
-    
+#versusrobot, #versushuman {
+    background: #341343;
 }
 
-#regles {
-    border-radius: 35px;
-    background-image: url("../../assets/images/imageindex/imgregles.png");
-    
+#regles span {
+    color: #fff;
+    font-size: 25px;
+    margin-left: 15px;
 }
 
-#classement {
-    border-radius: 35px;
-    background-image: url("../../assets/images/imageindex/imgclassement.png");
+#regles img {
+    width: auto;
+    height: 65%;
 }
 
-#versusrobot {
-    border-radius: 70px;
-    width: 300px;
-    height: 145px;
-    background-image: url("../../assets/images/imageindex/imgvsrobot.png");
+.animateLeft{
+    animation: fadeInLeft 1s ease-in-out;
 }
 
-#versushuman {
-    border-radius: 70px;
-    width: 300px;
-    height: 145px;
-    background-image: url("../../assets/images/imageindex/imgvshuman.png");
+.animateRight{
+    animation: fadeInRight 1s ease-in-out;
 }
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+

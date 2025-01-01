@@ -11,23 +11,16 @@
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
 </head>
     <div id="fonctionnalites">
-        <div id="sectionHaut">
-            <form action="Regles.php" method="GET">
-                <input id="regles" type="submit" value="">
-            </form>
-            <form action="Classement.php" method="GET">
-                <input id="classement" type="submit" value="">
-            </form>
-        </div>
-        <div id="sectionBas">
-            <form action="versusrobot.php" method="GET">
-                <input id="versusrobot" type="submit" value="">
-            </form>
-            <form action="CreaRej.php" method="GET">
-                <input id="versushuman" type="submit" value="">
-            </form>
-        </div>
+        <a href="./regles.php" id="regles" class="taches">
+            <span>Règles</span>
+            <img src="../../assets/Images/imageindex/robot1.png" alt="" class="">
+        </a>
+        <a href="./Classement.php" id="classement" class="taches"></a>
+        <a id="versusrobot" class="taches"></a>
+        <a href="./CreaRej.php" id="versushuman" class="taches"></a>
     </div>
+
+    <script src="../../assets/JS/animationIndex.js"></script>
 </body>
 </html>
 

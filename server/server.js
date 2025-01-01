@@ -318,7 +318,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('finDeTour', (data) => {
-        const positionNvJoueur = (data.position + 1) % data.nbJoueurs;
+        let positionNvJoueur = data.position + 1;
+        if(positionNvJoueur > data.nbJoueurs){
+            positionNvJoueur = 1;
+        }
         io.to(data.gameId).emit('debutNvTour', positionNvJoueur);
     });
 });

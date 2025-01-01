@@ -23,16 +23,22 @@ let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
 document.querySelector('.table').addEventListener('click', (event) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
-    if(donneesJoueur.listeDes[3] !== undefined){
-        if (event.target.classList.contains('des')) {
-            event.target.classList.toggle('libre');
-            event.target.classList.toggle('selected');
-            verifDesTousGardes();
-        }
-    } else{
+    
+    // Vérifier si l'élément cliqué est une div avec la classe 'des'
+    const deClique = event.target.closest('.des');
+    
+    if (deClique && donneesJoueur.listeDes[3] !== undefined) {
+        // Bascule les classes de la div contenant l'image
+        deClique.classList.toggle('libre');
+        deClique.classList.toggle('selected');
+        
+        // Appel de la fonction qui vérifie si tous les dés sont gardés
+        verifDesTousGardes();
+    } else {
         window.alert('Petit coquin va');
     }
 });
+
 
 let button = document.getElementById('roll'); //bouton permettant de lancer les dés
 //ajout d'un event listener au bouton de lancés qui permet de lancer les dés
@@ -56,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
 
-        if(position === nbPlayers){
-            socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
+        if(position === 1){
+            socket.emit('finDeTour', {gameId: gameId, position: nbPlayers, nbJoueurs: nbPlayers});
         }
     } else{
         socket.emit('reloadPage', {gameId: gameId, playerId: playerId});
@@ -230,7 +236,8 @@ socket.on('reloadPage', (playerId) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
 
     const nbRoll = donneesJoueur.nbRoll;
-    if(nbRoll > 0){
+    console.log(nbRoll);
+    if(nbRoll >= 0){
         reprisePartie(nbRoll);
     }
 
@@ -239,7 +246,7 @@ socket.on('reloadPage', (playerId) => {
     }
 
     if(donneesJoueur.listeDes.length !== 0){
-        socket.emit('transmitionDes', {playerIdDest: playerId, gameId: gameId, listeDes: donneesJoueur.listeDes});
+        socket.emit('transmitionDes', {playerIdDest: playerId, gameId: gameId, listeDes: donneesJoueur.listeDes, desGardes: donneesJoueur.listeDesGardes});
     }
 
     if(donneesJoueur.scoreSecSup !== 0 || donneesJoueur.scoreSecInf !== 0){
@@ -254,11 +261,7 @@ socket.on('transmitionPoints', (data) => {
 });
 
 socket.on('transmitionDes', (data) => {
-    if(data.playerIdDest === playerId){
-        for(let i = 0; i < 5; i++){
-            des[i].textContent = data.listeDes[i];
-        }
-    }
+    afficheListeDes(data);
 });
 
 socket.on('transmitionScore', (data) => {
@@ -271,6 +274,7 @@ socket.on('inputValue', async (data) => {
     const inputElements = document.getElementById(data.idInput);
     inputElements.placeholder = "-1";
     inputElements.disabled = true;
+    inputElements.classList.add('obt');
 
     await new Promise(r => setTimeout(r, 12));
 
@@ -388,18 +392,31 @@ function afficheListeDes(data){
     const desGardes = data.desGardes;
 
     des.forEach((de, i) => {
+        const img = de.querySelector('img');
+        let nbDe;
         if(!data.reset){
-            if (i < desGardes.length) {
-                de.innerHTML = desGardes[i];
+            if(i < desGardes.length){
+                nbDe = desGardes[i];
+                //de.innerHTML = desGardes[i];
                 de.classList.replace("libre", "selected");
-            } else {
-                de.innerHTML = listeDes[i];
+            } else{
+                nbDe = listeDes[i];
+                //de.innerHTML = listeDes[i];
                 de.classList.replace("selected", "libre");
             }
         } else{
-            de.innerHTML = '';
+            //de.innerHTML = '';
             de.classList.replace("selected", "libre");
         }
+
+        let src;
+        if(nbDe !== undefined){
+            src = '../../assets/images/imgGames/de' + nbDe + '.png';
+        } else{
+            src = '';
+        }
+
+        img.src = src;
     });
 }
 
@@ -415,6 +432,7 @@ function affichePoints(data){
         if(pointsObt !== undefined && pointsObt !== null){
             inputElements.placeholder = "-1";
             inputElements.disabled = true;
+            inputElements.classList.add('obt');
             value = pointsObt;
         } else if(pointsCombi !== undefined){
             value = pointsCombi;
@@ -452,12 +470,11 @@ function actionRoll(){
  */
 function gardeDes(){
     let desGardes = [];
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
 
-    des.forEach(de => {
+    des.forEach((de, index) => {
         if(de.classList.contains("selected")){
-            if(!isNaN(de.textContent)) {
-                desGardes.push(parseInt(de.textContent));
-            }
+            desGardes.push(donneesJoueur.listeDes[index]);
         }
     })
 
@@ -578,7 +595,7 @@ function resetManche(){
     socket.emit('afficheDes', { desGardes: donneesJoueur.listeDesGardes, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: true});
     socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
 
-    updateInfo({nbRoll: 0});
+    updateInfo({nbRoll: -1});
 
     desactiveInput();
     desactiveDes();

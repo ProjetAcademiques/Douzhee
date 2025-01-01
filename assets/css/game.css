@@ -328,7 +328,6 @@ p{
     display: none;
 }
 
-
 @media (max-width: 1480px) and (min-width: 521px) {
     .joueur-nom{
         display: none;
@@ -531,4 +530,13 @@ p{
         border-radius: 0%;
         font: 1.75em sans-serif;
     }
+}
+
+input.obt{
+    background: red;
+    color: black;
+}
+
+.des.selected img {
+    border: 2px solid red;
 }

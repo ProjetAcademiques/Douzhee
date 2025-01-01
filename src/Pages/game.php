@@ -264,11 +264,11 @@
 
     <div class="dé-table">
         <div class="table">
-            <div class="des libre" id="dé1"></div>
-            <div class="des libre" id="dé2"></div>
-            <div class="des libre" id="dé3"></div>
-            <div class="des libre" id="dé4"></div>
-            <div class="des libre" id="dé5"></div>
+            <div class="des libre" id="dé1"><img></div>
+            <div class="des libre" id="dé2"><img></div>
+            <div class="des libre" id="dé3"><img></div>
+            <div class="des libre" id="dé4"><img></div>
+            <div class="des libre" id="dé5"><img></div>
         </div>
         <button id="roll" disabled><p>Roll</p></button>
     </div>
@@ -356,7 +356,7 @@
         </div>
     </div>
     <button id="chat-toggle">💬</button>
-    
+
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="../../assets/JS/connectionWebSocket.js"></script>
     <script>

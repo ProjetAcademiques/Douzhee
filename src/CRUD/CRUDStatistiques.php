@@ -23,7 +23,7 @@
         $nbDouzhee = 0;
         $nbPartiesJoues = 0;
 
-        $insertStatsQuery = "INSERT INTO statistiques VALUES (null,:nbPartiesGagnees, :scoreMaximal, :tempsJeu, :ratioVictoire, :nbSucces, :nbDouzhee, :nbPartieJoues)";
+        $insertStatsQuery = "INSERT INTO statistiques VALUES ($idUser,:nbPartiesGagnees, :scoreMaximal, :tempsJeu, :ratioVictoire, :nbSucces, :nbDouzhee, :nbPartieJoues)";
 
         $statement = $connection->prepare($insertStatsQuery);
         $statement->bindParam(":nbPartiesGagnees", $nbPartiesGagnees, PDO::PARAM_INT);

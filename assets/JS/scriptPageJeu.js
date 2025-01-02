@@ -23,19 +23,16 @@ let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
 document.querySelector('.table').addEventListener('click', (event) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
-    
-    // Vérifier si l'élément cliqué est une div avec la classe 'des'
     const deClique = event.target.closest('.des');
     
-    if (deClique && donneesJoueur.listeDes[3] !== undefined) {
-        // Bascule les classes de la div contenant l'image
-        deClique.classList.toggle('libre');
-        deClique.classList.toggle('selected');
-        
-        // Appel de la fonction qui vérifie si tous les dés sont gardés
-        verifDesTousGardes();
-    } else {
-        window.alert('Petit coquin va');
+    if(donneesJoueur.nbRoll < 3 && donneesJoueur.nbRoll > -1){
+        if(donneesJoueur.listeDes[3] !== undefined){
+            deClique.classList.toggle('libre');
+            deClique.classList.toggle('selected');
+            verifDesTousGardes();
+        } else{
+            window.alert('Petit coquin va');
+        }
     }
 });
 
@@ -56,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bonusSecSup: false,
             scoreSecInf: 0,
             scoreTot: 0,
-            nbRoll: 0,
+            nbRoll: -1,
             nbDouzhee: 0,
             position: position
         };
@@ -186,21 +183,23 @@ function updateInfo(info) {
         donneesJoueur.listeDes = setListeDes(Array.isArray(donneesJoueur.listeDesGardes) ? donneesJoueur.listeDesGardes : []);
     } else if(info.reset && info.listeDes){
         donneesJoueur.listeDes = info.listeDes;
-    } else if(info.decrementRoll){
+    } else if(info.decrementRoll !== undefined){
         donneesJoueur.nbRoll -= 1;
-    } else if(info.listeDesGardes){
+    } else if(info.listeDesGardes !== undefined){
         donneesJoueur.listeDesGardes = Array.isArray(info.listeDesGardes) ? info.listeDesGardes : [];
-    } else if(info.listePointsCombi){
+    } else if(info.listePointsCombi !== undefined){
         donneesJoueur.listePointsCombi = Array.isArray(info.listePointsCombi) ? info.listePointsCombi : [];
-    } else if(info.listePointsObt){
+    } else if(info.listePointsObt !== undefined){
         const inputId = parseInt(info.index);
         const pointsIndex = Math.floor(inputId / nbPlayers);
         donneesJoueur.listePointsObt[pointsIndex] = info.listePointsObt;
-    } else if(info.scoreSecSup){
+    } else if(info.scoreSecSup !== undefined){
         donneesJoueur.scoreSecSup += info.scoreSecSup;
-    } else if(info.scoreSecInf){
+        donneesJoueur.scoreTot += donneesJoueur.scoreSecSup;
+    } else if(info.scoreSecInf !== undefined){
         donneesJoueur.scoreSecInf += info.scoreSecInf;
-    } else if(info.nbDouzhee){
+        donneesJoueur.scoreTot += donneesJoueur.scoreSecInf;
+    } else if(info.nbDouzhee !== undefined){
         donneesJoueur.nbDouzhee += 1;
     } else if(info.bonusSecSup){
         donneesJoueur.bonusSecSup = true;
@@ -217,8 +216,32 @@ socket.on('debutNvTour', (positionNvJoueur) => {
             button.disabled = false;
             updateInfo({nbRoll: 3});
         } else{
-            finDePartie();
+            socket.emit('finDePartie', {gameId: gameId});
+            //finDePartie();
         }
+    }
+});
+
+socket.on('finDePartie', () => {
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+
+    socket.emit('transmitionScoreTot', {gameId: gameId, position: position, scoreTot: donneesJoueur.scoreTot});
+});
+
+let tabScoresJoueurs = [];
+socket.on('transmitionScoreTot', (data) => {
+    tabScoresJoueurs[data.position] = data.scoreTot;
+
+    let rempli = true;
+    for(let i = 1; i <= nbPlayers ; i++){
+        if(tabScoresJoueurs[i] === undefined || tabScoresJoueurs[i] === null){
+            rempli = false;
+            break;
+        }
+    }
+
+    if(rempli){
+        finDePartie();
     }
 });
 
@@ -228,7 +251,7 @@ function reprisePartie(nbRoll){
         nbRoll < 3 ? activeDes() : false;
         button.disabled = false;
     } else{
-        finDePartie();
+        socket.emit('finDePartie', {gameId: gameId});
     }
 }
 
@@ -236,7 +259,6 @@ socket.on('reloadPage', (playerId) => {
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
 
     const nbRoll = donneesJoueur.nbRoll;
-    console.log(nbRoll);
     if(nbRoll >= 0){
         reprisePartie(nbRoll);
     }
@@ -292,7 +314,7 @@ socket.on('affichageScore', (data) => {
 function verifCombiRemplies(){
     const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     for(let i = 0 ; i <= 12 ; i++){
-        if(donneesJoueur[i] === undefined || donneesJoueur[i] === null){
+        if(donneesJoueur.listePointsObt[i] === undefined || donneesJoueur.listePointsObt[i] === null){
             return false;
         }
     }
@@ -604,6 +626,11 @@ function resetManche(){
 }
 
 function finDePartie(){
-    localStorage.removeItem('donneesJoueur');
+    let msg = '';
+    for(let i = 1 ; i <= nbPlayers ; i++){
+        msg += 'Le joueur ' + i + ' a obtenu le score de : ' + tabScoresJoueurs[i] + '\n';
+    }
+    window.alert(msg);
+    //localStorage.removeItem('donneesJoueur');
     //window.location.href = './index.php';
 }

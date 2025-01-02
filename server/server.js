@@ -324,6 +324,14 @@ io.on('connection', (socket) => {
         }
         io.to(data.gameId).emit('debutNvTour', positionNvJoueur);
     });
+
+    socket.on('finDePartie', (data) => {
+        io.to(data.gameId).emit('finDePartie');
+    });
+
+    socket.on('transmitionScoreTot', (data) => {
+        io.to(data.gameId).emit('transmitionScoreTot', data);
+    });
 });
 
 // Écouter sur le port 8080

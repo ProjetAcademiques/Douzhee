@@ -540,3 +540,7 @@ input.obt{
 .des.selected img {
     border: 2px solid red;
 }
+
+.gagne {
+    background: lightgreen;
+}

@@ -326,6 +326,12 @@ function afficheScore(data){
         const idSup = 'idSup' + data.position;
         const thScoreSup = document.getElementById(idSup);
         thScoreSup.textContent = data.scoreSecSup;
+
+        if(data.bonus === true){
+            const bonus = document.querySelectorAll('.bonus');
+            bonus[data.position-1].value = '25';
+            bonus[data.position-1].classList.add('gagne');
+        }
     } 
     if(data.scoreSecInf){
         const idInf = 'idInf' + data.position;
@@ -587,15 +593,18 @@ function ajoutScore(inputElements){
     let changement = false;
     if(!donneesJoueur.bonusSecSup && donneesJoueur.scoreSecSup > 62){
         updateInfo({scoreSecSup: 25});
+        updateInfo({bonusSecSup: true});
         scoreTot += 25;
         changement = true;
     }
 
     if(name === 'section-superieure'){
+        let bonus = false;
         if(changement){
             scoreSecSup += 25;
+            bonus = true;
         }
-        socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSecSup});
+        socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSecSup, bonus: bonus});
     } else{
         socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: donneesJoueur.scoreSecInf});
     }

@@ -217,7 +217,6 @@ socket.on('debutNvTour', (positionNvJoueur) => {
             updateInfo({nbRoll: 3});
         } else{
             socket.emit('finDePartie', {gameId: gameId});
-            //finDePartie();
         }
     }
 });
@@ -425,23 +424,21 @@ function afficheListeDes(data){
         if(!data.reset){
             if(i < desGardes.length){
                 nbDe = desGardes[i];
-                //de.innerHTML = desGardes[i];
                 de.classList.replace("libre", "selected");
             } else{
                 nbDe = listeDes[i];
-                //de.innerHTML = listeDes[i];
                 de.classList.replace("selected", "libre");
             }
         } else{
-            //de.innerHTML = '';
             de.classList.replace("selected", "libre");
         }
 
         let src;
         if(nbDe !== undefined){
+            img.classList.remove('hidden');
             src = '../../assets/images/imgGames/de' + nbDe + '.png';
         } else{
-            src = '';
+            img.classList.add('hidden');
         }
 
         img.src = src;

@@ -544,3 +544,7 @@ input.obt{
 .gagne {
     background: lightgreen;
 }
+
+.hidden{
+    display: none;
+}

@@ -36,18 +36,41 @@ body {
     text-decoration: none;
 }
 
+#classement, #versusrhuman{
+    justify-self: end;
+}
+
 #regles, #classement{
     background-color: #421956;
 }
 
 #versusrobot, #versushuman {
     background: #341343;
+    width: calc(250px * 1.25);
+    height: calc(115px * 1.25);
 }
 
 .taches span {
     color: #fff;
     font-size: 25px;
     margin-left: 15px;
+}
+
+#versusrobot div, #versushuman div {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+#versusrobot img, #versushuman img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+#versusrobot span, #versushuman span {
+    margin: 0%;
 }
 
 #regles img {

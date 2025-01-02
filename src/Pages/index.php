@@ -19,7 +19,15 @@
             <span>Classement</span>
             <img src="../../assets/Images/imageindex/classement.png" alt="" class="">
         </a>
-        <a id="versusrobot" class="taches"></a>
+        <a id="versusrobot" class="taches">
+            <div>
+                <img src="../../assets/Images/imageindex/robot2.png" alt="">
+            </div>
+            <span>VS</span>
+            <div>
+                <img src="../../assets/Images/imageindex/human.png" alt="">
+            </div>
+        </a>
         <a href="./CreaRej.php" id="versushuman" class="taches"></a>
     </div>
 

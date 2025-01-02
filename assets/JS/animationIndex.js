@@ -13,6 +13,7 @@ regles.addEventListener('mouseover', function() {
         spanRegles.classList.add('animateLeft');
         imgRegles.classList.add('animateRight');
         //regles.classList.add('animateZoomIn');
+        boolRegle = false;
     }
 });
 
@@ -20,7 +21,6 @@ regles.addEventListener('animationend', function() {
     spanRegles.classList.remove('animateLeft');
     imgRegles.classList.remove('animateRight');
     //regles.classList.remove('animateZoomIn');
-    boolRegle = false;
 });
 
 regles.addEventListener('mouseleave', function() {
@@ -33,6 +33,7 @@ classement.addEventListener('mouseover', function() {
         spanClassement.classList.add('animateLeft');
         imgClassement.classList.add('animateRight');
         //classement.classList.add('animateZoomIn');
+        boolClassement = false;
     }
 });
 
@@ -40,7 +41,6 @@ classement.addEventListener('animationend', function() {
     spanClassement.classList.remove('animateLeft');
     imgClassement.classList.remove('animateRight');
     //classement.classList.remove('animateZoomIn');
-    boolClassement = false;
 });
 
 classement.addEventListener('mouseleave', function() {

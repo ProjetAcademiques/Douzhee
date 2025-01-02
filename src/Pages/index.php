@@ -15,7 +15,10 @@
             <span>Règles</span>
             <img src="../../assets/Images/imageindex/robot1.png" alt="" class="">
         </a>
-        <a href="./Classement.php" id="classement" class="taches"></a>
+        <a href="./Classement.php" id="classement" class="taches">
+            <span>Classement</span>
+            <img src="../../assets/Images/imageindex/classement.png" alt="" class="">
+        </a>
         <a id="versusrobot" class="taches"></a>
         <a href="./CreaRej.php" id="versushuman" class="taches"></a>
     </div>

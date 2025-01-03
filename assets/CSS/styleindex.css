@@ -56,9 +56,11 @@ body {
     margin-left: 15px;
 }
 
-#versusrobot div, #versushuman div {
+#versusrobot div:not(.cache), #versushuman div:not(.cache) {
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 50%;
+    width: 25%;
+    height: auto;
     overflow: hidden;
 }
 
@@ -70,12 +72,84 @@ body {
 }
 
 #versusrobot span, #versushuman span {
+    position: relative;
     margin: 0%;
+    transform: rotate(-22.5deg);
+    font-size: 50px;
 }
 
 #regles img {
     width: auto;
     height: 65%;
+}
+
+#versusrobot, #versushuman {
+    position: relative;
+}
+
+.trait1::before {
+    content: '';
+    position: absolute;
+    width: 31.5%;
+    bottom: 13%;
+    left: 5%;
+    height: 1.75px;
+    background-color: #ffffff;
+    transform: rotate(-20deg);
+    transform-origin: left center;
+    z-index: 2;
+}
+
+#imgProfile1 {
+    position: relative;
+    top: 7px;
+}
+
+#imgProfile2 {
+    position: relative;
+    bottom: 7px;
+}
+
+
+.trait2::before {
+    content: '';
+    position: absolute;
+    width: 31.5%;
+    bottom: 60.5%;
+    right: 3.5%;
+    height: 1.75px;
+    background-color: #ffffff;
+    transform: rotate(-20deg);
+    transform-origin: left center;
+    z-index: 2;
+}
+
+.cache1 {
+    display: block;
+    position: absolute;
+    background-color: #341343;
+    top: 8.5%;
+    right: 10.5%;
+    width: 50px;
+    height: 50px;
+    transform: rotate(-20deg);
+    border-radius: 50%;
+    clip-path: inset(0 0 50% 0);
+    z-index: 1;
+}
+
+.cache2 {
+    display: block;
+    position: absolute;
+    background-color: #341343;
+    bottom: 7.5%;
+    left: 10.5%;
+    width: 50px;
+    height: 50px;
+    transform: rotate(-20deg);
+    border-radius: 50%;
+    clip-path: inset(50% 0 0 0);
+    z-index: 1;
 }
 
 .animateLeft{

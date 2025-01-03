@@ -19,16 +19,32 @@
             <span>Classement</span>
             <img src="../../assets/Images/imageindex/classement.png" alt="" class="">
         </a>
-        <a id="versusrobot" class="taches">
-            <div>
-                <img src="../../assets/Images/imageindex/robot2.png" alt="">
+        <a href="./versusbot.php" id="versusrobot" class="taches">
+            <div id="imgProfile1">
+                <img src="../../assets/Images/imageindex/robot2.png" alt="robot">
             </div>
+            <p class="trait1"></p>
+            <div class="cache cache1"></div>
             <span>VS</span>
-            <div>
-                <img src="../../assets/Images/imageindex/human.png" alt="">
+            <p class="trait2"></p>
+            <div class="cache cache2"></div>
+            <div id="imgProfile2">
+                <img src="../../assets/Images/imageindex/human.png" alt="human">
             </div>
         </a>
-        <a href="./CreaRej.php" id="versushuman" class="taches"></a>
+        <a href="./CreaRej.php" id="versushuman" class="taches">
+            <div id="imgProfile1">
+                <img src="../../assets/Images/imageindex/human.png" alt="human">
+            </div>
+            <p class="trait1"></p>
+            <div class="cache cache1"></div>
+            <span>VS</span>
+            <p class="trait2"></p>
+            <div class="cache cache2"></div>
+            <div id="imgProfile2">
+                <img src="../../assets/Images/imageindex/human.png" alt="human">
+            </div>
+        </a>
     </div>
 
     <script src="../../assets/JS/animationIndex.js"></script>

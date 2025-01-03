@@ -9,12 +9,22 @@ var imgClassement = document.querySelector('#classement img');
 var boolClassement = true;
 
 var versusbot = document.querySelector('#versusrobot');
+var imageGaucheVersBot = document.querySelector('#versusrobot #imgProfile1');
+var imageDroiteVersBot = document.querySelector('#versusrobot #imgProfile2');
+var spanVersusBot = document.querySelector('#versusrobot span');
+var barVersusBot1 = document.querySelector('#versusrobot .trait1::before');
+var boolVersusBot = true;
+
+var versushuman = document.querySelector('#versushuman');
+var imageGaucheVersHuman = document.querySelector('#versushuman #imgProfile1');
+var imageDroiteVersHuman = document.querySelector('#versushuman #imgProfile2');
+var spanVersusHuman = document.querySelector('#versushuman span');
+var boolVersusHuman = true;
 
 regles.addEventListener('mouseover', function() {
     if (boolRegle) {
         spanRegles.classList.add('animateLeft');
         imgRegles.classList.add('animateRight');
-        //regles.classList.add('animateZoomIn');
         boolRegle = false;
     }
 });
@@ -22,7 +32,6 @@ regles.addEventListener('mouseover', function() {
 regles.addEventListener('animationend', function() {
     spanRegles.classList.remove('animateLeft');
     imgRegles.classList.remove('animateRight');
-    //regles.classList.remove('animateZoomIn');
 });
 
 regles.addEventListener('mouseleave', function() {
@@ -34,7 +43,6 @@ classement.addEventListener('mouseover', function() {
     if (boolClassement) {
         spanClassement.classList.add('animateLeft');
         imgClassement.classList.add('animateRight');
-        //classement.classList.add('animateZoomIn');
         boolClassement = false;
     }
 });
@@ -42,9 +50,49 @@ classement.addEventListener('mouseover', function() {
 classement.addEventListener('animationend', function() {
     spanClassement.classList.remove('animateLeft');
     imgClassement.classList.remove('animateRight');
-    //classement.classList.remove('animateZoomIn');
 });
 
 classement.addEventListener('mouseleave', function() {
     boolClassement = true;
+});
+
+versusbot.addEventListener('mouseover', function() {
+    if (boolVersusBot) {
+        imageGaucheVersBot.classList.add('animateLeft');
+        imageDroiteVersBot.classList.add('animateRight');
+        spanVersusBot.classList.add('animateZoomIn');
+        barVersusBot1.classList.add('fadeIn');
+        boolVersusBot = false;
+    }
+});
+
+versusbot.addEventListener('animationend', function() {
+    imageGaucheVersBot.classList.remove('animateLeft');
+    imageDroiteVersBot.classList.remove('animateRight');
+    spanVersusBot.classList.remove('animateZoomIn');
+    barVersusBot1.classList.remove('fadeIn');
+});
+
+versusbot.addEventListener('mouseleave', function() {
+    boolVersusBot = true;
+});
+
+
+versushuman.addEventListener('mouseover', function() {
+    if (boolVersusHuman) {
+        imageGaucheVersHuman.classList.add('animateLeft');
+        imageDroiteVersHuman.classList.add('animateRight');
+        spanVersusHuman.classList.add('animateZoomIn');
+        boolVersusHuman = false;
+    }
+});
+
+versushuman.addEventListener('animationend', function() {
+    imageGaucheVersHuman.classList.remove('animateLeft');
+    imageDroiteVersHuman.classList.remove('animateRight');
+    spanVersusHuman.classList.remove('animateZoomIn');
+});
+
+versushuman.addEventListener('mouseleave', function() {
+    boolVersusHuman = true;
 });

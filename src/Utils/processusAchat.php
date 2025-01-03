@@ -1,5 +1,4 @@
 <?php
-    require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../CRUD/CRUDSkinAchete.php");
     header('Content-Type: application/json');
@@ -9,12 +8,12 @@
             echo json_encode(['success' => false, 'error' => 'Paramètres manquants dans la requête.']);
             exit;
         }
-        $userId = $_SESSION['userId'];
+        $userId = $input['userId'];
         $idSkin = $input['idSkin'] ?? null;
         $cost = $input['cost'] ?? 0;
     
         if ($userId && $idSkin && $cost > 0) {
-            $userMoney = getMoneyById($userId)['douzCoin'];
+            $userMoney = getMoneyById( $userId) ?? 0;
             if ($userMoney >= $cost) {
                 $newMoney = $userMoney - $cost;
                 updateDouzCoin($userId, $newMoney);
@@ -24,7 +23,7 @@
                 echo json_encode(['success' => false, 'error' => 'Fonds insuffisants.']);
             }
         } else {
-            echo json_encode(['success' => false, 'error' => 'Données invalides.']);
+            echo json_encode(['success' => false, 'error' => 'Données invalides.', 'donnees' => $cost, 'donnees2' => $idSkin, 'donnees3' => $userId]);
         }
     } else {
         echo json_encode(['success' => false, 'error' => 'Méthode non autorisée.']);

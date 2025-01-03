@@ -3,12 +3,70 @@ require_once("../CRUD/CRUDJoueur.php");
 require_once("../CRUD/CRUDSkinAchete.php");
 if (isset($_SESSION['userId'])){
     $allAchats = readAllAchatByUser($_SESSION['userId']);
+    $musicPath = readMusicPath($_SESSION['userId']);
 }
 
 ?>
 <body>
     <header>
-        <a href="Index.php">
+        <audio id="audioPlayer" controls loop>
+            <source id="audioSource" src="<?php echo $musicPath?>" type="audio/mpeg">
+        </audio>
+        <script>
+          var audio = document.getElementById('audioPlayer');
+          const audioSource =document.getElementById("audioSource");
+          if (localStorage.getItem('isMusicPlaying') === 'true') {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+            var currentTime = localStorage.getItem('audioCurrentTime');
+            if (currentTime) {
+                audio.currentTime = currentTime;  
+            }
+        audio.style.display = 'none';
+        window.addEventListener('beforeunload', function() {
+            if (!audio.paused) {
+                localStorage.setItem('isMusicPlaying', 'true'); 
+            } else {
+                localStorage.setItem('isMusicPlaying', 'false'); 
+            }
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+        });
+        <?php
+          if (isset($_SESSION['isconnected'])){
+            echo 'localStorage.setItem("isMusicPlaying", "true");';
+            echo 'audio.play();';
+            unset($_SESSION['isconnected']);
+        }else{
+            echo 'localStorage.setItem("isMusicPlaying", "false");';
+        }
+          ?>
+          async function updateMusicPath(){
+            try{
+                const response = await fetch('../Utils/processusGetMusicPath.php');
+                const data = await response.json();
+                let basePath = "../../assets/images/musiqueBoutique/";
+                let fileName = audioSource.src.split('/').pop();
+                let newaudioSource = basePath +fileName;
+                if (data.musicPath != newaudioSource) {
+                    audioSource.src = data.musicPath;
+                    audio.load();
+                    audio.addEventListener('canplaythrough', () => {
+                    audio.play().catch(error => {
+                       console.error('Erreur lors de la lecture de la musique:', error);
+                });
+            });
+                }
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour de la musique:', error);
+            }
+            }
+            updateMusicPath();
+            setInterval(updateMusicPath, 60000); 
+        
+        </script>
+        <a href="index.php">
             <input id="Logo" type="submit" value=""> 
         </a>
         
@@ -22,7 +80,7 @@ if (isset($_SESSION['userId'])){
             }
         ?>
             <div class="selection_droite">
-            <span id="money"><?php echo getMoneyById($_SESSION['userId'])['douzCoin']; ?></span>
+            <span id="money"><?php echo getMoneyById($_SESSION['userId']); ?></span>
                 <img src="../../assets/images/imgheader/coin_dollar_finance_icon_125510 1.png" alt="Money du Jeu" width="27" height="27" id="coin">
                 <span id="pseudo"><?php echo getPseudoById($_SESSION['userId'])['pseudonyme']; ?></span>
                 <form action="Profil.php" method="GET">
@@ -78,9 +136,17 @@ if (isset($_SESSION['userId'])){
                             <script>
                             document.body.style.background = "linear-gradient(to bottom, #A52A2A 0%, #6F4F4F 100%)";
                             document.querySelector("header").style.backgroundColor = "#6f4b4d";
-                        </script>
-                        <?php
-                        break;
+                            </script>
+                            <?php
+                            break;
+                        case 4:
+                            ?>
+                            <script>
+                               document.body.style.background = "linear-gradient(to bottom, #4a90e2 0%, #4285f4 25%, #3a78db 50%, #3367d6 75%, #2a56c6 100%)";
+                               document.querySelector("header").style.backgroundColor = "#2c5aa0";
+                            </script>
+                            <?php
+                            break;
                     }
                 }
                 

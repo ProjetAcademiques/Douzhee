@@ -43,7 +43,6 @@ header {
 #profil {
     background-image: url("");
     border-radius: 50%; 
-    margin-right: 10px;
     background-size: cover;
     border: none;
     cursor: pointer;

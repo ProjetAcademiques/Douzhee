@@ -8,6 +8,8 @@ var spanClassement = document.querySelector('#classement span');
 var imgClassement = document.querySelector('#classement img');
 var boolClassement = true;
 
+var versusbot = document.querySelector('#versusrobot');
+
 regles.addEventListener('mouseover', function() {
     if (boolRegle) {
         spanRegles.classList.add('animateLeft');

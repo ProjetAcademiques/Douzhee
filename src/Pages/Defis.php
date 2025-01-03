@@ -10,8 +10,6 @@ $defiexists = readAllDefisSelected();
 $idDefis = 0;
 $idDefisMaitrise = 0;
 
-$regexGain = '/^(1[0-9]{2}|2[0-4][0-9]|250)$/';
-
 if (!$defiexists) {
     $defi = readThreeDefis();
     foreach ($defi as $d) {
@@ -49,7 +47,7 @@ if (!$defiexists) {
             </div>
         <?php endforeach; ?>
         
-        <form action="Defis.php" method="POST">
+        <form id="defisForm" action="Defis.php" method="POST">
             <h2>Formulaire de création de Défis : </h2>
             <input type="text" name="nomDefis" id="nomDefis" placeholder="Insérer le nom du Défis" maxlength="50">
             <input type="text" name="descriptionDefis" id="descriptionDefis" placeholder="Insérer une description du Défis" maxlength="150">
@@ -60,16 +58,3 @@ if (!$defiexists) {
     <script src="../../assets/JS/scriptDefis.js"></script>
 </body>
 </html>
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!empty($_POST['nomDefis']) && !empty($_POST['descriptionDefis']) && !empty($_POST['gainDefis'])) {
-        if (preg_match($regexGain, $_POST['gainDefis'])) {
-            createDefis($_POST['nomDefis'], $_POST['descriptionDefis'], $_POST['gainDefis']);
-            header('Location: index.php');
-            exit();
-        } else {
-            echo '<script type="text/javascript"> window.onload = function () { alert("Veuillez saisir un gain valide (entre 100 et 250)."); }</script>';
-        }
-    }
-}
-?>

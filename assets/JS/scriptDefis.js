@@ -21,7 +21,7 @@ function getTimeUntilNextSundayMidnight() {
 
     var seconds = Math.floor(diff / 1000);
     
-    if (days == 2 && hours == 0 && minutes == 39 && seconds == 55) {
+    if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
         delet = true;
     }
 
@@ -36,18 +36,43 @@ function checkAndDeleteDefis() {
     if (delet) {
         console.log("Deleting defis");
         fetch('../../src/Utils/defisDelete.php')
-            .then(response => response.text())
-            .then(data => console.log(data))
+            .then(response => response.json())
             .catch(error => console.error('Error:', error));
         delet = false;
         location.reload();
     }
-    else {
-        console.log("Defis not deleted");
-    }
 }
 
-console.log("Script loaded");
+var form = document.getElementById('defisForm');
+var regexGain = /^(1[0-9]{2}|2[0-4][0-9]|250)$/;
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêcher l'envoi du formulaire par défaut sinon la page sera rechargée et donc zikete
+
+    var nomDefis = document.getElementById('nomDefis').value.trim();
+    var descriptionDefis = document.getElementById('descriptionDefis').value.trim();
+    var gainDefis = document.getElementById('gainDefis').value.trim();
+
+    var formData = new FormData(); // Plus pratique pour envoyer des fichiers
+    formData.append('nomDefis', nomDefis);
+    formData.append('descriptionDefis', descriptionDefis);
+    formData.append('gainDefis', gainDefis);
+
+    fetch('../../src/Utils/defisCreate.php', {
+        method: 'POST', // Envoi de données par la méthode POST
+        body: formData // Les données à envoyer
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Défi créé avec succès.');
+            location.reload(); // Recharger la page pour afficher le nouveau défi ?
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
 
 setInterval(checkAndDeleteDefis, 1000);
 setInterval(updateTimer, 1000);

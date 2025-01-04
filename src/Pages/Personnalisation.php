@@ -1,20 +1,25 @@
 <?php
+   ob_start();
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDSkinAchete.php");
     require_once("../Utils/headerBody.php");
+
     $allAchats = readAllAchatByUser($_SESSION['userId']);
+    $achat = readEffecuteAchatById($_SESSION['userId']);
+   
 
 ?>
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
-    <link rel="stylesheet" href="../../assets/css/stylePersonnalisation.css">
+    <link rel="stylesheet" href="../../assets/css/styleGlobal.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
        
     <div class="Personnalisation">
         <form action="Personnalisation.php" method="POST"  enctype="multipart/form-data">
             <div class="input-input-group">
                 <div class="input-group">
-                    <label for="pseudo">Pseudo</label>
+                    <label for="pseudoPers">Pseudo</label>
                     <input type="text" id="pseudoPers" name="pseudo" value="<?php echo getPseudoById($_SESSION['userId'])['pseudonyme'] ?>" maxlength="25">
                 </div>
                 <div class="input-group">
@@ -25,25 +30,49 @@
 
            
             <div class="input-group">
-                <label for="Bio">Bio</label>
+                <label for="BioPers">Bio</label>
                 <textarea id="BioPers" name="bio" maxlength="500"><?php echo getBioById($_SESSION['userId'])['biographie']?></textarea>
             </div>
 
             <div class="input-group">
-                <label for="Themes">Themes</label>
+                <label for="Themes1">Themes</label>
                 <div class="radio-group">
-                    <input type="radio" id="Themes1" name="themes" value="theme1" checked>
-                    <input type="radio" id="Themes2" name="themes" value="theme2" disabled>
-                    <input type="radio" id="Themes3" name="themes" value="theme3" disabled>
+                    <?php
+                    foreach($achat as $achats){
+                        $etatSkin = $achats['etatSkin'];
+                        $idSkin = $achats['idSkin'];
+                        if ($achats['etatSkin'] == 1) {
+                            $etatSkinChecked = 1; 
+                            break; 
+                        }
+                    }
+                    ?>
+                    <input type="radio" id="Themes1" name="themes" value="theme1" <?php echo ($etatSkinChecked == 1 && $idSkin == 1) ? 'checked' : ''; ?> disabled>
+                    <input type="radio" id="Themes2" name="themes" value="theme2" <?php echo ($etatSkinChecked == 1 && $idSkin == 2) ? 'checked' : ''; ?> disabled>
+                    <input type="radio" id="Themes3" name="themes" value="theme3" <?php echo ($etatSkinChecked == 1 && $idSkin == 3) ? 'checked' : ''; ?> disabled>
+                    <input type="radio" id="Themes4" name="themes" value="theme4" <?php echo ($etatSkinChecked == 1 && $idSkin == 4) ? 'checked' : ''; ?> disabled>
                     
                 </div>
             </div>
             <div class="input-group">
-                <label for="Dés">Dés</label>
+                <label for="Musique5">Musique</label>
                 <div class="radio-group">
-                    <input type="radio" id="Des1" name="des" checked>
-                    <input type="radio" id="Des2" name="des" disabled>
-                    <input type="radio" id="Des3" name="des" disabled>
+                <?php
+                    foreach($achat as $achats){
+                        if ($achats['idSkin'] > 4){
+                            $etatSkin = $achats['etatSkin'];
+                            $idSkin2 = $achats['idSkin'];
+                            if ($achats['etatSkin'] == 1) {
+                                $etatSkinChecked = 1; 
+                                break; 
+                        }
+                    }
+                        }
+                    ?>
+                    <input type="radio" id="Musique5" name="musique" value="musique5" <?php echo ($etatSkinChecked == 1 && $idSkin2 == 5) ? 'checked' : ''; ?> disabled>
+                    <input type="radio" id="Musique6" name="musique" value="musique6" <?php echo ($etatSkinChecked == 1 && $idSkin2 == 6) ? 'checked' : ''; ?> disabled>
+                    <input type="radio" id="Musique7" name="musique" value="musique7" <?php echo ($etatSkinChecked == 1 && $idSkin2 == 7) ? 'checked' : ''; ?> disabled>
+                    <input type="radio" id="Musique8" name="musique" value="musique8" <?php echo ($etatSkinChecked == 1 && $idSkin2 == 8) ? 'checked' : ''; ?> disabled>
                 </div>
             </div>
             <button id="buttonPers" type="submit">Enregistrer les modifications</button>
@@ -52,10 +81,41 @@
 </body>
 </html>
 <?php
+if (is_array($allAchats)) {
+    foreach ($allAchats as $achats) {
+        $themeId = $achats['idSkin'];
+        ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {     
+                if ("<?php echo $themeId; ?>" > 4){
+                    const musique =document.getElementById("Musique<?php echo $themeId; ?>");
+                    musique.style.backgroundImage = 'url("../../assets/images/imagePersonnalisation/imgMusique.png")';  
+                    musique.disabled = false;
+                }else{
+                    const theme = document.getElementById("Themes<?php echo $themeId; ?>");
+                    console.log(<?php echo $themeId;?>)
+                    theme.style.backgroundImage = 'url("../../assets/images/imagePersonnalisation/Theme<?php echo $themeId; ?>.png")';
+                    theme.disabled = false; 
+                }
+                
+            });
+        </script>
+        <?php
+    }
+}
+    
+?>
+  <script>
+        const img_ = document.getElementsByClassName("file-label")[0]
+        img_.style.backgroundImage = 'url("<?php echo readAvatarById($_SESSION['userId']); ?>")'
+    </script>
+
+    <?php
+ 
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         if (!empty($_POST['pseudo'])){
             updatePseudoJoueur($_SESSION['userId'], $_POST['pseudo']);
-            header('Location: Profil.php');
+            
         }if(!empty($_POST['bio'])){
             updateBio($_SESSION['userId'], $_POST['bio']);
 
@@ -91,40 +151,66 @@
                 updateEtatSkin(1,1,$_SESSION['userId']);
                 updateEtatSkin(2,0,$_SESSION['userId']);
                 updateEtatSkin(3,0,$_SESSION['userId']);
+                updateEtatSkin(4,0,$_SESSION['userId']);
                 break;
             case 'theme2':
                 updateEtatSkin(1,0,$_SESSION['userId']);
                 updateEtatSkin(2,1,$_SESSION['userId']);
                 updateEtatSkin(3,0,$_SESSION['userId']);
+                updateEtatSkin(4,0,$_SESSION['userId']);
                 break;
             case 'theme3':
                 updateEtatSkin(1,0,$_SESSION['userId']);
                 updateEtatSkin(2,0,$_SESSION['userId']);
                 updateEtatSkin(3,1,$_SESSION['userId']);
+                updateEtatSkin(4,0,$_SESSION['userId']);
                 break;
+            case 'theme4':
+                updateEtatSkin(1,0,$_SESSION['userId']);
+                updateEtatSkin(2,0,$_SESSION['userId']);
+                updateEtatSkin(3,0,$_SESSION['userId']);
+                updateEtatSkin(4,1,$_SESSION['userId']);
+                break;
+
         }
+    }
+    if(!empty($_POST['musique'])){
+        $selected_musique = $_POST['musique'];
+        switch ($selected_musique) {
+            case'musique5':
+                updateEtatSkin(5,1,$_SESSION['userId']);
+                updateEtatSkin(6,0,$_SESSION['userId']);
+                updateEtatSkin(7,0,$_SESSION['userId']);
+                updateEtatSkin(8,0,$_SESSION['userId']);
+                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil5.mp3",$_SESSION['userId']);
+                break;
+            case'musique6':
+                updateEtatSkin(5,0,$_SESSION['userId']);
+                updateEtatSkin(6,1,$_SESSION['userId']);
+                updateEtatSkin(7,0,$_SESSION['userId']);
+                updateEtatSkin(8,0,$_SESSION['userId']);
+                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil6.mp3",$_SESSION['userId']);
+                break;
+            case'musique7':
+                updateEtatSkin(5,0,$_SESSION['userId']);
+                updateEtatSkin(6,0,$_SESSION['userId']);
+                updateEtatSkin(7,1,$_SESSION['userId']);
+                updateEtatSkin(8,0,$_SESSION['userId']);
+                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil7.mp3",$_SESSION['userId']);
+            case'musique8':
+                updateEtatSkin(5,0,$_SESSION['userId']);
+                updateEtatSkin(6,0,$_SESSION['userId']);
+                updateEtatSkin(7,0,$_SESSION['userId']);
+                updateEtatSkin(8,1,$_SESSION['userId']);
+                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil8.mp3",$_SESSION['userId']);
+                break;
+    
     }
     
 
-}if (is_array($allAchats)) {
-    foreach ($allAchats as $achats) {
-        $themeId = $achats['idSkin'];
-        ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const theme = document.getElementById("Themes<?php echo $themeId; ?>");
-                theme.style.backgroundImage = 'url("../../assets/images/imagePersonnalisation/Theme<?php echo $themeId; ?>.png")';
-                theme.disabled = false; 
-            });
-        </script>
-        <?php
-    }
+}
+    ob_end_clean();
+    header('Location: Profil.php');
+    exit;
 }
 ?>
-    <?php
-
-?>
-  <script>
-        const img_ = document.getElementsByClassName("file-label")[0]
-        img_.style.backgroundImage = 'url("<?php echo readAvatarById($_SESSION['userId']); ?>")'
-    </script>

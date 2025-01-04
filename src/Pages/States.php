@@ -6,7 +6,7 @@
     $statsUser = readStatistiquesByIdUser($_SESSION['userId']);
 ?>
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
-    <link rel="stylesheet" href="../../assets/css/styleStates.css">
+    <link rel="stylesheet" href="../../assets/css/styleGlobal.css">
 </head>
 <body>
     <div class="States">
@@ -36,8 +36,21 @@
         </div>
         <div class="State">
             <h2>Temps de jeu <img src="../../assets/images/imageStates/tempsjeu.png"></img> :</h2>
-            <?php echo $statsUser->getTempsJeu() ?>
+            <?php echo formatageDuree($statsUser->getTempsJeu()) ?>
         </div>
     </div>
 </body>
 </html>
+<?php
+function formatageDuree($secondes){
+        $jours = floor($secondes/ 86400);
+        $secondes %= 86400;
+        $heures = floor($secondes/ 3600);
+        $secondes %= 3600;
+        $minutes = floor($secondes / 60);
+        $secondes %= 60;
+        $heures = floor($minutes / 60);
+        $minutes %= 60;
+        return "{$jours} jours, {$heures} heures, {$minutes} minutes, {$secondes} secondes";
+    }
+?>

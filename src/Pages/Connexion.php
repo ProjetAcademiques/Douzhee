@@ -38,6 +38,7 @@
                 $_SESSION['userId'] = getIdUser($email);
                 $_SESSION['timeStart'] = microtime(true); 
                 header('Location: Index.php');
+                $_SESSION['isconnected'] = 1;
                 exit();
             } 
         }
@@ -66,6 +67,7 @@
                 if ($trouve){
                         $_SESSION['userId'] = getIdUser($_POST['E-mail']);
                         $_SESSION['timeStart'] = microtime(true); 
+                        $_SESSION['isconnected'] = 1;
                         header('Location: Index.php');
                         exit();
                 } else {

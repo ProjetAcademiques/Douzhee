@@ -1,0 +1,20 @@
+.purpleBody {
+    background: linear-gradient(to bottom, 
+        #642581 0%, 
+        #421956 52%, 
+        #421956 70%, 
+        #421956 79%, 
+        #391549 88%, 
+        #341343 95%, 
+        #341343 96%, 
+        #351444 100%, 
+        #15081B 100% )
+}
+
+.purpleItem1 {
+    background: #401753
+}
+
+.purpleItem2 {
+    background: #3A134D
+}

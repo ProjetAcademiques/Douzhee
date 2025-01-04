@@ -32,10 +32,16 @@ function updateTimer() {
     tempsRestant.textContent = getTimeUntilNextSundayMidnight();
 }
 
+var formTest = new FormData();
+formTest.append('testdesecurité', true);
+
 function checkAndDeleteDefis() {
     if (delet) {
         console.log("Deleting defis");
-        fetch('../../src/Utils/defisDelete.php')
+        fetch('../../src/Utils/defisDelete.php', {
+            method: 'POST',
+            body: formTest
+        })
             .then(response => response.json())
             .catch(error => console.error('Error:', error));
         delet = false;

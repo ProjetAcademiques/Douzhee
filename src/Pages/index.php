@@ -7,6 +7,7 @@
         unset($_SESSION['messageSucces1']);
     }
 ?>
+    <link rel="stylesheet" href="../../assets/css/Theme.css">
     <link rel="stylesheet" href="../../assets/css/styleindex.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
 </head>

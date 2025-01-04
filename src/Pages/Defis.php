@@ -40,7 +40,7 @@
             ?>
             <div class="defi">
                 <h3>Nom : <?= htmlspecialchars($defi['nom'], ENT_QUOTES, 'UTF-8') ?></h3>
-                <p>Condition : <?= htmlspecialchars($defi['Description'], ENT_QUOTES, 'UTF-8') ?></p>
+                <p>Condition : <?= htmlspecialchars($defi['description'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p>Gain : <?= htmlspecialchars($defi['gain'], ENT_QUOTES, 'UTF-8') ?></p>
                 <label for="validation_<?= $idDefis ?>">Défis valider ? :</label>
                 <input type="radio" <?= $idDefisMaitrise == 1 ? 'checked' : '' ?> id="validation_<?= $idDefis ?>" name="valider_<?= $idDefis ?>" disabled>

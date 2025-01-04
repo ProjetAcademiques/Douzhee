@@ -1,7 +1,7 @@
 /**
  * @author Nathan
  */
-//finDePartie();
+
 //const URL = "http://localhost:8080/";
 
 let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant les points des combinaisons
@@ -328,7 +328,7 @@ function afficheScore(data){
 
         if(data.bonus === true){
             const bonus = document.querySelectorAll('.bonus');
-            bonus[data.position-1].value = '25';
+            bonus[data.position-1].value = '35';
             bonus[data.position-1].classList.add('gagne');
         }
     } 
@@ -364,11 +364,11 @@ socket.on('affichePointsCombinaisons', (result) => {
         if(result.playerId === playerId){
             updateInfo({nbDouzhee: true});
         }
-        if(inputs[index].placeholder === '-1'){
+        if(inputs[index].value === '50'){
             inputs[index].value = parseInt(inputs[index].value) + 25; // Ajout de 25 points
             if(result.playerId === playerId){
-                updateInfo({scoreSecSup: 25});
-                const scoreSup = donneesJoueur.scoreSecSup + 25;
+                updateInfo({scoreSecInf: 25});
+                const scoreInf = donneesJoueur.scoreSecInf + 25;
 
                 if(donneesJoueur.nbRoll === 3){
                     // Succès pour le premier coup
@@ -377,7 +377,7 @@ socket.on('affichePointsCombinaisons', (result) => {
                     // Succès pour 3 Douzhee
                 }
 
-                socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSup});
+                socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: scoreInf});
             }
         }
     }
@@ -598,12 +598,10 @@ function ajoutScore(inputElements){
     }
 
     if(name === 'section-superieure'){
-        let bonus = false;
         if(changement){
             scoreSecSup += 35;
-            bonus = true;
         }
-        socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSecSup, bonus: bonus});
+        socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSecSup, bonus: changement});
     } else{
         socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: donneesJoueur.scoreSecInf});
     }

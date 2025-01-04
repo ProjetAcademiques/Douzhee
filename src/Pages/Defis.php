@@ -1,28 +1,28 @@
 <?php
-require_once("../Utils/headerInit.php");
-require_once("../Utils/headerBody.php");
-require_once("../CRUD/CRUDDefis.php");
-require_once("../CRUD/CRUDMaitrise.php");
-require_once("../CRUD/CRUDDefiSelected.php");
+    require_once("../Utils/headerInit.php");
+    require_once("../CRUD/CRUDDefis.php");
+    require_once("../CRUD/CRUDMaitrise.php");
+    require_once("../CRUD/CRUDDefiSelected.php");
 
-$defis = readDefisReussiByUser($_SESSION['userId']);
-$defiexists = readAllDefisSelected();
-$idDefis = 0;
-$idDefisMaitrise = 0;
+    $defis = readDefisReussiByUser($_SESSION['userId']);
+    $defiexists = readAllDefisSelected();
+    $idDefis = 0;
+    $idDefisMaitrise = 0;
 
-if (!$defiexists) {
-    $defi = readThreeDefis();
-    foreach ($defi as $d) {
-        createDefisSelected($d['id'], $d['nom'], $d['Description'], $d['gain']);
+    if (!$defiexists) {
+        $defi = readThreeDefis();
+        foreach ($defi as $d) {
+            createDefisSelected($d['id'], $d['nom'], $d['Description'], $d['gain']);
+        }
+        header("Location: Defis.php");
+        exit;
     }
-    header("Location: Defis.php");
-    exit;
-}
 ?>
     <link rel="stylesheet" href="../../assets/css/styleDefis.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css">
 </head>
 <body>
+    <?php require_once("../Utils/headerBody.php"); ?>
     <div class="Defis">
         <h2>Voici les défis qui vous attendent :</h2>
         <h2>Temps restant avant le renouvellement des défis :</h2>

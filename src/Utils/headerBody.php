@@ -1,13 +1,11 @@
 <?php
-require_once("../CRUD/CRUDJoueur.php");
-require_once("../CRUD/CRUDSkinAchete.php");
-if (isset($_SESSION['userId'])){
-    $musicPath = readMusicPath($_SESSION['userId']);
-}
-
+    require_once("../CRUD/CRUDJoueur.php");
+    require_once("../CRUD/CRUDSkinAchete.php");
+    if (isset($_SESSION['userId'])){
+        $musicPath = readMusicPath($_SESSION['userId']);
+    }
 ?>
-<body>
-    <header>
+    <header class="themeItem1">
         <audio id="audioPlayer" controls loop>
             <source id="audioSource" src="<?php echo $musicPath?>" type="audio/mpeg">
         </audio>
@@ -40,7 +38,6 @@ if (isset($_SESSION['userId'])){
                     <button type="submit">Déconnexion</button>
                 </form>
             </div>
-
         <?php else: ?>
             <div class="selection_droite">
                 <form method="POST" action="Connexion.php">

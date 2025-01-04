@@ -8,7 +8,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #380052;
     width: 100%;
     height: 74px;
     padding: 10px;
@@ -60,7 +59,8 @@ button {
     cursor: pointer;
     margin-right: 10px;
 }
-#Logo{
+
+#Logo {
     background-image: url("../../assets/images/imgheader/logo.png");
     background-size: cover;
     border: none;

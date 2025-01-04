@@ -195,10 +195,10 @@ function updateInfo(info) {
         donneesJoueur.listePointsObt[pointsIndex] = info.listePointsObt;
     } else if(info.scoreSecSup !== undefined){
         donneesJoueur.scoreSecSup += info.scoreSecSup;
-        donneesJoueur.scoreTot += donneesJoueur.scoreSecSup;
+        donneesJoueur.scoreTot += info.scoreSecSup;
     } else if(info.scoreSecInf !== undefined){
         donneesJoueur.scoreSecInf += info.scoreSecInf;
-        donneesJoueur.scoreTot += donneesJoueur.scoreSecInf;
+        donneesJoueur.scoreTot += info.scoreSecInf;
     } else if(info.nbDouzhee !== undefined){
         donneesJoueur.nbDouzhee += 1;
     } else if(info.bonusSecSup){
@@ -360,11 +360,13 @@ socket.on('affichePointsCombinaisons', (result) => {
     }
 
     if(pointsCombinaisons[11] === 50){
-        const index = (11 * nbPlayers) + (data.position - 1);
+        const index = (11 * nbPlayers) + (result.position - 1);
+        if(result.playerId === playerId){
+            updateInfo({nbDouzhee: true});
+        }
         if(inputs[index].placeholder === '-1'){
             inputs[index].value = parseInt(inputs[index].value) + 25; // Ajout de 25 points
             if(result.playerId === playerId){
-                updateInfo({nbDouzhee: true});
                 updateInfo({scoreSecSup: 25});
                 const scoreSup = donneesJoueur.scoreSecSup + 25;
 
@@ -407,7 +409,8 @@ function setListeDes(desGardes){
     let listeDes = [...desGardes];
         
     while (listeDes.length < 5) {
-        let de = Math.floor(Math.random() * 6) + 1;
+        //let de = Math.floor(Math.random() * 6) + 1;
+        const de = 6;
         listeDes.push(de);
     }
 
@@ -589,16 +592,16 @@ function ajoutScore(inputElements){
     let scoreSecSup = donneesJoueur.scoreSecSup;
     let changement = false;
     if(!donneesJoueur.bonusSecSup && donneesJoueur.scoreSecSup > 62){
-        updateInfo({scoreSecSup: 25});
+        updateInfo({scoreSecSup: 35});
         updateInfo({bonusSecSup: true});
-        scoreTot += 25;
+        scoreTot += 35;
         changement = true;
     }
 
     if(name === 'section-superieure'){
         let bonus = false;
         if(changement){
-            scoreSecSup += 25;
+            scoreSecSup += 35;
             bonus = true;
         }
         socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSecSup, bonus: bonus});

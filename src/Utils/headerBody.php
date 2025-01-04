@@ -107,6 +107,7 @@ if (isset($_SESSION['userId'])){
         img.style.backgroundImage = 'url("<?php echo readAvatarById($_SESSION['userId']); ?>")'
     </script>
     <?php endif; ?>
+    <!-- Je ferai ça avec un Fetch plus tard -->
     <?php
         if (isset($allAchats) && is_array($allAchats)  ){
             foreach($allAchats as $achats){
@@ -152,4 +153,4 @@ if (isset($_SESSION['userId'])){
                 
             }
         }
-        ?>
+    ?>

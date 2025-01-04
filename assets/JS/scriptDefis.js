@@ -44,7 +44,6 @@ function checkAndDeleteDefis() {
 }
 
 var form = document.getElementById('defisForm');
-var regexGain = /^(1[0-9]{2}|2[0-4][0-9]|250)$/;
 
 form.addEventListener('submit', function(event) {
     event.preventDefault(); // Empêcher l'envoi du formulaire par défaut sinon la page sera rechargée et donc zikete
@@ -57,6 +56,7 @@ form.addEventListener('submit', function(event) {
     formData.append('nomDefis', nomDefis);
     formData.append('descriptionDefis', descriptionDefis);
     formData.append('gainDefis', gainDefis);
+    formData.append('testdesecurité', true); // Pour éviter les attaques CSRF meme si le fait qu'on envoie la methode POST suffit
 
     fetch('../../src/Utils/defisCreate.php', {
         method: 'POST', // Envoi de données par la méthode POST

@@ -1,0 +1,147 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+#Boutique {
+    position: absolute !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 8.5% - 5px);
+    border: 1px solid #fff;
+    bottom: 0;
+}
+
+.nav {
+    height: 8.5%;
+    width: 7%;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 83%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid red;
+}
+
+.store {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 1px solid blue;
+}
+
+.notSelected {
+    display: none;
+}
+
+.selected {
+    display: flex;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.animateFadeOutDown {
+    animation: fadeOutDown 1s cubic-bezier(0.11, 0.91, 0.58, 1);
+}
+
+.animateFadeOutUp {
+    animation: fadeOutUp 1s cubic-bezier(0.11, 0.91, 0.58, 1);
+}
+
+.animateFadeInUp {
+    animation: fadeInUp 1s cubic-bezier(0.11, 0.91, 0.58, 1);
+}
+
+.animateFadeInDown {
+    animation: fadeInDown 1s cubic-bezier(0.11, 0.91, 0.58, 1);
+}
+
+.animateFadeZoomIn {
+    animation: fadeZoomIn 1s cubic-bezier(0.11, 0.91, 0.58, 1) forwards;
+}
+
+.animateFadeZoomOut {
+    animation: fadeZoomOut 1s cubic-bezier(0.11, 0.91, 0.58, 1) forwards;
+}
+
+@keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+}
+
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeZoomIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeZoomOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}

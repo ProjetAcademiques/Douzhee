@@ -1,4 +1,35 @@
 <?php
+
+require_once("../CRUD/CRUDSkinAchete.php");
+require_once("../CRUD/CRUDJoueur.php");
+session_start();
+
+if (!empty($_POST['testdesecurité'])) {
+    if (!empty($_POST['idSkin']) && !empty($_POST['cost'])) {
+        $idSkin = intval($_POST['idSkin']);
+        $cost = intval($_POST['cost']);
+        $userId = $_SESSION['userId'];
+        $userMoney = getMoneyById($userId) ?? 0;
+        if ($userMoney >= $cost) {
+            $newMoney = $userMoney - $cost;
+            updateDouzCoin($userId, $newMoney);
+            createSkinAchete($idSkin, $userId, 0, "Theme", date("Y-m-d"));
+            echo json_encode(['status' => 'success']);
+            exit();
+        } else {
+            echo json_encode(['status' => 'unsucces', 'error' => 'Fonds insuffisants.']);
+            exit();
+        }
+    } else {
+        echo json_encode(['status' => 'unsucces', 'error' => 'Données invalides.', 'donnees' => $cost, 'donnees2' => $idSkin, 'donnees3' => $userId]);
+        exit();
+    }
+} else {
+    echo "tu t'es cru ou toi, hein?";
+}
+
+
+/*
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../CRUD/CRUDSkinAchete.php");
     header('Content-Type: application/json');
@@ -28,4 +59,5 @@
     } else {
         echo json_encode(['success' => false, 'error' => 'Méthode non autorisée.']);
     }
+*/
  ?>

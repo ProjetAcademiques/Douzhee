@@ -50,7 +50,7 @@ class AuthManager {
      * @param {*} email email sous forme valide (zikette@domaine.tld)
      */
     SignUpNewUser(username, pwd, email) {
-        fetch("http://localhost/douzhee/src/Controllers/AuthController.php", {
+        fetch("../../src/Controllers/AuthController.php", {
             method: "POST",
             mode: "cors",
             headers: {

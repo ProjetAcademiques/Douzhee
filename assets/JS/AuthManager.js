@@ -22,7 +22,7 @@ class AuthManager {
      * Une fonction qui vérifie si un utilisateur existe dans la base de données. Si oui, le conencte.
      */
     ConnectExistingUser (email, pwdHash) {
-        fetch("http://localhost/douzhee/src/Controllers/AuthController.php", {
+        fetch("../../src/Controllers/AuthController.php", {
             method : "POST",
             mode : "cors",
             headers: {

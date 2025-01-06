@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         diff -= minutes * (1000 * 60);
 
         var seconds = Math.floor(diff / 1000);
+
+        days = days - 1; 
         
         if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
             delet = true;

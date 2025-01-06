@@ -14,6 +14,8 @@
         <div class="container">
             <div id="Theme" class="store">
                 <h2>Thèmes</h2>
+                <div class="sold"> 
+                </div>
             </div>
 
             <div id="Musique" class="store">

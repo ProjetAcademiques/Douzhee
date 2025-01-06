@@ -37,52 +37,6 @@
       return null;
     }
  }
-
-/**
- * @author Mael
- * @brief retourne tout les thèmes, null sinon
- * @return array|null
- */
-function readAllThemes(): ?array {
-   $connexion = ConnexionSingleton::getInstance();
-
-   $query = "SELECT * FROM skinachetable WHERE typeSkin = 'Theme'";
-
-   $statement = $connexion->prepare($query);
-
-   $statement->execute();
-
-   $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-   if(gettype($results) != "boolean") {
-      return $results;
-   }
-   return null;
-}
-
-/**
- * @author Mael
- * @brief retourne toutes les musiques, null sinon
- * @return array|null
- */
-function readAllMusics(): ?array {
-   $connexion = ConnexionSingleton::getInstance();
-
-   $query = "SELECT * FROM SkinAchetable WHERE typeSkin = Musique";
-
-   $statement = $connexion->prepare($query);
-
-   $statement->execute();
-
-   $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-   if(gettype($results) != "boolean") {
-      return $results;
-   }
-   return null;
-}
-
-
 function readPriceById($id){
    $connection = ConnexionSingleton::getInstance();
    $SelectQuery = "SELECT prixSkin FROM skinachetable WHERE id = :id";

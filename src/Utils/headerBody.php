@@ -7,7 +7,7 @@
 ?>
     <header class="themeItem1">
         <audio id="audioPlayer" controls loop>
-            <source id="audioSource" src="<?php echo $musicPath ?>" type="audio/mpeg">
+            <source id="audioSource" src="<?php echo $musicPath?>" type="audio/mpeg">
         </audio>
 
         <a href="index.php">
@@ -20,29 +20,33 @@
                 $_SESSION['douzeCoin'] = getMoneyById($_SESSION['userId']); // Pour éviter de faire des requêtes inutiles
             }
             if (!isset($_SESSION['pseudo'])){
-                $_SESSION['pseudo'] = getPseudoById($_SESSION['userId'])['pseudonyme']; // Pour éviter de faire des requêtes inutiles
+                $_SESSION['pseudo'] = getPseudoById($_SESSION['userId'])['pseudonyme']; // Pour éviter de faire des requêtes inutiles;
             }
-        ?>
+            ?>
         
-        <div class="selection_droite">
-            <span id="money"><?php echo $_SESSION['douzeCoin']; ?></span>
-            <img src="../../assets/images/imgheader/coin_dollar_finance_icon_125510 1.png" alt="Money du Jeu" width="27" height="27" id="coin">
-            
-            <span id="pseudo"><?php echo $_SESSION['pseudo']; ?></span>
-            
-            <form action="Profil.php" method="GET">
-                <input id="profil" type="submit" value="">
-            </form>
+            <div class="selection_droite">
+                <span id="money"><?php echo getMoneyById($_SESSION['userId']); ?></span>
+                <img src="../../assets/images/imgheader/coin_dollar_finance_icon_125510 1.png" alt="Money du Jeu" width="27" height="27" id="coin">
+                
+                <span id="pseudo"><?php echo getPseudoById($_SESSION['userId'])['pseudonyme']; ?></span>
+                
+                <form action="Profil.php" method="GET">
+                    <input id="profil" type="submit" value="">
+                </form>
 
-            <form method="POST" action="../Utils/logout.php">
-                <button type="submit">Déconnexion</button>
-            </form>
-        </div>
+                <form method="POST" action="../Utils/logout.php">
+                    <button type="submit">Déconnexion</button>
+                </form>
+            </div>
         <?php else: ?>
-        <div class="selection_droite">
-            <form method="POST" action="Connexion.php">
-                <button type="submit">Connexion</button>
-            </form>
-        </div>
+            <div class="selection_droite">
+                <form method="POST" action="Connexion.php">
+                    <button type="submit">Connexion</button>
+                </form>
+            </div>
         <?php endif; ?>
-    </header>
+     </header>
+     <script src="../../assets/JS/scriptTheme.js"></script>
+     <script src="../../assets/JS/scriptAudio.js"></script>
+     <script src="../../assets/JS/scriptAvatar.js"></script>
+    

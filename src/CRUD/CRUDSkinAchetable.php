@@ -1,5 +1,5 @@
 <?php
-
+   require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
 /**
  * @author Mael
  * @brief ne nécessite pas d'autres opération qu'un read
@@ -37,3 +37,13 @@
       return null;
     }
  }
+function readPriceById($id){
+   $connection = ConnexionSingleton::getInstance();
+   $SelectQuery = "SELECT prixSkin FROM skinachetable WHERE id = :id";
+   $statement = $connection->prepare($SelectQuery);
+   $statement->bindParam(":id", $id);
+   $statement->execute();
+   $results = $statement->fetch(PDO::FETCH_ASSOC);
+   return $results["prixSkin"];
+
+}

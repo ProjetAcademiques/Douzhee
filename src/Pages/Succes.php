@@ -6,7 +6,7 @@
     require_once("../CRUD/CRUDObtient.php");
 ?>
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
-    <link rel="stylesheet" href="../../assets/css/styleSucces.css"> 
+    <link rel="stylesheet" href="../../assets/css/styleGlobal.css"> 
 <?php
     require_once("../Utils/headerBody.php");
    
@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="Succes">
-        <h2>Succès :</h2>
+        <h2>Liste des Succès  :</h2>
         <?php
             for ($i = 1; $i < 34; $i++) {
                 echo '<img src="../../assets/images/imageSucces/Succes_verrouille.png" alt="Image du succès" id="'. $i .'" class="clickable">';
@@ -22,8 +22,8 @@
         ?>
 
     </div>
-    <div id="fenModal">
-        <div class="content">
+    <div id="fenModalSucces">
+        <div class="contentSucces">
             <h2>Voici comment obtenir ce skin !</h2>
             <img src="" id="modalImage">
             <h2 id="nomSucces"></h2>
@@ -54,7 +54,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
      const inputs = document.querySelectorAll(".clickable");
-     const modal = document.getElementById("fenModal");
+     const modal = document.getElementById("fenModalSucces");
      const modalImage = document.getElementById("modalImage");
      const nom = document.getElementById("nomSucces");
      const condition = document.getElementById("conditionSucces");

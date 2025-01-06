@@ -1,70 +1,258 @@
 body {
-    background: linear-gradient(to bottom,
-    #642581 0%,
-    #421956 52%,
-    #421956 70%,
-    #421956 79%,
-    #391549 88%,
-    #341343 95%,
-    #341343 96%,
-    #351444 100%,
-    #15081B 100%
-    );
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
     height: 100vh;
 }
 
 #fonctionnalites {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-}
-
-#sectionHaut, #sectionBas {
-    display: flex;
-    flex-direction: row;
-    gap: 100px;
     justify-content: center;
-    padding: 150px;
-    
+    flex-direction: column;
+    align-items: center;
+    gap: 15vh;
 }
 
-input[type="submit"] {
-    width: 223px;
-    height: 85px;
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    margin: 30px;
-    
+.sectionHaute {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 30vh;
 }
 
-#regles {
-    border-radius: 35px;
-    background-image: url("../../assets/images/imageindex/imgregles.png");
-    
+.sectionMilieu {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 }
 
-#classement {
-    border-radius: 35px;
-    background-image: url("../../assets/images/imageindex/imgclassement.png");
+.sectionBasse {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 30vh;
 }
 
-#versusrobot {
-    border-radius: 70px;
-    width: 300px;
-    height: 145px;
-    background-image: url("../../assets/images/imageindex/imgvsrobot.png");
+.taches {
+    width: 250px;
+    height: 115px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-decoration: none;
 }
 
 #versushuman {
-    border-radius: 70px;
-    width: 300px;
-    height: 145px;
-    background-image: url("../../assets/images/imageindex/imgvshuman.png");
+    width: calc(250px * 1.25);
+    height: calc(115px * 1.25);
 }
+
+.taches span {
+    color: #fff;
+    font-size: 25px;
+    margin-left: 15px;
+}
+
+#versushuman div:not(.cache) {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    width: 25%;
+    height: auto;
+    overflow: hidden;
+}
+
+#versushuman img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+#versushuman span {
+    position: relative;
+    margin: 0%;
+    transform: rotate(-22.5deg);
+    font-size: 50px;
+}
+
+#regles img {
+    width: auto;
+    height: 65%;
+}
+
+#versushuman {
+    position: relative;
+    align-self: center;
+}
+
+.trait1::before {
+    content: '';
+    position: absolute;
+    width: 31.5%;
+    bottom: 13%;
+    left: 5%;
+    height: 1.75px;
+    background-color: #ffffff;
+    transform: rotate(-20deg);
+    transform-origin: left center;
+    z-index: 2;
+}
+
+#imgProfile1 {
+    position: relative;
+    top: 7px;
+}
+
+#imgProfile2 {
+    position: relative;
+    bottom: 7px;
+}
+
+
+.trait2::before {
+    content: '';
+    position: absolute;
+    width: 31.5%;
+    bottom: 60.5%;
+    right: 3.5%;
+    height: 1.75px;
+    background-color: #ffffff;
+    transform: rotate(-20deg);
+    transform-origin: left center;
+    z-index: 2;
+}
+
+#cache1 {
+    display: block;
+    position: absolute;
+    top: 8.5%;
+    right: 10.5%;
+    width: 50px;
+    height: 50px;
+    transform: rotate(-20deg);
+    border-radius: 50%;
+    clip-path: inset(0 0 50% 0);
+    z-index: 1;
+}
+
+#cache2 {
+    display: block;
+    position: absolute;
+    bottom: 7.5%;
+    left: 10.5%;
+    width: 50px;
+    height: 50px;
+    transform: rotate(-20deg);
+    border-radius: 50%;
+    clip-path: inset(50% 0 0 0);
+    z-index: 1;
+}
+
+.animateLeft{
+    animation: fadeInLeft 1s ease-in-out;
+}
+
+.animateRight{
+    animation: fadeInRight 1s ease-in-out;
+}
+
+.animateZoomIn{
+    animation: zoomIn 1s ease-in-out;
+}
+
+.animateFadeIn{
+    animation: fadeIn 1s ease-in-out;
+}
+
+.animateRotate3D{
+    animation: rotate3D 1s ease-in-out;
+}
+
+.animateJackInTheBox{
+    animation: jackInTheBox 1s ease-in-out;
+}
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        transform: rotate(-22.5deg);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes rotate3D {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+@keyframes jackInTheBox {
+    0% {
+        opacity: 0;
+        transform: scale(0.1) rotate(30deg);
+    }
+
+    50% {
+        transform: rotate(-10deg);
+    }
+
+    70% {
+        transform: rotate(3deg);
+    }
+
+    90% {
+        transform: rotate(-1deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+

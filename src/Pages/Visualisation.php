@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
    
 ?>
  <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
- <link rel="stylesheet" href="../../assets/CSS/styleVisualisation.css">
+ <link rel="stylesheet" href="../../assets/CSS/styleGlobal.css">
 </head>
 
     <div class="Visualisation">
@@ -81,9 +81,22 @@ if (isset($_GET['id'])) {
     </div>
     <div class="State">
         <h2>Temps de jeu <img src="../../assets/images/imageStates/tempsjeu.png"></img> :</h2>
-        <?php echo $statsUser->getTempsJeu() ?>
+        <?php echo formatageDuree($statsUser->getTempsJeu()) ?>
     </div>
         </div>
     </div>
 </body>
 </html>
+<?php
+    function formatageDuree($secondes){
+        $jours = floor($secondes/ 86400);
+        $secondes %= 86400;
+        $heures = floor($secondes/ 3600);
+        $secondes %= 3600;
+        $minutes = floor($secondes / 60);
+        $secondes %= 60;
+        $heures = floor($minutes / 60);
+        $minutes %= 60;
+        return "{$jours} jours, {$heures} heures, {$minutes} minutes, {$secondes} secondes";
+    }
+?>

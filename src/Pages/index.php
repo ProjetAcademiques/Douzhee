@@ -1,33 +1,83 @@
 <?php
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDJoueur.php");
-    require_once("../Utils/headerBody.php");
     if (isset($_SESSION['messageSucces1'])){
         echo '<script>alert("' . $_SESSION['messageSucces1'] . '");</script>';
         unset($_SESSION['messageSucces1']);
     }
 ?>
-    <link rel="stylesheet" href="../../assets/css/styleIndex.css">
+    <link rel="stylesheet" href="../../assets/css/Theme.css">
+    <link rel="stylesheet" href="../../assets/css/styleindex.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
 </head>
+<body>
+    <?php require_once("../Utils/headerBody.php"); ?>
     <div id="fonctionnalites">
-        <div id="sectionHaut">
-            <form action="Regles.php" method="GET">
-                <input id="regles" type="submit" value="">
-            </form>
-            <form action="Classement.php" method="GET">
-                <input id="classement" type="submit" value="">
-            </form>
+        <div class="sectionHaute">
+            <a href="./regles.php" id="regles" class="taches themeItem3">
+                <span>Règles</span>
+                <img src="../../assets/Images/imageindex/robot1.png" alt="" class="">
+            </a>
+
+            <a href="./Classement.php" id="classement" class="taches themeItem3">
+                <span>Classement</span>
+                <img src="../../assets/Images/imageindex/classement.png" alt="" class="">
+            </a>
         </div>
-        <div id="sectionBas">
-            <form action="versusrobot.php" method="GET">
-                <input id="versusrobot" type="submit" value="">
-            </form>
-            <form action="CreaRej.php" method="GET">
-                <input id="versushuman" type="submit" value="">
-            </form>
+
+        <div class="sectionMilieu">
+            <!--
+            <a href="./versusbot.php" id="versusrobot" class="taches">
+                <div id="imgProfile1"> 
+                    <img src="../../assets/Images/imageindex/robot2.png" alt="robot">
+                </div>
+
+                <p class="trait1"></p>
+                <div class="cache cache1"></div>
+
+                <span>VS</span>
+
+                <p class="trait2"></p>
+                <div class="cache cache2"></div>
+
+                <div id="imgProfile2">
+                    <img src="../../assets/Images/imageindex/human.png" alt="human">
+                </div>
+            </a>
+            -->
+            
+            <a href="./CreaRej.php" id="versushuman" class="taches themeItem4">
+                <div id="imgProfile1">
+                    <img src="../../assets/Images/imageindex/human.png" alt="human">
+                </div>
+
+                <p class="trait1"></p>
+                <div class="cache themeItem4" id="cache1"></div>
+
+                <span>VS</span>
+
+                <p class="trait2"></p>
+                <div class="cache themeItem4" id="cache2"></div>
+
+                <div id="imgProfile2">
+                    <img src="../../assets/Images/imageindex/human.png" alt="human">
+                </div>
+            </a>
+        </div>
+
+        <div class="sectionBasse">
+            <a href="./Boutique.php" id="boutique" class="taches themeItem4">
+                <span>Boutique</span>
+                <img src="../../assets/Images/imgheader/coin_dollar_finance_icon_125510 1.png" alt="">
+            </a>
+
+            <a href="./Defis.php" id="defis" class="taches themeItem4">
+                <span>Defis</span>
+            </a>
         </div>
     </div>
+
+    <script src="../../assets/JS/animationIndex.js"></script>
 </body>
 </html>
 

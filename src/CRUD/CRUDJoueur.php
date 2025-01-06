@@ -392,14 +392,14 @@ function getPseudoById(int $id){
  * @param $id l'id du joueur
  * @return array le nombre de douzcoin
  */
-function getMoneyById(int $id){
+function getMoneyById(int $id): int{
     $connexion = ConnexionSingleton::getInstance();
-    $sql = "Select douzCoin from joueur where id =?";
+    $sql = "Select douzCoin from joueur where id = :id";
     $stmt = $connexion->prepare($sql);
-    $stmt->bindParam(1,$id);
+    $stmt->bindParam(":id",$id);
     $stmt->execute();
     $money = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $money;
+    return $money['douzCoin'];
 }
 function verifEmail($email){
     $connexion = ConnexionSingleton::getInstance();
@@ -465,7 +465,7 @@ function updateAvatar(String $path, int $idUser) {
 }
 function cryptage($data,$key){
     $iv = random_bytes(16); //Génération d'une valeur aléatoire de 16 octets
-    $chiffrement = openssl_encrypt($data,'aes-256-cbc',$key,0,$iv); //chiffrement de la donnée en utilisant l'algo de chiffrage AES la clé et la valeur aléatoire 
+    $chiffrement = openssl_encrypt($data,'aes-256-cbc',$key,0,$iv); //chiffrement de la donnée en utilisant l'algo de chiffrage AES, la clé et la valeur aléatoire 
     return base64_encode($iv.$chiffrement); //concaténation de la valeur aléatoire au chiffrement
 }
 function decryptage($data,$key){
@@ -478,3 +478,22 @@ function decryptage($data,$key){
         return null;
     }
 }
+
+function readMusicPath($idJ){
+    $connection = ConnexionSingleton::getInstance();
+    $selectedQuery = "SELECT musiqueChemin FROM Joueur  WHERE id = :idJ";
+    $statement = $connection->prepare($selectedQuery);
+    $statement->bindParam(":idJ", $idJ);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['musiqueChemin'];
+}
+function updateMusicPath($newpath,$idJ){
+    $connection = ConnexionSingleton::getInstance();
+    $updateQuery = "UPDATE Joueur SET musiqueChemin = :newpath WHERE id = :id";
+    $statement = $connection->prepare($updateQuery);
+    $statement->bindParam(":newpath", $newpath);
+    $statement->bindParam(":id", $idJ);
+    return $statement->execute();
+}
+

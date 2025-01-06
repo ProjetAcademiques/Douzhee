@@ -1,0 +1,115 @@
+/* PURPLE THEME */
+.purpleBody {
+    background: linear-gradient(to bottom, 
+        #642581 0%, 
+        #421956 52%, 
+        #421956 70%, 
+        #421956 79%, 
+        #391549 88%, 
+        #341343 95%, 
+        #341343 96%, 
+        #351444 100%, 
+        #15081B 100% )
+}
+
+.purpleItem1 {
+    background: #380052
+}
+
+.purpleItem2 {
+    background: #3A134D
+}
+
+.purpleItem3 {
+    background: #421956
+}
+
+.purpleItem4 {
+    background: #341343
+}
+
+/* GREEN THEME */
+.greenBody {
+    background: linear-gradient(to bottom, 
+    #94ca52 0%, 
+    #56ab2f 52%, 
+    #56ab2f 70%, 
+    #56ab2f 79%, 
+    #3b8d1e 88%, 
+    #2e6b15 95%, 
+    #2e6b15 96%, 
+    #2e6b15 100%)
+}
+
+.greenItem1 {
+    background: #1a8431
+}
+
+.greenItem2 {
+    background: #00825d
+}
+
+.greenItem3 {
+    background: #1b9a0a
+}
+
+.greenItem4 {
+    background: #018815
+}
+
+/* RED THEME */
+.redBody {
+    background: linear-gradient(to bottom, 
+    #7d2e2e 0%,  
+    #5d1c1c 52%,  
+    #5d1c1c 70%,  
+    #5d1c1c 79%,  
+    #401717 88%,  
+    #351414 95%,  
+    #351414 96%,  
+    #351414 100%,  
+    #1f0f0f 100%)
+}
+
+.redItem1 {
+    background: #6f4b4d
+}
+
+.redItem2 {
+    background: #4D0D0D
+}
+
+.redItem3 {
+    background: #542626
+}
+
+.redItem4 {
+    background: #4D0D0D
+}
+
+
+/* BLUE THEME */
+.blueBody {
+    background: linear-gradient(to bottom, 
+    #4a90e2 0%,
+    #4285f4 25%, 
+    #3a78db 50%, 
+    #3367d6 75%, 
+    #2a56c6 100%)
+}
+
+.blueItem1 {
+    background: #2c5aa0
+}
+
+.blueItem2 {
+    background: #0D4D4D
+}
+
+.blueItem3 {
+    background: #0D4D4D
+}
+
+.blueItem4 {
+    background: #0D4D4D
+}

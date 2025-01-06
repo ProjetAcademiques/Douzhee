@@ -13,15 +13,17 @@
 
         <div class="container">
             <div id="Theme" class="store">
-                <h2>Thèmes</h2>
+                <h2>Theme</h2>
+                <div class="sold">
+
+                </div>
             </div>
 
             <div id="Musique" class="store">
-                <h2>Musiques</h2>
-            </div>
-
-            <div id="Dés" class="store">
-                <h2>Skins de Dés</h2>
+                <h2>Musique</h2>    
+                <div class="sold">
+                    
+                </div>
             </div>
         </div>
         

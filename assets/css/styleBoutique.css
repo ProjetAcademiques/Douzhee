@@ -1,7 +1,9 @@
 body {
-    margin: 0;
     padding: 0;
+    margin: 0;
     height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
 #Boutique {
@@ -11,13 +13,24 @@ body {
     align-items: center;
     width: 100%;
     height: calc(100% - 8.5% - 5px);
-    border: 1px solid #fff;
     bottom: 0;
+}
+
+.sold {
+    width: 50%;
+    height: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .nav {
     height: 8.5%;
     width: 7%;
+    background : none;
+}
+
+i::before {
+    font-size: 6.5vh;
+    color: #fff;
 }
 
 .container {
@@ -28,7 +41,6 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    border: 1px solid red;
 }
 
 .store {
@@ -40,8 +52,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     flex-wrap: wrap;
-    border: 1px solid blue;
 }
 
 .notSelected {
@@ -73,11 +85,11 @@ body {
 }
 
 .animateFadeZoomIn {
-    animation: fadeZoomIn 1s cubic-bezier(0.11, 0.91, 0.58, 1) forwards;
+    animation: fadeZoomIn 0.5s cubic-bezier(0.11, 0.91, 0.58, 1) forwards;
 }
 
 .animateFadeZoomOut {
-    animation: fadeZoomOut 1s cubic-bezier(0.11, 0.91, 0.58, 1) forwards;
+    animation: fadeZoomOut 0.5s cubic-bezier(0.11, 0.91, 0.58, 1) forwards;
 }
 
 @keyframes fadeOutDown {

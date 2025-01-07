@@ -46,7 +46,7 @@
 function readAllThemes(): ?array {
    $connexion = ConnexionSingleton::getInstance();
 
-   $query = "SELECT * FROM SkinAchetable WHERE typeSkin = Theme";
+   $query = "SELECT * FROM SkinAchetable WHERE typeSkin = 'Theme'";
 
    $statement = $connexion->prepare($query);
 
@@ -68,7 +68,7 @@ function readAllThemes(): ?array {
 function readAllMusics(): ?array {
    $connexion = ConnexionSingleton::getInstance();
 
-   $query = "SELECT * FROM SkinAchetable WHERE typeSkin = Music";
+   $query = "SELECT * FROM SkinAchetable WHERE typeSkin = 'Musique'";
 
    $statement = $connexion->prepare($query);
 

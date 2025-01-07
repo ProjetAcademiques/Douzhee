@@ -1,71 +1,83 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById("fenModal");
-    const inputs = document.querySelectorAll(".clickable");
-    const valider = document.getElementById("valider");
-    const refuser = document.getElementById("refuser");
-    const modalImage = document.getElementById("modalImage");
-    const price = document.getElementById("price");
+    const allItems = document.querySelectorAll('.item');
 
-    var selectedSkin = null;
-    var idSkin = null;
-    var prixSkin = -1;
+    const windowAchat = document.querySelector('#achatContainer');
+    const windowAchatImg = document.querySelector('#achatContainer img');
+    const windowAchatcost = document.querySelector('#achatContainer p');
+    const windowAchatButton = document.querySelector('#btnAchat');
 
-    inputs.forEach(input => {
-        input.addEventListener('click', () => {
-            selectedSkin = input.src;
-            idSkin = input.id;
-            modalImage.src = selectedSkin;
+    windowAchat.classList.add('disabled');
 
-            var formData = new FormData();
-            formData.append('idSkin', idSkin);
-            formData.append('testdesecurité', true);
+    allItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            windowAchat.classList.remove('disabled');
+            windowAchat.classList.add('actived');
 
-            fetch('../Utils/processusGetPrixSkin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                price.textContent = `Cela vous coutera ${data.resultat} douzcoin`;
-                prixSkin = data.resultat;
-            })
-            .catch(error => {
-                console.error("Erreur lors de la requête : ", error);
-            });
-            modal.style.display = "block";
+            
+
+            windowAchatImg.src = item.querySelector('img').src;
+            windowAchatImg.id = item.id;
+
+            if (item.classList.contains('sold')) {
+                windowAchatcost.textContent = 'Vous avez déjà acheté cet item';
+                windowAchatButton.classList.add('disabled');
+            } else {
+                windowAchatButton.classList.remove('disabled');
+                var formData = new FormData();
+                formData.append('id', item.id);
+                formData.append('testdesecurité', true);
+
+                fetch('../Utils/getItemCost.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        windowAchatcost.textContent = `Cela vous coûtera ${data.resultat} douzcoin`;
+                    } else {
+                        windowAchatcost.textContent = 'Erreur lors de la récupération du coût';
+                        console.error("Erreur : " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erreur lors de la requête : ", error);
+                    windowAchatcost.textContent = 'Erreur lors de la récupération du coût';
+                });
+            }
         });
     });
 
-    refuser.onclick = () => {
-        modal.style.display = "none";
-    };
+    windowAchatButton.addEventListener('click', function() {
+        var formData = new FormData();
+        formData.append('id', windowAchatImg.id);
+        formData.append('cost', windowAchatcost.textContent.match(/\d+/)[0]); // Extraire le coût du texte
+        formData.append('testdesecurité', true);    
 
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    valider.addEventListener('click', () => {
-        var formData2 = new FormData();
-        formData2.append('testdesecurité', true);
-        formData2.append('idSkin', idSkin);
-        formData2.append('cost', prixSkin);
-
-        fetch("../Utils/processusAchat.php", {
+        fetch('../Utils/buyItem.php', {
             method: 'POST',
-            body: formData2
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
-            if (data.status === "success") {
-                location.reload(); // Recharger la page
+            if (data.status === 'success') {
+                console.log("Achat effectué avec succès");
+                windowAchat.classList.remove('actived');
+                windowAchat.classList.add('disabled');
+                location.reload();
             } else {
-                alert("Erreur : " + data.error);
+                console.error("Erreur : " + data.error);
             }
         })
         .catch(error => {
             console.error("Erreur lors de la requête : ", error);
         });
+    });
+
+    windowAchat.addEventListener('click', function(event) {
+        if (event.target === windowAchat) {
+            windowAchat.classList.remove('actived');
+            windowAchat.classList.add('disabled');
+        }
     });
 });

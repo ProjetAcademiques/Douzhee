@@ -14,29 +14,32 @@ document.addEventListener('DOMContentLoaded', function() {
             allAchats.forEach(achat => {
                 const themeId = parseInt(achat.idSkin, 10);
                 const theme = document.getElementById(`${themeId}`);
-                if (theme) {
-                    switch (themeId) {
-                        case 2:
-                            theme.src = "../../assets/images/imageBoutique/Theme2Acheter.png";
-                            theme.style.pointerEvents = "none";
-                            break;
-                        case 3:
-                            theme.src = "../../assets/images/imageBoutique/Theme3Acheter.png";
-                            theme.style.pointerEvents = "none";
-                            break;
-                        case 4:
-                            theme.src = "../../assets/images/imageBoutique/Theme4Acheter.png";
-                            theme.style.pointerEvents = "none";
-                            break;
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
-                            theme.src = "../../assets/images/imageBoutique/imgMusiqueAcheter.png";
-                            theme.style.pointerEvents = "none";
-                            break;
-                        default:
-                            break;
+                if (theme) { // Vérifiez si l'élément existe
+                    const themeImg = theme.querySelector('img');
+                    if (themeImg) { // Vérifiez si l'image existe
+                        switch (themeId) {
+                            case 2:
+                                themeImg.src = "../../assets/images/imageBoutique/Theme2Acheter.png";
+                                theme.classList.add('sold');
+                                break;
+                            case 3:
+                                themeImg.src = "../../assets/images/imageBoutique/Theme3Acheter.png";
+                                theme.classList.add('sold');
+                                break;
+                            case 4:
+                                themeImg.src = "../../assets/images/imageBoutique/Theme4Acheter.png";
+                                theme.classList.add('sold');
+                                break;
+                            case 5:
+                            case 6:
+                            case 7:
+                            case 8:
+                                themeImg.src = "../../assets/images/imageBoutique/imgMusiqueAcheter.png";
+                                theme.classList.add('sold');
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             });

@@ -1,18 +1,21 @@
 <?php
-require_once ("../CRUD/CRUDSkinAchetable.php");
-header('Content-Type: application/json');
+    require_once("../CRUD/CRUDSkinAchetable.php");
+    session_start();
 
-$input = json_decode(file_get_contents('php://input'), true);
+    header('Content-Type: application/json');
 
-if (isset($input['idSkin'])) {
-    $id = intval($input['idSkin']); 
-    $resultat = readPriceById($id);
-    $_SESSION['prixSkin'] = $resultat;
-    echo json_encode(['message' => "ID reçu : $id", 'resultat' => $resultat]);
-    exit();
-} else {
-    echo json_encode(['error' => 'ID non fourni']);
-    exit();
-}
-
+    if (!empty($_POST['testdesecurité'])) {
+        if (!empty($_POST['idSkin'])) {
+            $resultat = readPriceById($_POST['idSkin']);
+            $_SESSION['prixSkin'] = $resultat;
+            echo json_encode(['status' => 'success', 'resultat' => $resultat]);
+            exit();
+        } else {
+            echo json_encode(['status' => 'unsuccess', 'error' => 'ID non fourni']);
+            exit();
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+        exit();
+    }
 ?>

@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         switch(data.theme){
             case 'purple':
-                console.log('purple');
                 body.classList.add('purpleBody');
                 themeItem1.forEach(element => {
                     element.classList.add('purpleItem1');
@@ -35,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
 
             case 'green':
-                console.log('green');
                 body.classList.add('greenBody');
                 themeItem1.forEach(element => {
                     element.classList.add('greenItem1');
@@ -53,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
             case 'red':
-                console.log('red');
                 body.classList.add('redBody');
                 themeItem1.forEach(element => {
                     element.classList.add('redItem1');
@@ -70,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
 
             case 'blue':
-                console.log('blue');
                 body.classList.add('blueBody');
                 themeItem1.forEach(element => {
                     element.classList.add('blueItem1');

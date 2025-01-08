@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData
             });
             const data = await response.json();
-            let basePath = "../../assets/images/musiqueBoutique/";
+            let basePath = "../../assets/audio/";
             let fileName = audioSource.src.split('/').pop();
             let newaudioSource = basePath + fileName;
             if (data.musicPath != newaudioSource) {

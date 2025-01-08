@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const windowAchatImg = document.querySelector('#achatContainer img');
     const windowAchatcost = document.querySelector('#achatContainer p');
     const windowAchatButton = document.querySelector('#btnAchat');
+    const audio = document.querySelector('.audioAchat');
+    const windowAchatClose = document.querySelector('#achatContainer i');
 
     windowAchat.classList.add('disabled');
 
@@ -13,7 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
             windowAchat.classList.remove('disabled');
             windowAchat.classList.add('actived');
 
-            
+            if (item.classList.contains('itemTheme')) {
+                audio.classList.add('notSelected');
+            }
+
+            console.log(item.id);
+            audio.src = '../../assets/audio/MusicAccueil' + item.id + '.mp3';
+            console.log(audio.src);
 
             windowAchatImg.src = item.querySelector('img').src;
             windowAchatImg.id = item.id;
@@ -78,6 +86,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target === windowAchat) {
             windowAchat.classList.remove('actived');
             windowAchat.classList.add('disabled');
+            audio.classList.remove('notSelected');
         }
+    });
+
+    windowAchatClose.addEventListener('click', function() {
+        windowAchat.classList.remove('actived');
+        windowAchat.classList.add('disabled');
+        audio.classList.remove('notSelected');
     });
 });

@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var themeItem2 = document.querySelectorAll('.themeItem2');
     var themeItem3 = document.querySelectorAll('.themeItem3');
     var themeItem4 = document.querySelectorAll('.themeItem4');
+    var themeItem5 = document.querySelectorAll('.themeItem5');
+    var themeItem6 = document.querySelectorAll('.themeItem6');
 
     console.table(themeItem3);
 
@@ -31,6 +33,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 themeItem4.forEach(element => {
                     element.classList.add('purpleItem4');
                 });
+                themeItem5.forEach(element => {
+                    element.classList.add('purpleItem5');
+                });
+                themeItem6.forEach(element => {
+                    element.classList.add('purpleItem6');
+                });
                 break;
 
             case 'green':
@@ -46,6 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 themeItem4.forEach(element => {
                     element.classList.add('greenItem4');
+                });
+                themeItem5.forEach(element => {
+                    element.classList.add('greenItem5');
+                });
+                themeItem6.forEach(element => {
+                    element.classList.add('greenItem6');
                 });
                 break;
 
@@ -64,6 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 themeItem4.forEach(element => {
                     element.classList.add('redItem4');
                 });
+                themeItem5.forEach(element => {
+                    element.classList.add('redItem5');
+                });
+                themeItem6.forEach(element => {
+                    element.classList.add('redItem6');
+                });
                 break;
 
             case 'blue':
@@ -79,6 +99,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 themeItem4.forEach(element => {
                     element.classList.add('blueItem4');
+                });
+                themeItem5.forEach(element => {
+                    element.classList.add('blueItem5');
+                });
+                themeItem6.forEach(element => {
+                    element.classList.add('blueItem6');
                 });
                 break;
 

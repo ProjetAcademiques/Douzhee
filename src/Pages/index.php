@@ -27,6 +27,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         $(function() {
+            toastr.options = {
+                "positionClass": "toast-bottom-right"
+            };
             toastr.success('Hé, <b>ça marche !</b>', 'Test');
         });
     </script>

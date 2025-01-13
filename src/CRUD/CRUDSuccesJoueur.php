@@ -33,3 +33,29 @@ function createSuccessJoueur(int $idJoueur, int $idSucces): bool {
     } return true;
 }
 
+/**
+ * @author Mael
+ * @param int $idJoueur
+ * @return array|bool
+ */
+function readAllWithIdJ(int $idJoueur): ?array {
+    $connexion = ConnexionSingleton::getInstance();
+
+    $query = "SELECT * FROM SuccesJoueur WHERE $idJoueur";
+    $statement = $connexion->prepare($query);
+
+    if ($statement == 0) {
+        return null;
+    }
+
+    $res = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+    $liste = [];
+
+    foreach ($res as $results) {
+        array_push($liste, $results);
+    }
+
+    return $liste;
+}
+

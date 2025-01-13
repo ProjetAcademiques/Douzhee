@@ -91,5 +91,4 @@ function readPriceById($id){
    $statement->execute();
    $results = $statement->fetch(PDO::FETCH_ASSOC);
    return $results["prixSkin"];
-
 }

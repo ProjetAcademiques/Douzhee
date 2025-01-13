@@ -23,7 +23,7 @@
             <div id="Dés" class="store">
                 <h2>Skins de Dés</h2>
             </div>
-        </div>
+        </div> 
         
         <button class="nav" id="navDown">Down</button>
     </div>

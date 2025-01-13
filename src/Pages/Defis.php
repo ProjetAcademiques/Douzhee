@@ -3,6 +3,9 @@
     require_once("../CRUD/CRUDDefis.php");
     require_once("../CRUD/CRUDMaitrise.php");
     require_once("../CRUD/CRUDDefiSelected.php");
+    if (!isset($_SESSION['userId'])){
+        require_once("../Utils/redirection.php");
+    }
 
     $defis = readDefisReussiByUser($_SESSION['userId']);
     $defiexists = readAllDefisSelected();

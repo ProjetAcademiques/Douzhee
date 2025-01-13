@@ -1,16 +1,38 @@
-<?php
-    require_once("../Utils/headerInit.php");
-    require_once("../CRUD/CRUDJoueur.php");
-    if (isset($_SESSION['messageSucces1'])){
-        echo '<script>alert("' . $_SESSION['messageSucces1'] . '");</script>';
-        unset($_SESSION['messageSucces1']);
-    }
-?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <?php
+        require_once("../Utils/headerInit.php");
+        require_once("../CRUD/CRUDJoueur.php");
+        if (isset($_SESSION['messageSucces1'])){
+            echo '<script>alert("' . $_SESSION['messageSucces1'] . '");</script>';
+            unset($_SESSION['messageSucces1']);
+        }
+    ?>
     <link rel="stylesheet" href="../../assets/css/Theme.css">
     <link rel="stylesheet" href="../../assets/css/styleindex.css">
-    <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
+    <link rel="stylesheet" href="../../assets/css/styleHeader.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        .toast {
+            z-index: 9999 !important;
+        }
+    </style>
 </head>
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            toastr.options = {
+                "positionClass": "toast-bottom-right"
+            };
+            toastr.success('Hé, <b>ça marche !</b>', 'Test');
+        });
+    </script>
     <?php require_once("../Utils/headerBody.php"); ?>
     <div id="fonctionnalites">
         <div class="sectionHaute">

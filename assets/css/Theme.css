@@ -28,6 +28,14 @@
     background: #341343
 }
 
+.purpleItem5 {
+    background: #a04cca
+}
+
+.purpleItem6 {
+    background: #793999
+}
+
 /* GREEN THEME */
 .greenBody {
     background: linear-gradient(to bottom, 
@@ -55,6 +63,14 @@
 
 .greenItem4 {
     background: #018815
+}
+
+.greenItem5 {
+    background: #44aa36
+}
+
+.greenItem6 {
+    background: #198b2a
 }
 
 /* RED THEME */
@@ -87,6 +103,13 @@
     background: #4D0D0D
 }
 
+.redItem5 {
+    background: #bc3636
+}
+
+.redItem6 {
+    background: #9f1a1a
+}
 
 /* BLUE THEME */
 .blueBody {
@@ -103,13 +126,21 @@
 }
 
 .blueItem2 {
-    background: #0D4D4D
+    background: #1f57be
 }
 
 .blueItem3 {
-    background: #0D4D4D
+    background: #0a4393
 }
 
 .blueItem4 {
-    background: #0D4D4D
+    background: #073894
+}
+
+.blueItem5 {
+    background: #3558f2
+}
+
+.blueItem6 {
+    background: #0f2db5
 }

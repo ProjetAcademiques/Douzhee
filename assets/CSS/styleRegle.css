@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    justify-content: flex-start; /* Aligner les éléments en haut */
+    align-items: center;
+    flex-direction: column;
+    margin-top: 9vh;
+    max-height: 91vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.container::-webkit-scrollbar { 
+    width: 0 !important 
+}
+
+.inverse {
+    flex-direction: row-reverse;
+}
+
+.regle .bob {
+    margin: 3%;
+    width: 40%;
+    align-items: center;
+    justify-content: center;
+}
+
+.regle p{
+    margin: 1%;
+    padding: 0;
+    width: 40%;
+}
+
+.container .regle {
+    display: flex;
+    width: 100%;
+    min-height: 22.6vh;
+    border: 0.5px solid black;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.eyes {
+    position: relative;
+    display: flex;
+    height: 7vh;
+    width: 7vh;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.eyes:first-child {
+    left: 7px;
+}
+
+.eyes:last-child {
+    right: 7px;
+}
+
+.pupil {
+    height: 2.7vh;
+    width: 2.7vh;
+    background-color: black;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.notSelected {
+    display: none;
+}
+
+.selected {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+}

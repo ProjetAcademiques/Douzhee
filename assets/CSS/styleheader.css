@@ -68,3 +68,7 @@ button {
     border-radius: 10px;
     margin-left: auto;
 }
+
+#audioPlayer {
+    display: none;  
+}

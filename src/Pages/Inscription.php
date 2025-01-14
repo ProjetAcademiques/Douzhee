@@ -37,7 +37,6 @@
                     createStatistiques($_SESSION['userId']);
                     $pseudo = getPseudoById($_SESSION['userId']);
                     createClassement($pseudo['pseudonyme'],$_SESSION['userId']);
-                    createObtient($_SESSION['userId'],1);
                     $_SESSION['timeStart'] = microtime(true); 
                     createSkinAchete(1,$_SESSION['userId'],1,"Theme",date("Y/m/d"));
                     createSkinAchete(5,$_SESSION['userId'],1,"Musique",date("Y/m/d"));

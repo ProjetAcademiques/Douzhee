@@ -1,19 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var audio = document.getElementById('audioPlayer');
-    const audioSource = document.getElementById("audioSource");
+    const audio = document.getElementById("audioSource");
 
-    if (localStorage.getItem('isMusicPlaying') === 'true') {
-        audio.play();
-    } else {
-        audio.pause();
-    }
+    // Fetch the music path from the server
+    var formData = new FormData();
+    formData.append('testdesecurité', true);
 
-    var currentTime = localStorage.getItem('audioCurrentTime');
-    if (currentTime) {
-        audio.currentTime = currentTime;
-    }
+    fetch('../Utils/processusGetMusicPath.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.musicPath) {
+            audio.src = data.musicPath;
 
-    audio.style.display = 'none';
+            audio.addEventListener('canplaythrough', function() {
+                if (localStorage.getItem('isMusicPlaying') === 'true') {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+
+                var currentTime = localStorage.getItem('audioCurrentTime');
+                if (currentTime) {
+                    audio.currentTime = currentTime;
+                }
+
+                audio.style.display = 'none';
+            });
+        } else {
+            console.error('Music path not found');
+        }
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
 
     window.addEventListener('beforeunload', function() {
         if (!audio.paused) {
@@ -23,51 +49,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         localStorage.setItem('audioCurrentTime', audio.currentTime);
     });
-
-    var formData = new FormData();
-    formData.append('testdesecurité', true);
-
-    fetch('../Utils/isConnected.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            localStorage.setItem("isMusicPlaying", "true");
-            audio.play();
-        } else if (data.status === 'unsucess') {
-            localStorage.setItem("isMusicPlaying", "false");
-        }
-    })
-    .catch(error => {
-        console.error('Erreur lors de la récupération de la connexion:', error);
-    });
-
-    async function updateMusicPath() {
-        try {
-            const response = await fetch('../Utils/processusGetMusicPath.php', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            let basePath = "../../assets/audio/";
-            let fileName = audioSource.src.split('/').pop();
-            let newaudioSource = basePath + fileName;
-            if (data.musicPath != newaudioSource) {
-                audioSource.src = data.musicPath;
-                audio.load();
-                audio.addEventListener('canplaythrough', () => {
-                    audio.play().catch(error => {
-                        console.error('Erreur lors de la lecture de la musique:', error);
-                    });
-                });
-            }
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour de la musique:', error);
-        }
-    }
-
-    updateMusicPath();
-    setInterval(updateMusicPath, 60000);
 });

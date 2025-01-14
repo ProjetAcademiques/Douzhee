@@ -16,23 +16,11 @@
     <link rel="stylesheet" href="../../assets/css/styleindex.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
-    <style>
-        .toast {
-            z-index: 9999 !important;
-        }
-    </style>
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script type="text/javascript">
-        $(function() {
-            toastr.options = {
-                "positionClass": "toast-bottom-right"
-            };
-            toastr.success('Hé, <b>ça marche !</b>', 'Test');
-        });
-    </script>
+    
     <?php require_once("../Utils/headerBody.php"); ?>
     <div id="fonctionnalites">
         <div class="sectionHaute">
@@ -100,6 +88,7 @@
     </div>
 
     <script src="../../assets/JS/animationIndex.js"></script>
+    <script type="module" src="../../assets/JS/scriptIndex.js"></script>
 </body>
 </html>
 

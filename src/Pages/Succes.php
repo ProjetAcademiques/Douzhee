@@ -3,7 +3,7 @@
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDClassement.php");
     require_once("../CRUD/CRUDSucces.php");
-    require_once("../CRUD/CRUDObtient.php");
+    require_once("../CRUD/CRUDSuccesJoueur.php");
 ?>
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
     <link rel="stylesheet" href="../../assets/css/styleGlobal.css"> 
@@ -33,7 +33,7 @@
 </html>
  <?php
     for ($i= 1; $i < 34; $i++) {
-        $allsucces = readAllUserWinTheSuccesId($i);
+        $allsucces = readAllWithIdJ($i);
         if (is_array($allsucces)) {
             foreach ($allsucces as $succes) {
                 if ($_SESSION['userId'] == $succes['idJoueur']) {  

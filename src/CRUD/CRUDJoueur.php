@@ -479,15 +479,16 @@ function decryptage($data,$key){
     }
 }
 
-function readMusicPath($idJ){
+function readMusicPath($idJ) {
     $connection = ConnexionSingleton::getInstance();
-    $selectedQuery = "SELECT musiqueChemin FROM Joueur  WHERE id = :idJ";
+    $selectedQuery = "SELECT musiqueChemin FROM Joueur WHERE id = :idJ";
     $statement = $connection->prepare($selectedQuery);
     $statement->bindParam(":idJ", $idJ);
     $statement->execute();
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['musiqueChemin'];
 }
+
 function updateMusicPath($newpath,$idJ){
     $connection = ConnexionSingleton::getInstance();
     $updateQuery = "UPDATE Joueur SET musiqueChemin = :newpath WHERE id = :id";

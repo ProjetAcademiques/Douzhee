@@ -12,7 +12,14 @@ function readSuccessJoueur(int $idJoueur, int $idSucces) : bool {
 
     $statement = $connexion->prepare($query);
 
-    return $statement->execute();
+    $success = $statement->execute();
+
+    if($success) {
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+        if ($results == false) {
+            return false;
+        } return true;
+    }
 }
 
 /**

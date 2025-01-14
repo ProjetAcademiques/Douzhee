@@ -182,27 +182,27 @@ if (is_array($allAchats)) {
                 updateEtatSkin(6,0,$_SESSION['userId']);
                 updateEtatSkin(7,0,$_SESSION['userId']);
                 updateEtatSkin(8,0,$_SESSION['userId']);
-                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil5.mp3",$_SESSION['userId']);
+                updateMusicPath("../../assets/audio/MusicAccueil5.mp3",$_SESSION['userId']);
                 break;
             case'musique6':
                 updateEtatSkin(5,0,$_SESSION['userId']);
                 updateEtatSkin(6,1,$_SESSION['userId']);
                 updateEtatSkin(7,0,$_SESSION['userId']);
                 updateEtatSkin(8,0,$_SESSION['userId']);
-                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil6.mp3",$_SESSION['userId']);
+                updateMusicPath("../../assets/audio/MusicAccueil6.mp3",$_SESSION['userId']);
                 break;
             case'musique7':
                 updateEtatSkin(5,0,$_SESSION['userId']);
                 updateEtatSkin(6,0,$_SESSION['userId']);
                 updateEtatSkin(7,1,$_SESSION['userId']);
                 updateEtatSkin(8,0,$_SESSION['userId']);
-                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil7.mp3",$_SESSION['userId']);
+                updateMusicPath("../../assets/audio/MusicAccueil7.mp3",$_SESSION['userId']);
             case'musique8':
                 updateEtatSkin(5,0,$_SESSION['userId']);
                 updateEtatSkin(6,0,$_SESSION['userId']);
                 updateEtatSkin(7,0,$_SESSION['userId']);
                 updateEtatSkin(8,1,$_SESSION['userId']);
-                updateMusicPath("../../assets/images/musiqueBoutique/MusicAccueil8.mp3",$_SESSION['userId']);
+                updateMusicPath("../../assets/audio/MusicAccueil8.mp3",$_SESSION['userId']);
                 break;
     
     }

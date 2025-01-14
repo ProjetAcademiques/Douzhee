@@ -93,6 +93,22 @@ function updateEtatSkin(int $idSkin, int $etatSkin, int $idUser){
         $statement->bindParam(":idAchat", $idAchat);
         $statement->execute();
 
+    }
 }
+
+function readAllThemesAchetes(int $userId): array {
+    $connection = ConnexionSingleton::getInstance();
+    $query = "SELECT * FROM skinacheter WHERE typeSkin = 'theme'";
+    $statement = $connection->prepare($query);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function readAllMusiquesAchetes(): array {
+    $connection = ConnexionSingleton::getInstance();
+    $query = "SELECT * FROM skinacheter WHERE typeSkin = 'musique'";
+    $statement = $connection->prepare($query);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 

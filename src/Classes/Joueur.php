@@ -15,8 +15,11 @@ class Joueur {
     private string|null $bio;
     private string $dateInsc;
     private int $idPartieEnCours;
+    private int $idTheme;
+    private string $avatarChemin;
+    private string $musiqueChemin;
 
-    function __construct(string $pseudo, string $mdp, int $douzCoin, string $email, string|null $bio, string $dateInsc, int $idPartie) {
+    function __construct(string $pseudo, string $mdp, int $douzCoin, string $email, string|null $bio, string $dateInsc, int $idPartie, int $idTheme, string $avatarChemin, string $musiqueChemin) {
         $this->pseudo = $pseudo;
         $this->mdp = $mdp;
         $this->douzCoin = $douzCoin;
@@ -24,6 +27,9 @@ class Joueur {
         $this->bio = $bio;
         $this->dateInsc = $dateInsc;
         $this->idPartieEnCours = $idPartie;
+        $this->idTheme = $idTheme;
+        $this->avatarChemin = $avatarChemin;
+        $this->musiqueChemin = $musiqueChemin;
     }
 
     // PSEUDO
@@ -80,11 +86,39 @@ class Joueur {
         $this->dateInsc = $date;
     }
 
+    // idPartie
     function getIdPartie():int {
         return $this->idPartieEnCours;
     }
 
     function setIdPartie(int $idPartie):void {
         $this->idPartieEnCours = $idPartie;
+    }
+
+    // idTheme
+    function getIdTheme():int {
+        return $this->idTheme;
+    }
+
+    function setIdTheme(int $idTheme):void {
+        $this->idTheme = $idTheme;
+    }
+
+    // avatarChemin
+    function getAvatarChemin():string {
+        return $this->avatarChemin;
+    }
+
+    function setAvatarChemin(string $avatarChemin):void {
+        $this->avatarChemin = $avatarChemin;
+    }
+
+    // musiqueChemin
+    function getMusiqueChemin():string {
+        return $this->musiqueChemin;
+    }
+
+    function setMusiqueChemin(string $musiqueChemin):void {
+        $this->musiqueChemin = $musiqueChemin;
     }
 }

@@ -209,8 +209,11 @@ function readJoueur(int $id): ?Joueur {
             $bio = $results ["biographie"];
             $dateInsc = $results ["dateInscription"];
             $idPartieEnCours = $results ["idPartieEnCours"];
+            $idTheme = $results["idTheme"];
+            $avatarChemin = $results["avatarChemin"];
+            $musiqueChemin = $results["musiqueChemin"];
             
-            return new Joueur ($pseudo, $mdp, $douzCoin, $email, $bio, $dateInsc, $idPartieEnCours);
+            return new Joueur ($pseudo, $mdp, $douzCoin, $email, $bio, $dateInsc, $idPartieEnCours, $idTheme, $avatarChemin, $musiqueChemin);
         } else {
             return null;
         }
@@ -240,13 +243,15 @@ function readJoueurByEmail(string $email): ?Joueur {
         $bio = $results ["biographie"];
         $dateInsc = $results ["dateInscription"];
         $idPartieEnCours = $results ["idPartieEnCours"];
+        $idTheme = $results["idTheme"];
+        $avatarChemin = $results["avatarChemin"];
+        $musiqueChemin = $results["musiqueChemin"];
         
-        return new Joueur ($pseudo, $mdp, $douzCoin, $email, $bio, $dateInsc, $idPartieEnCours);
+        return new Joueur ($pseudo, $mdp, $douzCoin, $email, $bio, $dateInsc, $idPartieEnCours, $idTheme, $avatarChemin, $musiqueChemin);
     } else {
         return null;
     }
 }
-
 
 /**
  * @brief retourne l'id de partie du joueur à l'id $id
@@ -255,6 +260,50 @@ function readJoueurByEmail(string $email): ?Joueur {
  */
 function readIdPartieJoueur(int $id): int {
     return (readJoueur($id) != null) ? readJoueur($id)->getIdPartie() : -1;
+}
+
+/**
+ * @brief retourne l'id du thème du joueur à l'id $id
+ * @param int $id id du joueur dont on cherche l'id thème
+ * @return int -1 si le joueur n'existe pas, l'id Thème correspondant à au param id du joueur sinon
+ */
+function readIdThemeJoueur(int $id): int {
+    return (readJoueur($id) != null) ? readJoueur($id)->getIdTheme() : -1;
+}
+
+/**
+ * @brief retourne le chemin de l'avatar du joueur à l'id $id
+ * @param int $id id du joueur dont on cherche l'avatar
+ * @return string|null null si le joueur n'existe pas, le chemin de l'avatar correspondant à au param id du joueur sinon
+ */
+function readAvatarJoueur(int $id): ?string {
+    return (readJoueur($id) != null) ? readJoueur($id)->getAvatarChemin() : null;
+}
+
+/**
+ * @brief retourne le chemin de la musique du joueur à l'id $id
+ * @param int $id id du joueur dont on cherche la musique
+ * @return string|null null si le joueur n'existe pas, le chemin de la musique correspondant à au param id du joueur sinon
+ */
+function readMusiqueJoueur(int $id): ?string {
+    return (readJoueur($id) != null) ? readJoueur($id)->getMusiqueChemin() : null;
+}
+
+/**
+ * @brief met à jour l'id du thème du joueur
+ * @param int $id id du joueur
+ * @param int $idTheme nouvel id du thème à mettre
+ * @return bool true si la requête marche, false sinon
+ */
+function updateJoueurIdTheme(int $id, int $idTheme): bool {
+    $connection = ConnexionSingleton::getInstance();
+    $updateQuery = "UPDATE Joueur SET idTheme = :idTheme WHERE id = :id";
+
+    $statement = $connection->prepare($updateQuery);
+    $statement->bindParam("idTheme", $idTheme);
+    $statement->bindParam("id", $id);
+
+    return $statement->execute();
 }
 
 
@@ -488,7 +537,6 @@ function readMusicPath($idJ) {
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['musiqueChemin'];
 }
-
 function updateMusicPath($newpath,$idJ){
     $connection = ConnexionSingleton::getInstance();
     $updateQuery = "UPDATE Joueur SET musiqueChemin = :newpath WHERE id = :id";

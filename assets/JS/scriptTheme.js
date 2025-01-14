@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(data => {
         switch(data.theme){
-            case 'purple':
+            case 1:
                 body.classList.add('purpleBody');
                 themeItem1.forEach(element => {
                     element.classList.add('purpleItem1');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 break;
 
-            case 'green':
+            case 2:
                 body.classList.add('greenBody');
                 themeItem1.forEach(element => {
                     element.classList.add('greenItem1');
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
 
 
-            case 'red':
+            case 3:
                 body.classList.add('redBody');
                 themeItem1.forEach(element => {
                     element.classList.add('redItem1');
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 break;
 
-            case 'blue':
+            case 4:
                 body.classList.add('blueBody');
                 themeItem1.forEach(element => {
                     element.classList.add('blueItem1');
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
 
             default:
-                console.log('error');
+                console.log('errsdcor');
                 console.log(data.test);
         }
     })

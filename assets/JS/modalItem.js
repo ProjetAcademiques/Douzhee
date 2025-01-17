@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     windowAchat.classList.add('disabled');
 
+    var type;
+
     allItems.forEach(function(item) {
         item.addEventListener('click', function() {
             windowAchat.classList.remove('disabled');
@@ -17,11 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (item.classList.contains('itemTheme')) {
                 audio.classList.add('notSelected');
+            }else{
+                audio.src = '../../assets/audio/MusicAccueil' + item.id + '.mp3';
             }
-
-            console.log(item.id);
-            audio.src = '../../assets/audio/MusicAccueil' + item.id + '.mp3';
-            console.log(audio.src);
 
             windowAchatImg.src = item.querySelector('img').src;
             windowAchatImg.id = item.id;
@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 windowAchatButton.classList.add('disabled');
             } else {
                 windowAchatButton.classList.remove('disabled');
+                if (item.classList.contains('itemTheme')) {
+                    type = "Theme"
+                } else {
+                    type = "Musique"
+                }
                 var formData = new FormData();
                 formData.append('id', item.id);
                 formData.append('testdesecurité', true);
@@ -60,7 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var formData = new FormData();
         formData.append('id', windowAchatImg.id);
         formData.append('cost', windowAchatcost.textContent.match(/\d+/)[0]); // Extraire le coût du texte
-        formData.append('testdesecurité', true);    
+        formData.append('type', type)
+        formData.append('testdesecurité', true);  
+        console.log(type)  
 
         fetch('../Utils/buyItem.php', {
             method: 'POST',

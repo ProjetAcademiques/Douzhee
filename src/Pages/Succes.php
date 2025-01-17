@@ -31,7 +31,10 @@
         </div>
 </body>
 </html>
+
+!<!--
  <?php
+ /*
     for ($i= 1; $i < 34; $i++) {
         $allsucces = readAllWithIdJ($i);
         if (is_array($allsucces)) {
@@ -50,7 +53,7 @@
 }
     }
 }
- ?>
+ */?>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
      const inputs = document.querySelectorAll(".clickable");
@@ -94,3 +97,4 @@
         };
     });
 </script>
+-->

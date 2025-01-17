@@ -537,7 +537,8 @@ function readMusicPath($idJ) {
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['musiqueChemin'];
 }
-function updateMusicPath($newpath,$idJ){
+
+function updateMusicPath($idJ,$newpath){
     $connection = ConnexionSingleton::getInstance();
     $updateQuery = "UPDATE Joueur SET musiqueChemin = :newpath WHERE id = :id";
     $statement = $connection->prepare($updateQuery);

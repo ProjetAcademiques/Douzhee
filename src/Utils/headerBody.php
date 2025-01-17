@@ -46,7 +46,7 @@
             </div>
         <?php endif; ?>
      </header>
-     <script src="../../assets/JS/scriptTheme.js"></script>
+     <script type="module" src="../../assets/JS/scriptTheme.js"></script>
      <script src="../../assets/JS/scriptAudio.js"></script>
      <script src="../../assets/JS/scriptAvatar.js"></script>
     

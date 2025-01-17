@@ -2,7 +2,6 @@
 require_once("../CRUD/CRUDJoueur.php");
 require_once("../CRUD/CRUDClassement.php");
 require_once("../CRUD/CRUDSucces.php");
-require_once("../CRUD/CRUDObtient.php");
 
 header('Content-Type: application/json');
 

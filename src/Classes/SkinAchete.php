@@ -5,27 +5,17 @@
  */
 class SkinAchete {
 
-    private int $idAchat;
+    private int $idJoueur ;
     private int $idSkin;
     private string $dateAchat;
-    private string $etatSkin;
     private string $typeSkin;
 
 
-    function __construct(int $idAchat, int $idSkin, string $date, string $etat, string $type) {
-        $this->idAchat = $idAchat;
+    function __construct(int $idJoueur , int $idSkin, string $date, string $type) {
+        $this->idJoueur  = $idJoueur ;
         $this->idSkin = $idSkin;
         $this->dateAchat = $date;
-        $this->etatSkin = $etat;
         $this->typeSkin = $type;
-    }
-
-    function getEtatSkin():string {
-        return $this->etatSkin;
-    }
-
-    function setEtatSkin(string $etatSkin):void {
-        $this->etatSkin = $etatSkin;
     }
 
     function getTypeSkin():string {
@@ -52,11 +42,11 @@ class SkinAchete {
         $this->idSkin = $idsk;
     }
 
-    function getIdAchat():int {
-        return $this->idAchat;
+    function getidJoueur ():int {
+        return $this->idJoueur ;
     }
 
-    function setIdAchat(int $idAchat):void {
-        $this->idAchat = $idAchat;
+    function setidJoueur (int $idJoueur ):void {
+        $this->idJoueur  = $idJoueur ;
     }
 }

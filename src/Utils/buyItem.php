@@ -13,7 +13,7 @@
         if ($userMoney >= $cost) {
             $newMoney = $userMoney - $cost;
             updateDouzCoin($userId, $newMoney);
-            createSkinAchete($idSkin, $userId, 0, "Theme", date("Y-m-d"));
+            createSkinAchete($idSkin, $userId, $_POST['type'], date("Y-m-d"));
             echo json_encode(['status' => 'success']);
         } else {
             echo json_encode(['status' => 'unsuccess', 'error' => 'Fonds insuffisants.']);

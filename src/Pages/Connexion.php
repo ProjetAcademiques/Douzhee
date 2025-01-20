@@ -68,14 +68,19 @@
     <div class="PCIR">
         <h2>Connexion</h2>
         <form action = "Connexion.php" method="POST">
-            <input name="E-mail" type="email" placeholder="E-mail" required value="<?php echo htmlspecialchars($newemail);?>">
-            <span style = "color : red">
-                <?php echo $email_err_mess ?? "" ?>
-            </span>
-            <input name = "Password" type="password" placeholder="Password" required value="<?php echo htmlspecialchars($newmdp);?>">
+            <div>
+                <input name="E-mail" type="email" placeholder="E-mail" required value="<?php echo htmlspecialchars($newemail);?>">
+                <span style = "color : red">
+                    <?php echo $email_err_mess ?? "" ?>
+                </span>
+            </div>
+
+            <div>
+                <input name = "Password" type="password" placeholder="Password" required value="<?php echo htmlspecialchars($newmdp);?>">
                 <div class="checkbox">
-                <input type ="checkbox" id="check" name="checkbox">
-                <label for="check">Se souvenir de moi</label>
+                    <input type ="checkbox" id="check" name="checkbox">
+                    <label for="check">Se souvenir de moi</label>
+                </div>
             </div>
             <button type="submit">Connexion</button>
         </form>

@@ -37,7 +37,7 @@ body{
 .PCIR input[type = "vérifier"]{
     width: 100%;
     padding: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     border: none;
     background-color: #c3acce;
     color: white;
@@ -46,6 +46,13 @@ body{
     transform: translateX(-50%);
     font-style: italic;
 }
+
+[action = "Connexion.php"] {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
 .PCIR button{
     background-color: #ab00e7;
     border: none;

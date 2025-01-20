@@ -2,10 +2,6 @@
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../Utils/headerInit.php");
     require_once("../Utils/headerBody.php");
-
-    if (!isset($_SESSION['bio'])){
-        $_SESSION['bio'] = getBioById($_SESSION['userId'])['biographie']; 
-    }
 ?>
     <link rel="stylesheet" href="../../assets/css/styleGlobal.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 

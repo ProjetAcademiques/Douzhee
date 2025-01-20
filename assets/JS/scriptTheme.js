@@ -6,6 +6,7 @@ export function changeTheme(idTheme) {
     var themeItem4 = document.querySelectorAll('.themeItem4');
     var themeItem5 = document.querySelectorAll('.themeItem5');
     var themeItem6 = document.querySelectorAll('.themeItem6');
+    var themeItem7 = document.querySelectorAll('.themeItem7');
 
     // Supprimez les classes de thème existantes
     body.classList.remove('purpleBody', 'greenBody', 'redBody', 'blueBody');
@@ -26,6 +27,9 @@ export function changeTheme(idTheme) {
     });
     themeItem6.forEach(element => {
         element.classList.remove('purpleItem6', 'greenItem6', 'redItem6', 'blueItem6');
+    });
+    themeItem7.forEach(element => {
+        element.classList.remove('purpleItem7', 'greenItem7', 'redItem7', 'blueItem7');
     });
 
     switch(idTheme) {
@@ -49,6 +53,9 @@ export function changeTheme(idTheme) {
             themeItem6.forEach(element => {
                 element.classList.add('purpleItem6');
             });
+            themeItem7.forEach(element => {
+                element.classList.add('purpleItem7');
+            });
             break;
 
         case '2':
@@ -70,6 +77,9 @@ export function changeTheme(idTheme) {
             });
             themeItem6.forEach(element => {
                 element.classList.add('greenItem6');
+            });
+            themeItem7.forEach(element => {
+                element.classList.add('greenItem7');
             });
             break;
 
@@ -93,6 +103,9 @@ export function changeTheme(idTheme) {
             themeItem6.forEach(element => {
                 element.classList.add('redItem6');
             });
+            themeItem7.forEach(element => {
+                element.classList.add('redItem7');
+            });
             break;
 
         case '4':
@@ -115,6 +128,9 @@ export function changeTheme(idTheme) {
             themeItem6.forEach(element => {
                 element.classList.add('blueItem6');
             });
+            themeItem7.forEach(element => {
+                element.classList.add('blueItem7');
+            });
             break;
 
         default:
@@ -136,6 +152,9 @@ export function changeTheme(idTheme) {
             });
             themeItem6.forEach(element => {
                 element.classList.add('purpleItem6');
+            });
+            themeItem7.forEach(element => {
+                element.classList.add('purpleItem7');
             });
             break;
     }

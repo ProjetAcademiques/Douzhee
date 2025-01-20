@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
 
 /**
  * @author Mael
@@ -47,22 +48,17 @@ function createSuccessJoueur(int $idJoueur, int $idSucces): bool {
  */
 function readAllWithIdJ(int $idJoueur): ?array {
     $connexion = ConnexionSingleton::getInstance();
+    $query = "SELECT * FROM SuccesJoueur WHERE idJoueur = $idJoueur";
 
-    $query = "SELECT * FROM SuccesJoueur WHERE $idJoueur";
     $statement = $connexion->prepare($query);
 
-    if ($statement == 0) {
-        return null;
+    $success = $statement->execute();
+
+    if($success) {
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if ($results == false) {
+            return false;
+        } return $results;
     }
-
-    $res = $statement->fetchAll(PDO::FETCH_ASSOC);
-    
-    $liste = [];
-
-    foreach ($res as $results) {
-        array_push($liste, $results);
-    }
-
-    return $liste;
 }
 

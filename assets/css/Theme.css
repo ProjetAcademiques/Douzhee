@@ -36,6 +36,11 @@
     background: #793999
 }
 
+.purpleItem7:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(100, 37, 129, 0.5);
+}
+
 /* GREEN THEME */
 .greenBody {
     background: linear-gradient(to bottom, 
@@ -71,6 +76,11 @@
 
 .greenItem6 {
     background: #198b2a
+}
+
+.greenItem7:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(34, 162, 56, 0.5);
 }
 
 /* RED THEME */
@@ -111,6 +121,11 @@
     background: #9f1a1a
 }
 
+.redItem7:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(125, 46, 46, 0.5);
+}
+
 /* BLUE THEME */
 .blueBody {
     background: linear-gradient(to bottom, 
@@ -143,4 +158,9 @@
 
 .blueItem6 {
     background: #0f2db5
+}
+
+.blueItem7:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
 }

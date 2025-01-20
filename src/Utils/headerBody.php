@@ -1,14 +1,22 @@
 <?php
-require_once("../CRUD/CRUDJoueur.php");
-require_once("../CRUD/CRUDSkinAchete.php");
-if (isset($_SESSION['userId'])){
-    $allAchats = readAllAchatByUser($_SESSION['userId']);
-    $musicPath = readMusicPath($_SESSION['userId']);
-}
+    require_once("../CRUD/CRUDJoueur.php");
+    require_once("../CRUD/CRUDSkinAchete.php");
+    if (isset($_SESSION['userId'])){
+        $musicPath = readMusicPath($_SESSION['userId']); 
+    } // remplaçable par un contrôleur
 
+    /* #### NOTES POUR REVAMP headerBody VERS HTML
+     * Il est possible de remplacer ce script PHP par un script JS. Celui ci sera donc en charge de :
+     * - obtenir un chemin de musique en fonction d'un id dans php://input
+     * - afficher un audio avec pour source le chemin trouvé
+     * - initialise les informations relatives aux joueurs (DouzCoin, pseudo) selon l'id dans php://input dans des variables
+     * de sessions
+     * > Peut être remplacé par Redis ou LocalStorage, ou les cookies. Les données sont non persistentes et ne disparaissent qu'en cas
+     * de fermeture du navigateur ou de l'onglet, des actions équivalentes qu'on peut intercepter.
+     */
 ?>
-<body>
-    <header>
+    <!-- Non touché-->
+    <header class="themeItem1">
         <audio id="audioPlayer" controls loop>
             <source id="audioSource" src="<?php echo $musicPath?>" type="audio/mpeg">
         </audio>

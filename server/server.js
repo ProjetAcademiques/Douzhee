@@ -233,20 +233,31 @@ io.on('connection', (socket) => {
 
     // Gestion de la déconnexion d'un client
     socket.on('disconnect', () => { 
-        console.log('user disconnected to the server');
-
-        // Retirer le joueur de la liste des joueurs connectés
-        for (let gameId in connectedPlayers) {  // Parcourir toutes les salles de jeu
-            let index = connectedPlayers[gameId].indexOf(socket.id);  // Trouver l'index du joueur dans la liste des joueurs connectés
-            if (index !== -1) { // Si le joueur est trouvé
+        console.log('user disconnected from the server');
+    
+        // Rechercher le gameId associé au socket
+        const gameIds = Object.keys(connectedPlayers); // Liste de tous les gameIds
+        let gameIdFound = null;
+    
+        for (let gameId of gameIds) {
+            const index = connectedPlayers[gameId].indexOf(socket.id); // Trouver l'index du socket.id
+            if (index !== -1) { // Si le socket.id est trouvé
+                gameIdFound = gameId;
                 console.log(`Removing socket.id: ${socket.id} from gameId: ${gameId}`);
                 console.log('Before removal:', connectedPlayers[gameId]);
-                connectedPlayers[gameId].splice(index, 1); // Retirer le joueur de la liste des joueurs connectés
+    
+                // Supprimer le socket.id de la liste
+                connectedPlayers[gameId].splice(index, 1);
                 console.log('After removal:', connectedPlayers[gameId]);
-                console.log(connectedPlayers[gameId].length);
-                io.to(gameId).emit('player disconnected', connectedPlayers[gameId].length); // Notifier les autres clients dans la salle que le nombre de joueurs a changé
-                break;
+    
+                // Notifier les autres clients dans la salle
+                io.to(gameId).emit('player disconnected', connectedPlayers[gameId].length);
+                break; // Sortir de la boucle après avoir trouvé le socket
             }
+        }
+    
+        if (!gameIdFound) {
+            console.log(`No gameId found for socket.id: ${socket.id}`);
         }
     });
 

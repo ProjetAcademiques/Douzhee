@@ -36,7 +36,6 @@ document.querySelector('.table').addEventListener('click', (event) => {
     }
 });
 
-
 let button = document.getElementById('roll'); //bouton permettant de lancer les dés
 //ajout d'un event listener au bouton de lancés qui permet de lancer les dés
 button.addEventListener('click', actionRoll);

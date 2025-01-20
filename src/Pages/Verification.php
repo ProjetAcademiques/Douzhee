@@ -14,6 +14,7 @@
 </body>
 </html>
 <?php
+
     if (!empty($_POST['codeVerification'])){
         echo $_SESSION['codeVerification'];
         if ($_POST['codeVerification'] == $_SESSION['codeVerification']){

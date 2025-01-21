@@ -35,7 +35,7 @@
                 </form>
 
                 <form method="POST" action="../Utils/logout.php">
-                    <button type="submit">Déconnexion</button>
+                    <button type="submit" id="decoButton">Déconnexion</button>
                 </form>
             </div>
         <?php else: ?>

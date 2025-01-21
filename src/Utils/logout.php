@@ -7,6 +7,6 @@
         updateTempsJeu($_SESSION['userId'],$delai);
     }
     session_destroy();
-    header("Location: /douzhee/src/Pages/Connexion.php");
+    header("Location: /douzhee/src/Pages/index.php");
     exit();
 ?>

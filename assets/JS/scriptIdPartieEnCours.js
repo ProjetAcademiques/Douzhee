@@ -1,14 +1,14 @@
-export function getIdPartieEnCours() {
+export async function getIdPartieEnCours() {
     let formData = new FormData();
     formData.append('testdesecurité', true);
-    fetch('../Utils/getIdPartieEnCours.php', {
+
+    const response = await fetch('../Utils/getIdPartieEnCours.php', {
         method: 'POST',
         body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        return data.idPartieEnCours;
-    })
+    });
+    const data = await response.json();
+
+    return data.idPartieEnCours;
 }
 
 export function setIdPartieEnCours(idPartie){

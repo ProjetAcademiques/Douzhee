@@ -34,9 +34,7 @@
                     <input id="profil" type="submit" value="">
                 </form>
 
-                <form method="POST" action="../Utils/logout.php">
-                    <button type="submit" id="decoButton" class="deco-button">Déconnexion</button>
-                </form>
+                <button type="submit" id="decoButton" class="deco-button">Déconnexion</button>
             </div>
         <?php else: ?>
             <div class="selection_droite">

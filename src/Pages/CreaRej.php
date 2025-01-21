@@ -77,6 +77,7 @@
                     <div class="input-container">
                         <img src="../../assets/Images/icon-mail.png" class="input-icon" alt="icon">
                         <input type="text" placeholder="Lien de la partie" name="lien_partie" required>
+                        <p class="error"></p>
                     </div>
                     <button>Rejoindre</button>
                 </form>
@@ -94,6 +95,7 @@
                         <label for="joueur2"><input type="radio" id="joueur2" name="nombre_joueur" value="2" required> 2</label>
                         <label for="joueur3"><input type="radio" id="joueur3" name="nombre_joueur" value="3" required> 3</label>
                         <label for="joueur4"><input type="radio" id="joueur4" name="nombre_joueur" value="4" required> 4</label>
+                        <p class="error"></p>
                     </div>
                     <button>Créer</button>
                 </form>

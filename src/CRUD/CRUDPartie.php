@@ -79,6 +79,10 @@
         $statement->execute();
 
         $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($results == false){
+            return new Partie(-1, "", "", 0, 0, "");
+        }
         return new Partie($results['id'], $results['datePartie'], $results['statut'], $results['scoreTotalPartie'], $results['nbJoueurs'], $results['lienPartie']);
     }
 

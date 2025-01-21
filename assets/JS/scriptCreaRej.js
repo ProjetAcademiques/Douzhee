@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log(data.positionPleine)
+            } else {
+                alert('Erreur lors de la connexion à la partie.');
+                console.error("Erreur : " + data.error);
+            }
+        })
     });
 
     document.querySelector('.creer form').addEventListener('submit', function(event) {

@@ -7,13 +7,8 @@
     if (!isset($_SESSION['userId'])){
         require_once("../Utils/redirection.php");
     }
-    
-    $_SESSION['user_id'] = 1;
-    $joueurTemp = readJoueur($_SESSION['user_id']);
 
-
-    $joueurTemp = readJoueur($_SESSION['userId']);
-
+    /*
     if(isset($_POST['nombre_joueur'])) {
         $nombre_joueur = $_POST['nombre_joueur'];
         $idJoueur = $_SESSION['userId'];
@@ -62,9 +57,10 @@
             echo '<script type="text/javascript"> window.onload = function () { alert("Partie pleine"); }</script>';
         }
     }
-
+    */
 ?>
-    <link rel="stylesheet" href="../../assets/CSS/CreaRej.css">   
+    <link rel="stylesheet" href="../../assets/CSS/Theme.css">
+    <link rel="stylesheet" href="../../assets/CSS/CreaRej.css">
 </head>
 <body>
     <div class="section-haute">
@@ -77,7 +73,7 @@
         <div class="zone">
             <div class="rejoindre">
                 <h1>Rejoindre une partie</h1>
-                <form action="Crearej.php" method="POST">
+                <form method="POST">
                     <div class="input-container">
                         <img src="../../assets/Images/icon-mail.png" class="input-icon" alt="icon">
                         <input type="text" placeholder="Lien de la partie" name="lien_partie" required>
@@ -92,7 +88,7 @@
         <div class="zone">
             <div class="creer">
                 <h1>Créer une partie</h1>
-                <form action="CreaRej.php" method="POST">
+                <form method="POST">
                     <div class="radio-container">
                         <label>Nombre de joueur :</label>
                         <label for="joueur2"><input type="radio" id="joueur2" name="nombre_joueur" value="2" required> 2</label>
@@ -104,5 +100,8 @@
             </div>
         </div>
     </div>
+
+    <script type="module" src="../../assets/JS/scriptTheme.js"></script>
+    <script src="../../assets/JS/scriptCreaRej.js"></script>
 </body>
 </html>

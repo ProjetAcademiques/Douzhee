@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data);
         changeTheme(data.theme + '');
     })
     .catch(error => {

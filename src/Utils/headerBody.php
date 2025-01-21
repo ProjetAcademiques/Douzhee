@@ -35,7 +35,7 @@
                 </form>
 
                 <form method="POST" action="../Utils/logout.php">
-                    <button type="submit" id="decoButton">Déconnexion</button>
+                    <button type="submit" id="decoButton" class="deco-button">Déconnexion</button>
                 </form>
             </div>
         <?php else: ?>
@@ -47,6 +47,7 @@
         <?php endif; ?>
      </header>
      <script type="module" src="../../assets/JS/scriptTheme.js"></script>
+     <script type="module" src="../../assets/JS/scriptHeaderBody.js"></script>
      <script src="../../assets/JS/scriptAudio.js"></script>
      <script src="../../assets/JS/scriptAvatar.js"></script>
     

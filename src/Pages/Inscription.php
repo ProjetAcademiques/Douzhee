@@ -3,7 +3,6 @@
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDStatistiques.php");
     require_once("../CRUD/CRUDClassement.php");
-    require_once("../CRUD/CRUDObtient.php");
     require_once("../CRUD/CRUDSkinAchete.php");
     $regexEmail = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
 ?>
@@ -38,8 +37,8 @@
                     $pseudo = getPseudoById($_SESSION['userId']);
                     createClassement($pseudo['pseudonyme'],$_SESSION['userId']);
                     $_SESSION['timeStart'] = microtime(true); 
-                    createSkinAchete(1,$_SESSION['userId'],1,"Theme",date("Y/m/d"));
-                    createSkinAchete(5,$_SESSION['userId'],1,"Musique",date("Y/m/d"));
+                    createSkinAchete(1,$_SESSION['userId'],"Theme",date("Y/m/d"));
+                    createSkinAchete(5,$_SESSION['userId'],"Musique",date("Y/m/d"));
                     $_SESSION['messageSucces1'] = "Bravo, vous venez d'obtenir le succès suivant : Se connecter pour la première fois";
                     $_SESSION['isconnected'] = 1;
                     header('Location: Index.php');

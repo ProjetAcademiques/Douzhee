@@ -4,7 +4,7 @@
     if (!isset($_SESSION['userId'])){
         require_once("../Utils/redirection.php");
     }
-    $allThemes = readAllThemes(); // array_fill(0, 21, 'randomValue')
+    $allThemes = readAllThemes();
     $allMusics = readAllMusics();
 ?>
     <link rel="stylesheet" href="../../assets/CSS/Theme.css">

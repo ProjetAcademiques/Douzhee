@@ -121,4 +121,13 @@ class Joueur {
     function setMusiqueChemin(string $musiqueChemin):void {
         $this->musiqueChemin = $musiqueChemin;
     }
+
+    // idPartieEnCours
+    function getIdPartieEnCours(){
+        return $this->idPartieEnCours;
+    }
+
+    function setIdPartieEnCours(int $idPartieEnCours){
+        $this->idPartieEnCours = $idPartieEnCours;
+    }
 }

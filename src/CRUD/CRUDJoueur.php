@@ -547,3 +547,17 @@ function updateMusicPath($idJ,$newpath){
     return $statement->execute();
 }
 
+function readIdPartieJoueurById(int $id): int {
+    return (readJoueur($id) != null) ? readJoueur($id)->getIdPartieEnCours() : -1;
+}
+
+function updateIdPartieJoueurById(int $id, int $idPartie): bool {
+    $connection = ConnexionSingleton::getInstance();
+    $updateQuery = "UPDATE Joueur SET idPartieEnCours = :idPartie WHERE id = :id";
+
+    $statement = $connection->prepare($updateQuery);
+    $statement->bindParam(":idPartie", $idPartie);
+    $statement->bindParam(":id", $id);
+
+    return $statement->execute();
+}

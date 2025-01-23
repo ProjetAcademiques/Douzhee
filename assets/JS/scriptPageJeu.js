@@ -704,10 +704,10 @@ function finDePartie() {
     updateScoreJouerPartie(gameId, parseInt(donneesJoueur.scoreTot));
     updateNbDouzhee(donneesJoueur.nbDouzhee);
     updateEndOfGame(gameId);
-    //setIdPartieEnCours(0);
+    setIdPartieEnCours(0);
 
     //Procédures de fin de partie
-    //localStorage.removeItem('donneesJoueur');
+    localStorage.removeItem('donneesJoueur');
     window.alert(msg);
-    //window.location.href = './index.php';
+    window.location.href = './index.php';
 }

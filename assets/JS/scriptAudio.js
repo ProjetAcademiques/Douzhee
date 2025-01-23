@@ -18,14 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         if (data.musicPath) {
             audio.src = data.musicPath;
-
             audio.addEventListener('canplaythrough', function() {
-                if (localStorage.getItem('isMusicPlaying') === 'true') {
-                    audio.play();
+                if (localStorage.getItem('isMusicPlaying') === 'true' ) {
+                    audio.play(); 
                 } else {
                     audio.pause();
                 }
-
                 var currentTime = localStorage.getItem('audioCurrentTime');
                 if (currentTime) {
                     audio.currentTime = currentTime;
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
     });
-
     window.addEventListener('beforeunload', function() {
         if (!audio.paused) {
             localStorage.setItem('isMusicPlaying', 'true');
@@ -49,4 +46,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         localStorage.setItem('audioCurrentTime', audio.currentTime);
     });
+    
+    window.addEventListener('beforeunload', function() {
+    if (!audio.paused) {
+        localStorage.setItem('isMusicPlaying', 'true');
+    } else {
+        localStorage.setItem('isMusicPlaying', 'false');
+    }
+    localStorage.setItem('audioCurrentTime', audio.currentTime);
+});
+
+    
 });

@@ -365,7 +365,7 @@ function readBoughtSkinsById(int $idJ) : ?array {
                 $etatSkin = $results["etatSkin"];
                 $typeSkin = $results["typeSkin"];
     
-                array_push($arrayOfSkins, new SkinAchete($idAchat, $idSkin, $dateAchat, $etatSkin, $typeSkin));
+                array_push($arrayOfSkins, new SkinAchete($idAchat, $idSkin, $dateAchat, $typeSkin));
             } else {
                 return null;
             }
@@ -468,17 +468,7 @@ function getBioById($id){
     $bio = $stmt->fetch(PDO::FETCH_ASSOC);
     return $bio;
 }
-function insertUser($email,$mdp,$pseudonyme){
-    $connexion = ConnexionSingleton::getInstance();
-    $sql = "INSERT INTO joueur (email, pseudonyme, mdp, douzCoin, dateInscription, biographie) VALUES (?, ?, ?,0,CURRENT_DATE,'Douzhee est un jeu conçu par des passionees dans le but de divertir les gens')";
-    $stmt = $connexion->prepare($sql);
-    $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
-    $stmt->bindParam(1, $email);
-    $stmt->bindParam(2, $pseudonyme);
-    $stmt->bindParam(3, $hashedPassword);
-    $stmt->execute();
 
-}
 function updatePassword($mdp,$email){
     $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
     $connexion = ConnexionSingleton::getInstance();

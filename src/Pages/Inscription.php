@@ -31,7 +31,8 @@
             }
             else{
                 if (preg_match($regexEmail, $_POST['E-mail'])){
-                    insertUser($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
+                    createJoueur($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
+                    $_SESSION["newconnected"] = 1;
                     $_SESSION['userId'] = getIdUser($_POST['E-mail']);
                     createStatistiques($_SESSION['userId']);
                     $pseudo = getPseudoById($_SESSION['userId']);
@@ -39,10 +40,6 @@
                     $_SESSION['timeStart'] = microtime(true); 
                     createSkinAchete(1,$_SESSION['userId'],"Theme",date("Y/m/d"));
                     createSkinAchete(5,$_SESSION['userId'],"Musique",date("Y/m/d"));
-                    createSkinAchete(1,$_SESSION['userId'],"Theme",date("Y/m/d"));
-                    createSkinAchete(5,$_SESSION['userId'],"Musique",date("Y/m/d"));
-                    $_SESSION['messageSucces1'] = "Bravo, vous venez d'obtenir le succès suivant : Se connecter pour la première fois";
-                    $_SESSION['isconnected'] = 1;
                     header('Location: Index.php');
                 }
                 else{

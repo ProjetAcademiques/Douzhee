@@ -1,14 +1,19 @@
 <?php
+    require_once("../Utils/redirection.php");
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../CRUD/CRUDSkinAchete.php");
     require_once("../CRUD/CRUDStatistiques.php");
+    require_once("../Utils/headerInit.php");
+    
     if (isset($_SESSION['userId'])){
         $musicPath = readMusicPath($_SESSION['userId']);
+       
     }
     if (isset($_SESSION['timeStart'])){
-        $_SESSION['timeEnd'] = microtime(true);
-        $delai = (int)$_SESSION['timeEnd'] - (int)$_SESSION['timeStart'];
+        $_SESSION['timeEnd'] = microtime(true);  
+        $delai = round($_SESSION['timeEnd'] - $_SESSION['timeStart']);
         updateTempsJeu($_SESSION['userId'],$delai);
+        $_SESSION['timeStart'] = microtime(true);
     }
 ?>
     <header class="themeItem1">

@@ -1,7 +1,7 @@
 import { updateScoreJouerPartie, updateEstGagnantJouerPartie } from "./updateJouerPartie.js";
 import { checkSuccess } from "./checkSucces.js";
-import { updateEndOfGame } from "./updateStats.js";
-import { updateNbDouzhee } from "./updateStats.js";
+import { updateEndOfGame } from "./updateFinDePartie.js";
+import { updateNbDouzhee } from "./updateFinDePartie.js";
 import { setIdPartieEnCours } from "./scriptIdPartieEnCours.js";
 /**
  * @author Nathan

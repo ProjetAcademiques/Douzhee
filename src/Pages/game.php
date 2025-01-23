@@ -4,14 +4,27 @@
     require_once("../CRUD/CRUDPartie.php");
     require_once("../CRUD/CRUDJouerPartie.php");
     require_once("../Utils/connectionSingleton.php");
+
+    if (readIdPartieJoueur($_SESSION['userId']) == 0){
+        header("Location: ./game.php");
+        exit();
+    }
 ?>
+    <link rel="stylesheet" href="../../assets/CSS/Theme.css">
     <link rel="stylesheet" href="../../assets/CSS/game.css">   
 </head>
 <body>
+    <script type="module" src="../../assets/JS/scriptTheme.js"></script>
     <?php
         $requiredPlayers = readPartieById($_SESSION['idPartie'])->getNbJoueurs(); // nombre de joueurs requis pour commencer la partie
         $connectedPlayers = readConnectedPlayers(); // nombre de joueurs connectés
-        $ids = 0; // id pour les inputs
+        $idsInputs = 0; // id pour les inputs
+
+        $idSup = 1;
+        $idsScoreSecSup = 'idSup';
+
+        $idInf = 1;
+        $idsScoreSecInf = 'idInf';
 
         $users = readAllUsersByIdPartie($_SESSION['idPartie']); // liste des joueurs
 
@@ -19,7 +32,7 @@
     ?>
     <div class="score">
         <table class="Upper">
-            <thead>
+            <thead class="themeItem10">
                 <tr>
                     <th class="head-score"></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
@@ -27,7 +40,7 @@
                     <?PHP endforeach; ?>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="themeItem11">
                 <tr>
                     <td class="col-score">
                         <div class="rect-score">
@@ -39,7 +52,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-superieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -53,7 +66,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-superieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -67,7 +80,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-superieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -81,7 +94,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-superieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -95,7 +108,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-superieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -109,7 +122,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-superieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -125,17 +138,17 @@
                     <?PHP endforeach; ?>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot class="themeItem10">
                 <tr>
                     <th class="foot-score"><p>UPPER</p></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <th class="foot-joueur"></th>
+                        <th class="foot-joueur" id="<?php echo $idsScoreSecSup . $idSup++ ?>"></th>
                     <?PHP endforeach; ?>
                 </tr>
             </tfoot>
         </table>
         <table class="Lower">
-            <thead>
+            <thead class="themeItem10">
                 <tr>
                     <th class="head-score"></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
@@ -143,7 +156,7 @@
                     <?PHP endforeach; ?>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="themeItem11">
                 <tr>
                     <td class="col-score">
                         <div class="rect-score">
@@ -157,7 +170,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -171,7 +184,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -185,7 +198,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -199,7 +212,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -213,7 +226,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -227,7 +240,7 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
                 <tr>
@@ -241,15 +254,15 @@
                         </div>
                     </td>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <td class="col-joueur"><input id="<?php echo $ids++; ?>" type="button" placeholder="" class="combinaison"></td>
+                        <td class="col-joueur"><input id="<?php echo $idsInputs++; ?>" type="button" placeholder="" class="combinaison" name='section-inferieure' disabled></td>
                     <?PHP endforeach; ?>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot class="themeItem10">
                 <tr>
                     <th class="foot-score"><p>LOWER</p></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
-                        <th class="foot-joueur"></t>
+                        <th class="foot-joueur" id="<?php echo $idsScoreSecInf . $idInf++ ?>"></t>
                     <?PHP endforeach; ?>
                 </tr>
             </tfoot>
@@ -258,13 +271,13 @@
 
     <div class="dé-table">
         <div class="table">
-            <div class="des libre" id="dé1"></div>
-            <div class="des libre" id="dé2"></div>
-            <div class="des libre" id="dé3"></div>
-            <div class="des libre" id="dé4"></div>
-            <div class="des libre" id="dé5"></div>
+            <div class="des libre" id="dé1"><img></div>
+            <div class="des libre" id="dé2"><img></div>
+            <div class="des libre" id="dé3"><img></div>
+            <div class="des libre" id="dé4"><img></div>
+            <div class="des libre" id="dé5"><img></div>
         </div>
-        <button id="roll"><p>Roll</p></button>
+        <button id="roll" class="themeItem8" disabled><p>Roll</p></button>
     </div>
 
     <div class="versus">
@@ -350,19 +363,19 @@
         </div>
     </div>
     <button id="chat-toggle">💬</button>
-    
+
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="../../assets/JS/connectionWebSocket.js"></script>
     <script>
-        let playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
-        let position = <?= json_encode($_SESSION["position"]); ?>; // Récupérer la position du joueur
-        let nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
+        const playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
+        const position = <?= json_encode($_SESSION["position"]); ?>; // Récupérer la position du joueur
+        const nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
 
-        let gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
-        let pseudoid = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
+        const gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
+        const pseudoid = <?= json_encode($_SESSION['pseudo']); ?>; // Récupérer le pseudo du joueur
 
-        let requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
-        let connectedPlayers = <?= json_encode($connectedPlayers); ?>; // Récupérer le nombre de joueurs connectés
+        const requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
+        const connectedPlayers = <?= json_encode($connectedPlayers); ?>; // Récupérer le nombre de joueurs connectés
 
         // Rejoindre la salle de chat pour la partie spécifique
         socket.emit('player joined', gameId);

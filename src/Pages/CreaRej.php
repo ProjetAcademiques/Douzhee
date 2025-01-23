@@ -7,10 +7,11 @@
     if (!isset($_SESSION['userId'])){
         require_once("../Utils/redirection.php");
     }
-    
-    $_SESSION['user_id'] = 1;
-    $joueurTemp = readJoueur($_SESSION['user_id']);
 
+    if (readIdPartieJoueur($_SESSION['userId']) != 0){
+        header("Location: ./game.php");
+        exit();
+    }
 
     $joueurTemp = readJoueur($_SESSION['userId']);
 
@@ -26,6 +27,7 @@
         $_SESSION['idPartie'] = $idPartie;
         $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 1);
         $_SESSION["position"] = 1;
+        updateIdPartieJoueurById($idJoueur, $idPartie);
         header("Location: ./loading.php");
         exit();
     }
@@ -46,16 +48,19 @@
         if (readPositionIsUsed($idPartie, 2) == 0 && $nbJoueurs >= 2) {
             $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 2);
             $_SESSION["position"] = 2;
+            updateIdPartieJoueurById($idJoueur, $idPartie);
             header("Location: ./loading.php");
             exit();
         } elseif (readPositionIsUsed($idPartie, 3) == 0 && $nbJoueurs >= 3) {
             $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 3);
             $_SESSION["position"] = 3;
+            updateIdPartieJoueurById($idJoueur, $idPartie);
             header("Location: ./loading.php");
             exit();
         } elseif (readPositionIsUsed($idPartie, 4) == 0 && $nbJoueurs >= 4) {
             $idJouerPartie = createJouerPartie($idJoueur, $idPartie, 4);
             $_SESSION["position"] = 4;
+            updateIdPartieJoueurById($idJoueur, $idPartie);
             header("Location: ./loading.php");
             exit();
         } else {
@@ -64,25 +69,27 @@
     }
 
 ?>
+    <link rel="stylesheet" href="../../assets/CSS/Theme.css">
     <link rel="stylesheet" href="../../assets/CSS/CreaRej.css">   
 </head>
 <body>
+    <script type="module" src="../../assets/JS/scriptTheme.js"></script>
     <div class="section-haute">
-        <a href="./index.php" id="retour">
+        <a href="./index.php" id="retour" class="themeItem8">
             <img src="../../assets/Images/arrow-back.svg" alt="retour">
             <p>Retour</p>
         </a>
     </div>
     <div class="section-basse">
         <div class="zone">
-            <div class="rejoindre">
+            <div class="rejoindre themeItem9">
                 <h1>Rejoindre une partie</h1>
                 <form action="Crearej.php" method="POST">
                     <div class="input-container">
                         <img src="../../assets/Images/icon-mail.png" class="input-icon" alt="icon">
                         <input type="text" placeholder="Lien de la partie" name="lien_partie" required>
                     </div>
-                    <button>Rejoindre</button>
+                    <button class="themeItem8">Rejoindre</button>
                 </form>
             </div>
         </div>
@@ -90,7 +97,7 @@
             
         </div>
         <div class="zone">
-            <div class="creer">
+            <div class="creer themeItem9">
                 <h1>Créer une partie</h1>
                 <form action="CreaRej.php" method="POST">
                     <div class="radio-container">
@@ -99,7 +106,7 @@
                         <label for="joueur3"><input type="radio" id="joueur3" name="nombre_joueur" value="3" required> 3</label>
                         <label for="joueur4"><input type="radio" id="joueur4" name="nombre_joueur" value="4" required> 4</label>
                     </div>
-                    <button>Créer</button>
+                    <button class="themeItem8">Créer</button>
                 </form>
             </div>
         </div>

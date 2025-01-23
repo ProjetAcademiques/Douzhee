@@ -17,7 +17,7 @@
 }
 
 .purpleItem2 {
-    background: #3A134D
+    background-color: #471a5c;
 }
 
 .purpleItem3 {
@@ -39,6 +39,22 @@
 .purpleItem7:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(100, 37, 129, 0.5);
+}
+
+.purpleItem8 {
+    background: #AB00E7
+}
+
+.purpleItem9 {
+    background-color: #b588c579;
+}
+
+.purpleItem10 {
+    background-color: #5F0061;
+}
+
+.purpleItem11 {
+    background: #C2ADCC;
 }
 
 /* GREEN THEME */
@@ -81,6 +97,22 @@
 .greenItem7:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(34, 162, 56, 0.5);
+}S
+
+.greenItem8 {
+    background: #195e28
+}
+
+.greenItem9 {
+    background-color: #88c59779;
+}
+
+.greenItem10 {
+    background-color: #2e6b15;
+}
+
+.greenItem11 {
+    background: #8da683;
 }
 
 /* RED THEME */
@@ -102,7 +134,7 @@
 }
 
 .redItem2 {
-    background: #4D0D0D
+    background: #450505
 }
 
 .redItem3 {
@@ -124,6 +156,22 @@
 .redItem7:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(125, 46, 46, 0.5);
+}
+
+.redItem8 {
+    background: #9f1a1a
+}
+
+.redItem9 {
+    background-color: #c5979779;
+}
+
+.redItem10 {
+    background-color: #351414;
+}
+
+.redItem11 {
+    background: #c87171;
 }
 
 /* BLUE THEME */
@@ -163,4 +211,20 @@
 .blueItem7:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+}
+
+.blueItem8 {
+    background: #0a4393
+}
+
+.blueItem9 {
+    background-color: #97b1c579;
+}
+
+.blueItem10 {
+    background-color: #2a56c6;
+}
+
+.blueItem11 {
+    background: #7e9dbf;
 }

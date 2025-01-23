@@ -124,7 +124,7 @@
     function updateNbSucces(int $idUser): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $updateSucces = 'UPDATE statistiques SET nbSucces = nbSucces + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
+        $updateSucces = 'UPDATE statistiques SET nombreSucces = nombreSucces + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
         $statement = $connection->prepare($updateSucces);
         $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();

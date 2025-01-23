@@ -39,6 +39,9 @@
                     $_SESSION['timeStart'] = microtime(true); 
                     createSkinAchete(1,$_SESSION['userId'],"Theme",date("Y/m/d"));
                     createSkinAchete(5,$_SESSION['userId'],"Musique",date("Y/m/d"));
+                    createSkinAchete(1,$_SESSION['userId'],"Theme",date("Y/m/d"));
+                    createSkinAchete(5,$_SESSION['userId'],"Musique",date("Y/m/d"));
+                    $_SESSION['messageSucces1'] = "Bravo, vous venez d'obtenir le succès suivant : Se connecter pour la première fois";
                     $_SESSION['isconnected'] = 1;
                     header('Location: Index.php');
                 }

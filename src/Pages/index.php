@@ -31,27 +31,7 @@
             </a>
         </div>
 
-        <div class="sectionMilieu">
-            <!--
-            <a href="./versusbot.php" id="versusrobot" class="taches">
-                <div id="imgProfile1"> 
-                    <img src="../../assets/Images/imageindex/robot2.png" alt="robot">
-                </div>
-
-                <p class="trait1"></p>
-                <div class="cache cache1"></div>
-
-                <span>VS</span>
-
-                <p class="trait2"></p>
-                <div class="cache cache2"></div>
-
-                <div id="imgProfile2">
-                    <img src="../../assets/Images/imageindex/human.png" alt="human">
-                </div>
-            </a>
-            -->
-            
+        <div class="sectionMilieu">            
             <a href="./CreaRej.php" id="versushuman" class="taches themeItem4">
                 <div id="imgProfile1">
                     <img src="../../assets/Images/imageindex/human.png" alt="human">

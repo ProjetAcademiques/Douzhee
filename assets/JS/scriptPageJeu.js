@@ -1,134 +1,493 @@
-import { Player } from "./Classes/Player.js";
-import { GameDataManager } from "./Classes/GameDataManager.js";
-
 /**
  * @author Nathan
  */
 
+//const URL = "http://localhost:8080/";
+
 let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant les points des combinaisons
-let button = document.getElementById('roll'); //bouton permettant de lancer les dés
-let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
-
-let joueur1 = new Player(playerId, position);
-let game = new GameDataManager(nbPlayers);
-
-console.log("Joueur : " + joueur1.getId());
-console.log("Position : " + joueur1.getPostion());
-console.log("Nombre de joueurs : " + game.getNbJoueurs());
-
-let nbRoll = 3; //nombre de lancés possible
-let nbDouzhee = 0; //nombre de Douzhee effectués
-
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
     input.addEventListener('click', (event) => {
-        event.target.value = event.target.placeholder;
-        event.target.placeholder = "-1";
-        event.target.disabled = true;
-
-        socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId });
-        console.log('gameId : ' + gameId);
+        const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+        if(verifInputOwner(donneesJoueur.position, event.target.id)){
+            if(event.target.value !== ""){
+                socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId, playerId: playerId});
+            }
+        } else{
+            window.alert('Petit coquin va');
+        }
     })
 })
 
-socket.on('inputValue', (data) => {
-    console.log('inputValue received');
-    console.log(data);
-    let inputElements = document.getElementById(data.idInput);
-    inputElements.value = data.value;
+let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
+//ajout d'un event listener à tous les dés pour permettre de les garder ou non
+document.querySelector('.table').addEventListener('click', (event) => {
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const deClique = event.target.closest('.des');
+    
+    if(donneesJoueur.nbRoll < 3 && donneesJoueur.nbRoll > -1){
+        if(donneesJoueur.listeDes[3] !== undefined){
+            deClique.classList.toggle('libre');
+            deClique.classList.toggle('selected');
+            verifDesTousGardes();
+        } else{
+            window.alert('Petit coquin va');
+        }
+    }
+});
+
+
+let button = document.getElementById('roll'); //bouton permettant de lancer les dés
+//ajout d'un event listener au bouton de lancés qui permet de lancer les dés
+button.addEventListener('click', actionRoll);
+
+document.addEventListener('DOMContentLoaded', () => {
+    let donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    if (!donneesJoueur) {
+        donneesJoueur = {
+            listeDes: [],
+            listeDesGardes: [],
+            listePointsCombi: [],
+            listePointsObt: [],
+            scoreSecSup: 0,
+            bonusSecSup: false,
+            scoreSecInf: 0,
+            scoreTot: 0,
+            nbRoll: -1,
+            nbDouzhee: 0,
+            position: position
+        };
+        localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
+
+        if(position === 1){
+            socket.emit('finDeTour', {gameId: gameId, position: nbPlayers, nbJoueurs: nbPlayers});
+        }
+    } else{
+        socket.emit('reloadPage', {gameId: gameId, playerId: playerId});
+    }
+});
+
+/*
+
+FONCTIONS LIEES A REDIS
+
+async function joinPartie(){
+    try{
+        const response = await fetch(`${URL}start-game`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                gameId,
+                playerId,
+                position
+            }),
+            mode: 'cors'
+        });
+
+        if(response.ok){
+            const result = await response.json();
+            console.log('Partie démarrée :', result);
+        } else {
+            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        }
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+}
+
+async function getNbJoueurs(){
+    try {
+        const response = await fetch(`${URL}game-player-count?gameId=${gameId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
+        const data = await response.json();
+        console.log('Nombre de joueurs :', data);
+        return data;
+    } catch (error) {
+        console.error('Erreur réseau :', error);
+    }
+}
+
+async function getInfo(info){
+    try{
+        const response = await fetch(`${URL}get-player-info?gameId=${gameId}&playerId=${playerId}&info=${info}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+        });
+        const data = await response.json();
+        return data;
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+}
+
+async function updateInfo(info){
+    let action = {};
+    if (info.listeDes) {
+        action = { ...action, listeDes: info.listeDes };
+    }
+    if (info.decrementRoll) {
+        action = { ...action, decrementRoll: true };
+    }
+    if (info.scoreSecSup) {
+        action = { ...action, scoreSecSup: info.scoreSecSup };
+    }
+    if (info.scoreSecInf) {
+        action = { ...action, scoreSecInf: info.scoreSecInf };
+    }    
+
+    try{
+        const response = fetch(`${URL}update-player`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                gameId: gameId,
+                playerId: playerId,
+                action: action
+            }),
+            mode: 'cors'
+        })
+
+        if(response.ok){
+            const data = await response.json();
+            console.log(data);
+        } else{
+            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        }
+    } catch(error){
+        console.error('Erreur réseau :', error);
+    }
+}
+
+*/
+
+function updateInfo(info) {
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    if (!donneesJoueur) {
+        console.error("Les données du joueur sont introuvables.");
+        return;
+    }
+
+    if(info.listeDes && !info.reset){
+        donneesJoueur.listeDes = setListeDes(Array.isArray(donneesJoueur.listeDesGardes) ? donneesJoueur.listeDesGardes : []);
+    } else if(info.reset && info.listeDes){
+        donneesJoueur.listeDes = info.listeDes;
+    } else if(info.decrementRoll !== undefined){
+        donneesJoueur.nbRoll -= 1;
+    } else if(info.listeDesGardes !== undefined){
+        donneesJoueur.listeDesGardes = Array.isArray(info.listeDesGardes) ? info.listeDesGardes : [];
+    } else if(info.listePointsCombi !== undefined){
+        donneesJoueur.listePointsCombi = Array.isArray(info.listePointsCombi) ? info.listePointsCombi : [];
+    } else if(info.listePointsObt !== undefined){
+        const inputId = parseInt(info.index);
+        const pointsIndex = Math.floor(inputId / nbPlayers);
+        donneesJoueur.listePointsObt[pointsIndex] = info.listePointsObt;
+    } else if(info.scoreSecSup !== undefined){
+        donneesJoueur.scoreSecSup += info.scoreSecSup;
+        donneesJoueur.scoreTot += info.scoreSecSup;
+    } else if(info.scoreSecInf !== undefined){
+        donneesJoueur.scoreSecInf += info.scoreSecInf;
+        donneesJoueur.scoreTot += info.scoreSecInf;
+    } else if(info.nbDouzhee !== undefined){
+        donneesJoueur.nbDouzhee += 1;
+    } else if(info.bonusSecSup){
+        donneesJoueur.bonusSecSup = true;
+    } else if(info.nbRoll !== undefined){
+        donneesJoueur.nbRoll = info.nbRoll;
+    }
+
+    localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
+}
+
+socket.on('debutNvTour', (positionNvJoueur) => {
+    if(positionNvJoueur === position){
+        if(!verifCombiRemplies()){
+            button.disabled = false;
+            updateInfo({nbRoll: 3});
+        } else{
+            socket.emit('finDePartie', {gameId: gameId});
+        }
+    }
+});
+
+socket.on('finDePartie', () => {
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+
+    socket.emit('transmitionScoreTot', {gameId: gameId, position: position, scoreTot: donneesJoueur.scoreTot});
+});
+
+let tabScoresJoueurs = [];
+socket.on('transmitionScoreTot', (data) => {
+    tabScoresJoueurs[data.position] = data.scoreTot;
+
+    let rempli = true;
+    for(let i = 1; i <= nbPlayers ; i++){
+        if(tabScoresJoueurs[i] === undefined || tabScoresJoueurs[i] === null){
+            rempli = false;
+            break;
+        }
+    }
+
+    if(rempli){
+        finDePartie();
+    }
+});
+
+function reprisePartie(nbRoll){
+    if(!verifCombiRemplies()){
+        nbRoll === 3 ? false : activeInput();
+        nbRoll < 3 ? activeDes() : false;
+        button.disabled = false;
+    } else{
+        socket.emit('finDePartie', {gameId: gameId});
+    }
+}
+
+socket.on('reloadPage', (playerId) => {
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+
+    const nbRoll = donneesJoueur.nbRoll;
+    if(nbRoll >= 0){
+        reprisePartie(nbRoll);
+    }
+
+    if(donneesJoueur.listePointsObt.length !== 0 || donneesJoueur.listePointsCombi.length !== 0){
+        socket.emit('transmitionPoints', {playerIdDest: playerId, gameId: gameId, listePointsCombi: donneesJoueur.listePointsCombi, listePointsObt: donneesJoueur.listePointsObt, position: donneesJoueur.position});
+    }
+
+    if(donneesJoueur.listeDes.length !== 0){
+        socket.emit('transmitionDes', {playerIdDest: playerId, gameId: gameId, listeDes: donneesJoueur.listeDes, desGardes: donneesJoueur.listeDesGardes});
+    }
+
+    if(donneesJoueur.scoreSecSup !== 0 || donneesJoueur.scoreSecInf !== 0){
+        socket.emit('transmitionScore', {playerIdDest: playerId, gameId: gameId, scoreSecSup: donneesJoueur.scoreSecSup, scoreSecInf: donneesJoueur.scoreSecInf, position: donneesJoueur.position});
+    }
+});
+
+socket.on('transmitionPoints', (data) => {
+    if(data.playerIdDest === playerId){
+        affichePoints({listePointsObt: data.listePointsObt, listePointsCombi: data.listePointsCombi, position: data.position});
+    }
+});
+
+socket.on('transmitionDes', (data) => {
+    afficheListeDes(data);
+});
+
+socket.on('transmitionScore', (data) => {
+    if(data.playerIdDest === playerId){
+        afficheScore(data);
+    }
+})
+
+socket.on('inputValue', async (data) => {
+    const inputElements = document.getElementById(data.idInput);
     inputElements.placeholder = "-1";
     inputElements.disabled = true;
+    inputElements.classList.add('obt');
 
-    ajoutScore({ target: inputElements });
-    resetManche();
+    await new Promise(r => setTimeout(r, 12));
+
+    if(data.playerId === playerId){
+        updateInfo({listePointsObt: data.value, index: data.idInput});
+        ajoutScore(inputElements);
+        resetManche();
+    }
 });
 
-//ajout d'un event listener à tous les dés pour permettre de les garder ou non
-des.forEach(de => {
-    de.addEventListener("click", (event) => {
-        event.target.classList.toggle('libre');
-        event.target.classList.toggle('selected');
-
-        verifDesTousGardes();
-    })
-})
-
-//ajout d'un event listener au bouton de lancés qui permet de lancer les dés
-button.addEventListener('click', () => {
-    let desGardes = gardeDes();
-
-    activeInput();
-
-    joueur1.setListeDes(desGardes);
-
-    afficheDes(desGardes);
-
-    affichePointsCombinaisons();
-
-    decrementRoll();
+socket.on('affichageScore', (data) => {
+    afficheScore(data);
 });
 
-/**
- * @brief Permet d'afficher les dés du joueur en vérifiant si un dé est sélectionné ou non
- * @param {array Dice} desGardes liste des dés gardés par le joueur
- */
-function afficheDes(desGardes){
-    let listeDes = joueur1.getListeDes();
-
-    des.forEach((de, i) => {
-        if (i < desGardes.length) {
-            de.innerHTML = desGardes[i];
-            de.classList.replace("libre", "selected");
-        } else {
-            de.innerHTML = listeDes[i];
-            de.classList.replace("selected", "libre");
+function verifCombiRemplies(){
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    for(let i = 0 ; i <= 12 ; i++){
+        if(donneesJoueur.listePointsObt[i] === undefined || donneesJoueur.listePointsObt[i] === null){
+            return false;
         }
-    });
+    }
+    return true;
+}
+
+function afficheScore(data){
+    if(data.scoreSecSup){
+        const idSup = 'idSup' + data.position;
+        const thScoreSup = document.getElementById(idSup);
+        thScoreSup.textContent = data.scoreSecSup;
+
+        if(data.bonus === true){
+            const bonus = document.querySelectorAll('.bonus');
+            bonus[data.position-1].value = '35';
+            bonus[data.position-1].classList.add('gagne');
+        }
+    } 
+    if(data.scoreSecInf){
+        const idInf = 'idInf' + data.position;
+        const thScoreInf = document.getElementById(idInf);
+        thScoreInf.textContent = data.scoreSecInf;
+    }
 }
 
 /**
- * @brief Permet d'afficher les points disponibles des combinaisons
- * @param {bool} reset true = vide l'affichage / false = affiche normalement les points
+ * @brief Permet d'afficher les dés du joueur en vérifiant si un dé est sélectionné ou non
+ * @param {Object} data liste des dés du joueur avec les dés qu'il faut garder
  */
-function affichePointsCombinaisons(reset = false){
-    let pointsCombinaisons = GameDataManager.checkCombinaisons(joueur1.getListeDes());
+socket.on('afficheDes', (data) => {
+    afficheListeDes({ listeDes: data.listeDes, desGardes: data.desGardes, reset: data.reset });
+});
 
-    if(pointsCombinaisons[12] != 0){
-        nbDouzhee++;
-        if(pointsCombinaisons[12] == 50 && inputs[12].value == 50){
-            inputs[12].value += 25;
-            joueur1.ajoutSectionInferieure(25);
-    
-            if(nbRoll == 3){
-                //zikette pour le succès du premier coup
-            }
-            if(nbDouzhee == 3){
-                //zikette pour le succès des 3 Douzhee
+/**
+ * @brief Permet d'afficher les points disponibles des combinaisons
+ * @param {Object} data
+ */
+socket.on('affichePointsCombinaisons', (result) => {
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const pointsCombinaisons = result.pointsCombinaisons;
+
+    if(result.playerId === playerId){
+        updateInfo({listePointsCombi: pointsCombinaisons});
+    }
+
+    if(pointsCombinaisons[11] === 50){
+        const index = (11 * nbPlayers) + (result.position - 1);
+        if(result.playerId === playerId){
+            updateInfo({nbDouzhee: true});
+        }
+        if(inputs[index].value === '50'){
+            inputs[index].value = parseInt(inputs[index].value) + 25; // Ajout de 25 points
+            if(result.playerId === playerId){
+                updateInfo({scoreSecInf: 25});
+                const scoreInf = donneesJoueur.scoreSecInf + 25;
+
+                if(donneesJoueur.nbRoll === 3){
+                    // Succès pour le premier coup
+                }
+                if(donneesJoueur.nbDouzhee === 3){
+                    // Succès pour 3 Douzhee
+                }
+
+                socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: scoreInf});
             }
         }
     }
 
-    for(let i = 0 ; i<13 ; i++){
-        let y = joueur1.getPostion() + (game.getNbJoueurs() * i) - 1;
-        console.log(y);
-        if(inputs[y].disabled != true){
-            if(!reset){
-                inputs[y].placeholder = pointsCombinaisons[i];
+    for(let i = 0; i < 13; i++){
+        const nbJoueurs = nbPlayers;
+        const y = result.position + (nbJoueurs * i) - 1;
+
+        if(inputs[y].placeholder !== "-1"){
+            if(!result.reset){
                 inputs[y].value = pointsCombinaisons[i];
             } else{
                 inputs[y].value = '';
             }
         }
     }
+});
+
+function verifInputOwner(position, id){
+    const indexJoueur = id % nbPlayers;
+    if(indexJoueur+1 !== position){
+        return false;
+    } else{
+        return true;
+    }
 }
 
-/**
- * Permet de réduire de 1 le nombre de lancés
- */
-function decrementRoll(){
-    nbRoll--;
-    if(nbRoll == 0){
-        button.disabled = true;
+function setListeDes(desGardes){
+    let listeDes = [...desGardes];
+        
+    while (listeDes.length < 5) {
+        const de = Math.floor(Math.random() * 6) + 1;
+        listeDes.push(de);
+    }
+
+    return listeDes;
+}
+
+function afficheListeDes(data){
+    const listeDes = data.listeDes;
+    const desGardes = data.desGardes;
+
+    des.forEach((de, i) => {
+        const img = de.querySelector('img');
+        let nbDe;
+        if(!data.reset){
+            if(i < desGardes.length){
+                nbDe = desGardes[i];
+                de.classList.replace("libre", "selected");
+            } else{
+                nbDe = listeDes[i];
+                de.classList.replace("selected", "libre");
+            }
+        } else{
+            de.classList.replace("selected", "libre");
+        }
+
+        let src;
+        if(nbDe !== undefined){
+            img.classList.remove('hidden');
+            src = '../../assets/images/imgGames/de' + nbDe + '.png';
+        } else{
+            img.classList.add('hidden');
+        }
+
+        img.src = src;
+    });
+}
+
+function affichePoints(data){
+    for(let i = 0 ; i <= 12 ; i++){
+        const pointsObt = data.listePointsObt[i];
+        const pointsCombi = data.listePointsCombi[i];
+
+        const id = `${data.position + (nbPlayers * i) - 1}`;
+        const inputElements = document.getElementById(id);
+
+        let value = '';
+        if(pointsObt !== undefined && pointsObt !== null){
+            inputElements.placeholder = "-1";
+            inputElements.disabled = true;
+            inputElements.classList.add('obt');
+            value = pointsObt;
+        } else if(pointsCombi !== undefined){
+            value = pointsCombi;
+        }
+        inputElements.value = value;
+    }
+}
+
+function actionRoll(){
+    verifDesTousGardes();
+    verifRoll();
+    if(!button.disabled){
+        const desAGarder = gardeDes(); // constante représentant les dés gardés par le joueur
+        updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
+        updateInfo({listeDes: true}); // stocke la liste des dés du joueur
+
+        const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    
+        // affiche les dés du joueur à tout le monde
+        socket.emit('afficheDes', { desGardes: desAGarder, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: false});
+    
+        activeInput(); // active tous les input afin que le joueur marque ses points
+        activeDes();
+    
+        // calcule toutes les combinaisons possibles avec les dés du joueur et les affiche
+        socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: false, gameId: gameId});
+    
+        updateInfo({decrementRoll: true}); // décrémente le nombre de roll du joueur
     }
 }
 
@@ -138,10 +497,11 @@ function decrementRoll(){
  */
 function gardeDes(){
     let desGardes = [];
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
 
-    des.forEach(de => {
+    des.forEach((de, index) => {
         if(de.classList.contains("selected")){
-            desGardes.push(parseInt(de.textContent));
+            desGardes.push(donneesJoueur.listeDes[index]);
         }
     })
 
@@ -152,25 +512,41 @@ function gardeDes(){
  * @brief Permet de vérifier si le joueur garde tous les dés pour désactiver le bouton de lancés
  */
 function verifDesTousGardes(){
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
     let nbDesGardes = 0;
+    const nbRoll = donneesJoueur.nbRoll;
     des.forEach(de => {
         if(de.classList.contains("selected")){
             nbDesGardes++;
         }
     })
     if(nbDesGardes == 5){
-        button.disabled = true;
-    } else if(nbRoll != 0){
+        desactiveButtonRoll();
+    } else if(nbRoll !== 0){
         button.disabled = false;
     }
+}
+
+function verifRoll(){
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const nbRoll = donneesJoueur.nbRoll;
+    if(nbRoll <= 0){
+        desactiveButtonRoll();
+    }
+}
+
+function desactiveButtonRoll(){
+    button.disabled = true;
 }
 
 /**
  * @brief Permet d'activer tous les input qui n'ont pas encore été remplis
  */
-function activeInput(){
-    inputs.forEach(input => {
-        if(input.placeholder != "-1"){
+function activeInput() {
+    inputs.forEach((input, index) => {
+        const joueurIndex = index % nbPlayers;
+        
+        if(joueurIndex === position - 1 && input.placeholder !== "-1"){
             input.disabled = false;
         }
     });
@@ -182,33 +558,55 @@ function activeInput(){
 function desactiveInput(){
     inputs.forEach(input => {
         input.disabled = true;
-    })
+    });
 }
 
-/**
- * rénitialise le nombre de lancés et active le bouton de lancés
- */
-function activeRoll(){
-    nbRoll = 3;
-    button.disabled = false;
+function activeDes(){
+    des.forEach(de => {
+        de.disabled = false;
+    });
+}
+
+function desactiveDes(){
+    des.forEach(de => {
+        de.disabled = true;
+    });
 }
 
 /**
  * @brief Met à jour le score du joueur en fonction de la section sélectionnée
  * @param {event} event input sélectionné pour être rempli
  */
-function ajoutScore(event){
-    if(event.target.name == 'section-superieure'){
-        joueur1.ajoutSectionSuperieure(parseInt(event.target.value));
-
-        if(joueur1.getSectionSuperieure() > 62){
-            joueur1.ajoutSectionSuperieure(25);
-        }
+function ajoutScore(inputElements){
+    const value = parseInt(inputElements.value);
+    const name = inputElements.name
+    if(name === 'section-superieure'){
+        updateInfo({scoreSecSup: value});
     } else{
-        joueur1.ajoutSectionInferieure(parseInt(event.target.value));
+        updateInfo({scoreSecInf: value});
     }
 
-    if(joueur1.getScore() >= 300){
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    let scoreTot = donneesJoueur.scoreTot;
+    let scoreSecSup = donneesJoueur.scoreSecSup;
+    let changement = false;
+    if(!donneesJoueur.bonusSecSup && donneesJoueur.scoreSecSup > 62){
+        updateInfo({scoreSecSup: 35});
+        updateInfo({bonusSecSup: true});
+        scoreTot += 35;
+        changement = true;
+    }
+
+    if(name === 'section-superieure'){
+        if(changement){
+            scoreSecSup += 35;
+        }
+        socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecSup: scoreSecSup, bonus: changement});
+    } else{
+        socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: donneesJoueur.scoreSecInf});
+    }
+
+    if(scoreTot >= 300){
         //zikette pour ajouter un succès
     }
 }
@@ -217,17 +615,28 @@ function ajoutScore(event){
  * @brief Permet de rénitialiser la manche
  */
 function resetManche(){
-    joueur1.resetTab()
+    updateInfo({listeDes: [], reset: true});
+    updateInfo({listeDesGardes: []});
+    updateInfo({listePointsCombi: []});
 
-    //libère tous les dés
-    des.forEach(de => {
-        de.classList.replace("selected", "libre");
-        de.innerHTML = '';
-    })
+    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    socket.emit('afficheDes', { desGardes: donneesJoueur.listeDesGardes, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: true});
+    socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
 
-    affichePointsCombinaisons(true);
-
-    activeRoll();
+    updateInfo({nbRoll: -1});
 
     desactiveInput();
+    desactiveDes();
+
+    socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
+}
+
+function finDePartie(){
+    let msg = '';
+    for(let i = 1 ; i <= nbPlayers ; i++){
+        msg += 'Le joueur ' + i + ' a obtenu le score de : ' + tabScoresJoueurs[i] + '\n';
+    }
+    window.alert(msg);
+    //localStorage.removeItem('donneesJoueur');
+    //window.location.href = './index.php';
 }

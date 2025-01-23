@@ -96,6 +96,15 @@ h1{
     margin-bottom: 0;
 }
 
+.error{
+    color: red;
+    font-size: 20px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 form{
     height: 80%;
     display: flex;
@@ -108,7 +117,6 @@ form{
 .input-container{
     border: none;
     background-color: #ecececbf;
-    width: 70%;
     height: 45px;
     display: flex;
     align-items: center;
@@ -147,7 +155,13 @@ form button{
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 70%;
+}
+
+form > div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
 }
 
 label{

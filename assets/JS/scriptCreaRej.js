@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const errorRejoindre = document.querySelector('.rejoindre .error');
+    const errorCreer = document.querySelector('.creer .error');
+
     document.querySelector('.rejoindre form').addEventListener('submit', function(event) {
         event.preventDefault();
         const lienPartie = document.querySelector('input[name="lien_partie"]').value;
@@ -19,8 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.status === 'success') {
                 console.log(data.positionPleine)
             } else {
-                alert('Erreur lors de la connexion à la partie.');
-                console.error("Erreur : " + data.error);
+                errorRejoindre.textContent = data.error;
             }
         })
     });

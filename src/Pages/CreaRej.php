@@ -74,9 +74,11 @@
             <div class="rejoindre">
                 <h1>Rejoindre une partie</h1>
                 <form method="POST">
-                    <div class="input-container">
-                        <img src="../../assets/Images/icon-mail.png" class="input-icon" alt="icon">
-                        <input type="text" placeholder="Lien de la partie" name="lien_partie" required>
+                    <div>
+                        <div class="input-container">
+                            <img src="../../assets/Images/icon-mail.png" class="input-icon" alt="icon">
+                            <input type="text" placeholder="Lien de la partie" name="lien_partie" required>
+                        </div>
                         <p class="error"></p>
                     </div>
                     <button>Rejoindre</button>
@@ -90,11 +92,13 @@
             <div class="creer">
                 <h1>Créer une partie</h1>
                 <form method="POST">
-                    <div class="radio-container">
-                        <label>Nombre de joueur :</label>
-                        <label for="joueur2"><input type="radio" id="joueur2" name="nombre_joueur" value="2" required> 2</label>
-                        <label for="joueur3"><input type="radio" id="joueur3" name="nombre_joueur" value="3" required> 3</label>
-                        <label for="joueur4"><input type="radio" id="joueur4" name="nombre_joueur" value="4" required> 4</label>
+                    <div>
+                        <div class="radio-container">
+                            <label>Nombre de joueur :</label>
+                            <label for="joueur2"><input type="radio" id="joueur2" name="nombre_joueur" value="2" required> 2</label>
+                            <label for="joueur3"><input type="radio" id="joueur3" name="nombre_joueur" value="3" required> 3</label>
+                            <label for="joueur4"><input type="radio" id="joueur4" name="nombre_joueur" value="4" required> 4</label>
+                        </div>
                         <p class="error"></p>
                     </div>
                     <button>Créer</button>

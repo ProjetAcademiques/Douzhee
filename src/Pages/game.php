@@ -4,10 +4,17 @@
     require_once("../CRUD/CRUDPartie.php");
     require_once("../CRUD/CRUDJouerPartie.php");
     require_once("../Utils/connectionSingleton.php");
+
+    if (readIdPartieJoueur($_SESSION['userId']) == 0){
+        header("Location: ./game.php");
+        exit();
+    }
 ?>
+    <link rel="stylesheet" href="../../assets/CSS/Theme.css">
     <link rel="stylesheet" href="../../assets/CSS/game.css">   
 </head>
 <body>
+    <script type="module" src="../../assets/JS/scriptTheme.js"></script>
     <?php
         $requiredPlayers = readPartieById($_SESSION['idPartie'])->getNbJoueurs(); // nombre de joueurs requis pour commencer la partie
         $connectedPlayers = readConnectedPlayers(); // nombre de joueurs connectés
@@ -25,7 +32,7 @@
     ?>
     <div class="score">
         <table class="Upper">
-            <thead>
+            <thead class="themeItem10">
                 <tr>
                     <th class="head-score"></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
@@ -33,7 +40,7 @@
                     <?PHP endforeach; ?>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="themeItem11">
                 <tr>
                     <td class="col-score">
                         <div class="rect-score">
@@ -131,7 +138,7 @@
                     <?PHP endforeach; ?>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot class="themeItem10">
                 <tr>
                     <th class="foot-score"><p>UPPER</p></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
@@ -141,7 +148,7 @@
             </tfoot>
         </table>
         <table class="Lower">
-            <thead>
+            <thead class="themeItem10">
                 <tr>
                     <th class="head-score"></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
@@ -149,7 +156,7 @@
                     <?PHP endforeach; ?>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="themeItem11">
                 <tr>
                     <td class="col-score">
                         <div class="rect-score">
@@ -251,7 +258,7 @@
                     <?PHP endforeach; ?>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot class="themeItem10">
                 <tr>
                     <th class="foot-score"><p>LOWER</p></th>
                     <?PHP foreach (range(1, $requiredPlayers) as $value): ?>
@@ -270,7 +277,7 @@
             <div class="des libre" id="dé4"><img></div>
             <div class="des libre" id="dé5"><img></div>
         </div>
-        <button id="roll" disabled><p>Roll</p></button>
+        <button id="roll" class="themeItem8" disabled><p>Roll</p></button>
     </div>
 
     <div class="versus">

@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <?php
-        require_once("../Utils/headerInit.php");
-        require_once("../CRUD/CRUDJoueur.php");
-        if (isset($_SESSION['messageSucces1'])){
-            echo '<script>alert("' . $_SESSION['messageSucces1'] . '");</script>';
-            unset($_SESSION['messageSucces1']);
-        }
-    ?>
-    <link rel="stylesheet" href="../../assets/css/Theme.css">
-    <link rel="stylesheet" href="../../assets/css/styleindex.css">
-    <link rel="stylesheet" href="../../assets/css/styleHeader.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<?php
+    require_once("../Utils/headerInit.php");
+    require_once("../CRUD/CRUDJoueur.php");
+    if (isset($_SESSION['messageSucces1'])){
+        echo '<script>alert("' . $_SESSION['messageSucces1'] . '");</script>';
+        unset($_SESSION['messageSucces1']);
+    }
+?>
+<link rel="stylesheet" href="../../assets/css/Theme.css">
+<link rel="stylesheet" href="../../assets/css/styleindex.css">
+<link rel="stylesheet" href="../../assets/css/styleHeader.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -35,27 +29,7 @@
             </a>
         </div>
 
-        <div class="sectionMilieu">
-            <!--
-            <a href="./versusbot.php" id="versusrobot" class="taches">
-                <div id="imgProfile1"> 
-                    <img src="../../assets/Images/imageindex/robot2.png" alt="robot">
-                </div>
-
-                <p class="trait1"></p>
-                <div class="cache cache1"></div>
-
-                <span>VS</span>
-
-                <p class="trait2"></p>
-                <div class="cache cache2"></div>
-
-                <div id="imgProfile2">
-                    <img src="../../assets/Images/imageindex/human.png" alt="human">
-                </div>
-            </a>
-            -->
-            
+        <div class="sectionMilieu">            
             <a href="./CreaRej.php" id="versushuman" class="taches themeItem4">
                 <div id="imgProfile1">
                     <img src="../../assets/Images/imageindex/human.png" alt="human">

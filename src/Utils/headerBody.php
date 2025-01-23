@@ -34,7 +34,7 @@
                     <input id="profil" type="submit" value="">
                 </form>
 
-                <button type="submit" id="decoButton" class="deco-button">Déconnexion</button>
+                
             </div>
         <?php else: ?>
             <div class="selection_droite">
@@ -45,7 +45,6 @@
         <?php endif; ?>
      </header>
      <script type="module" src="../../assets/JS/scriptTheme.js"></script>
-     <script type="module" src="../../assets/JS/scriptHeaderBody.js"></script>
      <script src="../../assets/JS/scriptAudio.js"></script>
      <script src="../../assets/JS/scriptAvatar.js"></script>
     

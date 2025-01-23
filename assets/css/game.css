@@ -5,17 +5,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(to bottom, 
-        #642581 0%, 
-        #421956 52%, 
-        #421956 70%, 
-        #421956 79%, 
-        #391549 88%, 
-        #341343 95%, 
-        #341343 96%, 
-        #351444 100%, 
-        #15081B 100%
-    );
     font-family: Arial, sans-serif;
     position: relative;
 }
@@ -129,7 +118,6 @@ input:disabled {
 }
 
 #roll {
-    background: #AB00E7;
     color: rgb(0, 0, 0);
     border: none;
     padding: 10px;
@@ -165,16 +153,10 @@ table{
 }
 
 tbody{
-    background: #C2ADCC;
     color: black;
 }
 
-thead{
-    background: #5F0061;
-}
-
 tfoot{
-    background: #5F0061;
     text-align: left;
 }
 

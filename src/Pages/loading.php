@@ -5,10 +5,11 @@
     require_once("../CRUD/CRUDJouerPartie.php");
     require_once("../Utils/connectionSingleton.php");
 ?>
-
-<link rel="stylesheet" href="../../assets/CSS/game.css">   
+    <link rel="stylesheet" href="../../assets/CSS/Theme.css">
+    <link rel="stylesheet" href="../../assets/CSS/game.css">   
 </head>
 <body>
+    <script type="module" src="../../assets/JS/scriptTheme.js"></script>
     <?php
         $requiredPlayers = readPartieById($_SESSION['idPartie'])->getNbJoueurs(); // nombre de joueurs requis pour commencer la partie
         $connectedPlayers = readConnectedPlayers(); // nombre de joueurs connectés

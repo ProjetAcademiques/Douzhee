@@ -1,4 +1,6 @@
 export function changeTheme(idTheme) {
+    console.log('Changement de thème en cours...');
+
     var body = document.querySelector('body');
     var themeItem1 = document.querySelectorAll('.themeItem1');
     var themeItem2 = document.querySelectorAll('.themeItem2');
@@ -7,6 +9,10 @@ export function changeTheme(idTheme) {
     var themeItem5 = document.querySelectorAll('.themeItem5');
     var themeItem6 = document.querySelectorAll('.themeItem6');
     var themeItem7 = document.querySelectorAll('.themeItem7');
+    var themeItem8 = document.querySelectorAll('.themeItem8');
+    var themeItem9 = document.querySelectorAll('.themeItem9');
+    var themeItem10 = document.querySelectorAll('.themeItem10');
+    var themeItem11 = document.querySelectorAll('.themeItem11');
 
     // Supprimez les classes de thème existantes
     body.classList.remove('purpleBody', 'greenBody', 'redBody', 'blueBody');
@@ -30,6 +36,18 @@ export function changeTheme(idTheme) {
     });
     themeItem7.forEach(element => {
         element.classList.remove('purpleItem7', 'greenItem7', 'redItem7', 'blueItem7');
+    });
+    themeItem8.forEach(element => {
+        element.classList.remove('purpleItem8', 'greenItem8', 'redItem8', 'blueItem8');
+    });
+    themeItem9.forEach(element => {
+        element.classList.remove('purpleItem9', 'greenItem9', 'redItem9', 'blueItem9');
+    });
+    themeItem10.forEach(element => {
+        element.classList.remove('purpleItem10', 'greenItem10', 'redItem10', 'blueItem10');
+    });
+    themeItem11.forEach(element => {
+        element.classList.remove('purpleItem11', 'greenItem11', 'redItem11', 'blueItem11');
     });
 
     switch(idTheme) {
@@ -56,6 +74,18 @@ export function changeTheme(idTheme) {
             themeItem7.forEach(element => {
                 element.classList.add('purpleItem7');
             });
+            themeItem8.forEach(element => {
+                element.classList.add('purpleItem8');
+            });
+            themeItem9.forEach(element => {
+                element.classList.add('purpleItem9');
+            });
+            themeItem10.forEach(element => {
+                element.classList.add('purpleItem10');
+            });
+            themeItem11.forEach(element => {
+                element.classList.add('purpleItem11');
+            });
             break;
 
         case '2':
@@ -80,6 +110,18 @@ export function changeTheme(idTheme) {
             });
             themeItem7.forEach(element => {
                 element.classList.add('greenItem7');
+            });
+            themeItem8.forEach(element => {
+                element.classList.add('greenItem8');
+            });
+            themeItem9.forEach(element => {
+                element.classList.add('greenItem9');
+            });
+            themeItem10.forEach(element => {
+                element.classList.add('greenItem10');
+            });
+            themeItem11.forEach(element => {
+                element.classList.add('greenItem11');
             });
             break;
 
@@ -106,6 +148,18 @@ export function changeTheme(idTheme) {
             themeItem7.forEach(element => {
                 element.classList.add('redItem7');
             });
+            themeItem8.forEach(element => {
+                element.classList.add('redItem8');
+            });
+            themeItem9.forEach(element => {
+                element.classList.add('redItem9');
+            });
+            themeItem10.forEach(element => {
+                element.classList.add('redItem10');
+            });
+            themeItem11.forEach(element => {
+                element.classList.add('redItem11');
+            });
             break;
 
         case '4':
@@ -131,6 +185,18 @@ export function changeTheme(idTheme) {
             themeItem7.forEach(element => {
                 element.classList.add('blueItem7');
             });
+            themeItem8.forEach(element => {
+                element.classList.add('blueItem8');
+            });
+            themeItem9.forEach(element => {
+                element.classList.add('blueItem9');
+            });
+            themeItem10.forEach(element => {
+                element.classList.add('blueItem10');
+            });
+            themeItem11.forEach(element => {
+                element.classList.add('blueItem11');
+            });
             break;
 
         default:
@@ -155,6 +221,18 @@ export function changeTheme(idTheme) {
             });
             themeItem7.forEach(element => {
                 element.classList.add('purpleItem7');
+            });
+            themeItem8.forEach(element => {
+                element.classList.add('purpleItem8');
+            });
+            themeItem9.forEach(element => {
+                element.classList.add('purpleItem9');
+            });
+            themeItem10.forEach(element => {
+                element.classList.add('purpleItem10');
+            });
+            themeItem11.forEach(element => {
+                element.classList.add('purpleItem11');
             });
             break;
     }

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
      */
     function getTableData(tableMode) { // ACH, RK, CRC
         const data = null
-        fetch("../../src/Classement.php", {
+        fetch("../../src/Pages/Classement.php", {
             mode: "cors",
             method: "POST",
             body: JSON.stringify({

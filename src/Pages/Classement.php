@@ -3,16 +3,19 @@
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDClassement.php");
     require_once("../Utils/headerBody.php");
-    // if (!isset($_SESSION['userId'])){
-    //     require_once("../Utils/redirection.php");
-    // }
+    
+    if (!isset($_SESSION['userId'])){
+        require_once("../Utils/redirection.php");
+    }
 
     if ($_SERVER ["REQUEST_METHOD"] === "GET") {
         $json_request = file_get_contents("php://input");
 
-        if(strcasecmp($json_request["for"], "leaderboard")) {} 
+        if($json_request == "") {
+            echo "";
+        }
 
-        else if ($json_request == "") {
+        else if (strcasecmp($json_request["for"], "leaderboard") == 0) {
             switch ($json_request["mode"]){
 
                 case "ACH": // Achievment
@@ -84,6 +87,6 @@
         </label>
         </div>
 
-        <script src = "../../assets/JS/ForPages/scriptClassement.js" type = "text/javascript"></script>
+        <script src = "../../assets/JS/scriptClassement.js" type = "text/javascript"></script>
     </body>
 </html>

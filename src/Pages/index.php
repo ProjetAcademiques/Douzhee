@@ -7,10 +7,6 @@
     <?php
         require_once("../Utils/headerInit.php");
         require_once("../CRUD/CRUDJoueur.php");
-        if (isset($_SESSION['messageSucces1'])){
-            echo '<script>alert("' . $_SESSION['messageSucces1'] . '");</script>';
-            unset($_SESSION['messageSucces1']);
-        }
     ?>
     <link rel="stylesheet" href="../../assets/css/Theme.css">
     <link rel="stylesheet" href="../../assets/css/styleindex.css">

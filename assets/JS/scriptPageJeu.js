@@ -1,4 +1,7 @@
 import { checkSuccess } from "./checkSucces.js";
+import { updateScoreJouerPartie, updateEstGagnantJouerPartie } from "./updateJouerPartie.js";
+import { updateEndOfGame, updateNbDouzhee } from "./updateStats.js";
+import { setIdPartieEnCours } from "./scriptIdPartieEnCours.js";
 /**
  * @author Nathan
  */
@@ -684,11 +687,20 @@ function finDePartie() {
     let msg = 'Classement des joueurs :\n';
     tabScoresTries.forEach((player, index) => {
         msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
+        if(index === 1 && player.position === position){
+            updateEstGagnantJouerPartie(gameId);
+        }
     });
 
     //Check des succes
     checkSuccesAucunZero();
     checkSuccesScore();
+
+    const donneesJoueur = getDonneesJoueur();
+    updateScoreJouerPartie(gameId, donneesJoueur.scoreTot);
+    updateNbDouzhee(donneesJoueur.nbDouzhee);
+    updateEndOfGame(gameId);
+    setIdPartieEnCours(0);
 
     //Procédures de fin de partie
     localStorage.removeItem('donneesJoueur');

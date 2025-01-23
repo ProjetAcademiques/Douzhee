@@ -85,11 +85,6 @@
         $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();
 
-        $updateNbParties = 'UPDATE statistiques SET nbPartiesJoues = nbPartiesJoues + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = idUser)';
-        $statement = $connection->prepare($updateNbParties);
-        $statement->bindParam('idUser', $idUser, PDO::PARAM_INT);
-        $statement->execute();
-
         if(readEstGagnant($idUser, $idGame)){
             $updateVictory = 'UPDATE statistiques SET nbPartiesGagnees = nbPartiesGagnees + 1 WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
             $statement = $connection->prepare($updateVictory);

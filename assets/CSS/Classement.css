@@ -11,5 +11,9 @@ table, td {
     align-items: center;
 }
 
+td:not(tr:first-child){
+    width: 33%;
+}
+
 
 

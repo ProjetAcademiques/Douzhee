@@ -420,12 +420,11 @@ function setListeDes(desGardes){
     let listeDes = [...desGardes];
         
     while (listeDes.length < 5) {
-        //const de = Math.floor(Math.random() * 6) + 1;
-        const de = 6;
+        const de = Math.floor(Math.random() * 6) + 1;
         listeDes.push(de);
     }
 
-    return [6, 6, 6, 6, 6];
+    return listeDes;
 }
 
 function afficheListeDes(data){

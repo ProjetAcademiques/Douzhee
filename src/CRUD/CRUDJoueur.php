@@ -561,3 +561,4 @@ function updateIdPartieJoueurById(int $id, int $idPartie): bool {
 
     return $statement->execute();
 }
+

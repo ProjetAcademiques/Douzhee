@@ -66,8 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('id', windowAchatImg.id);
         formData.append('cost', windowAchatcost.textContent.match(/\d+/)[0]); // Extraire le coût du texte
         formData.append('type', type)
-        formData.append('testdesecurité', true);  
-        console.log(type)  
+        formData.append('testdesecurité', true);
 
         fetch('../Utils/buyItem.php', {
             method: 'POST',
@@ -76,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                console.log("Achat effectué avec succès");
                 windowAchat.classList.remove('actived');
                 windowAchat.classList.add('disabled');
                 location.reload();

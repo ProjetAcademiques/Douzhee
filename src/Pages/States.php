@@ -2,13 +2,14 @@
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDStatistiques.php");
-    require_once("../Utils/headerBody.php");      
     $statsUser = readStatistiquesByIdUser($_SESSION['userId']);
 ?>
+    <link rel="stylesheet" href="../../assets/css/Theme.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css"> 
-    <link rel="stylesheet" href="../../assets/css/styleGlobal.css">
+    <link rel="stylesheet" href="../../assets/css/styleStats.css">
 </head>
 <body>
+    <?php require_once("../Utils/headerBody.php"); ?>
     <div class="States">
         <div class="State">
             <h2>Parties Jouées :</h2>

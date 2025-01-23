@@ -9,7 +9,6 @@ export function checkSuccess(idSucces) {
     .then(data => {
         if(data.status === "success") {
             var idUser = data.id;
-            console.log(idUser);
             var formData = new FormData();
             formData.append('testdesecurité', true);
             formData.append('idJoueur', idUser); // Assurez-vous que la clé est 'idJoueur'
@@ -21,7 +20,6 @@ export function checkSuccess(idSucces) {
             .then(response => response.json())
             .then(data => {
                 if(data.status === "success") {
-                    console.log(data.nomSucces);
                     $(function() {
                         toastr.options = {
                             "positionClass": "toast-bottom-right"

@@ -8,7 +8,6 @@ function checkPlayers() {
 socket.emit('player joined', gameId);
 
 socket.on('player joined', function(connectedPlayersCount) {
-    console.log('Player joined game: ' + connectedPlayersCount);
     document.getElementById('connected-players').innerText = connectedPlayersCount;
     connectedPlayers = connectedPlayersCount;
     checkPlayers();

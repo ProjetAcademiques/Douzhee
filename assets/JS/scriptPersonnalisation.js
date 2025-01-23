@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             themeSelected = theme;
             themeSelected.classList.add('selected');
-            console.log(themeSelected.id);
             changeTheme(themeSelected.id + '');
         });
     });

@@ -1,7 +1,6 @@
-    <?php
-        require_once("../Utils/headerInit.php");
-        require_once("../CRUD/CRUDJoueur.php");
-    ?>
+<?php
+    require_once("../Utils/headerInit.php");
+?>
     <link rel="stylesheet" href="../../assets/css/Theme.css">
     <link rel="stylesheet" href="../../assets/css/styleindex.css">
     <link rel="stylesheet" href="../../assets/css/styleHeader.css">

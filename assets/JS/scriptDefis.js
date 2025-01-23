@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function checkAndDeleteDefis() {
         if (delet) {
-            console.log("Deleting defis");
             fetch('../../src/Utils/defisDelete.php', {
                 method: 'POST',
                 body: formTest

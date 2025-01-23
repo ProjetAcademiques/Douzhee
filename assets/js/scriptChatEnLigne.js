@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     socket.on('player disconnected', function(connectedPlayersCount) {
-        console.log('Player disconnected from game: ' + gameId);
         document.getElementById('connected-players').innerText = connectedPlayersCount;
         connectedPlayers = connectedPlayersCount;
         checkPlayers();
@@ -25,11 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
         input.value = ''; // Réinitialiser l'input
         let cc = "cc"
         socket.emit('chat message game', { gameId: gameId, message: message, userName: pseudoid }); // Envoyer le message au serveur
-        console.log('Sending message: ' + message);
     }
 
     socket.on('chat message game', function(data) {
-        console.log('Received message: ', data);
         
         var messages = document.getElementById('chat-messages'); // Récupérer les messages
         var messageElement = document.createElement('p'); // Créer un élément div

@@ -1,6 +1,4 @@
 export function changeTheme(idTheme) {
-    console.log('Changement de thème en cours...');
-
     var body = document.querySelector('body');
     var themeItem1 = document.querySelectorAll('.themeItem1');
     var themeItem2 = document.querySelectorAll('.themeItem2');

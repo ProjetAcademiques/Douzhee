@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
+require_once "./CRUDStatistiques.php";
 
 /**
  * @author Mael
@@ -38,7 +39,10 @@ function createSuccessJoueur(int $idJoueur, int $idSucces): bool {
 
     if($statement == 0) {
         return false;
-    } return true;
+    } else{
+        updateNbSucces($idJoueur);
+        return true;
+    }
 }
 
 /**

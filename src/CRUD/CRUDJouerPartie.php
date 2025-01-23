@@ -224,3 +224,26 @@ function readAllUsersByIdPartie(int $idP): ?array {
         return null;
     } 
 }
+
+function updateScore(int $idJ, int $idP, int $score){
+    $connexion = ConnexionSingleton::getInstance();
+
+    $UpdateQuery = "UPDATE jouerpartie SET scoreJoueur = :score where idPartieJouee = :idP AND idJoueurJouee = :idJ";
+    $statement = $connection->prepare($UpdateQuery);
+    $statement->bindParam(":score", $score);
+    $statement->bindParam(":idP", $idP);
+    $statement->bindParam(":idJ", $idJ);
+
+    return $statement->execute();
+}
+
+function updateEstGagnant(int $idJ, int $idP){
+    $connexion = ConnexionSingleton::getInstance();
+
+    $UpdateQuery = "UPDATE jouerpartie SET estGagnant = 1 where idPartieJouee = :idP AND idJoueurJouee = :idJ";
+    $statement = $connection->prepare($UpdateQuery);
+    $statement->bindParam(":idP", $idP);
+    $statement->bindParam(":idJ", $idJ);
+
+    return $statement->execute();
+}

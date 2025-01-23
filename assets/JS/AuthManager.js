@@ -56,6 +56,7 @@ class AuthManager {
             headers: {
                 "Content-Type" : "application/json"
             },
+            
             body: JSON.stringify({
                 "for" : "signup",
                 "action" : "CREATE",

@@ -40,7 +40,6 @@ function createSuccessJoueur(int $idJoueur, int $idSucces): bool {
     if($statement == 0) {
         return false;
     } else{
-        updateNbSucces($idJoueur);
         return true;
     }
 }

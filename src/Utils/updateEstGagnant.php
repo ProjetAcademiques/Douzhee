@@ -3,7 +3,7 @@
     session_start();
 
     if(!empty($_POST['testdesecurité'])){
-        updateScore($_SESSION['userId'], $_POST['idPartie']);
+        updateEstGagnant($_SESSION['userId'], $_POST['idPartie']);
     } else {
         echo "tu t'es cru ou toi, hein?";
     }

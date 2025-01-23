@@ -688,7 +688,8 @@ function finDePartie() {
     let msg = 'Classement des joueurs :\n';
     tabScoresTries.forEach((player, index) => {
         msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
-        if(index === 1 && player.position === position){
+        if(index === 0 && parseInt(player.position) === position){
+            console.log('je suis premier ' + position);
             updateEstGagnantJouerPartie(gameId);
         }
     });
@@ -697,14 +698,16 @@ function finDePartie() {
     checkSuccesAucunZero();
     checkSuccesScore();
 
+    //Mise à jour de la BD
     const donneesJoueur = getDonneesJoueur();
-    updateScoreJouerPartie(gameId, donneesJoueur.scoreTot);
+    console.log(donneesJoueur.scoreTot);
+    updateScoreJouerPartie(gameId, parseInt(donneesJoueur.scoreTot));
     updateNbDouzhee(donneesJoueur.nbDouzhee);
     updateEndOfGame(gameId);
-    setIdPartieEnCours(0);
+    //setIdPartieEnCours(0);
 
     //Procédures de fin de partie
-    localStorage.removeItem('donneesJoueur');
+    //localStorage.removeItem('donneesJoueur');
     window.alert(msg);
-    window.location.href = './index.php';
+    //window.location.href = './index.php';
 }

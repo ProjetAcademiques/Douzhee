@@ -1,5 +1,9 @@
 <?php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Utils/connectionSingleton.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/douzhee/src/Classes/JouerPartie.php";
 /**
  * @brief retourne une instance de JouerPartie si une ligne dans la BD correspond aux param
  * @param int $idJoueurJoue 
@@ -9,21 +13,17 @@
 function readJouerPartie(int $idJoueurJoue, int $idPartieJoue): ?JouerPartie {
     $connection = ConnexionSingleton::getInstance();
 
-    $SelectQuery = "SELECT * FROM JouerPartie WHERE idJoueurJoue = :idJoueurJoue AND idPartieJoue = :idPartieJoue";
-
+    $SelectQuery = "SELECT * FROM JouerPartie WHERE idJoueurJouee = :idJoueurJoue AND idPartieJouee = :idPartieJoue";
     $statement = $connection->prepare($SelectQuery);
-
-    $statement->bindParam("idJoueurJoue", $idJoueurJoue);
-    $statement->bindParam("idPartieJoue", $idPartieJoue);
+    $statement->bindParam(":idJoueurJoue", $idJoueurJoue);
+    $statement->bindParam(":idPartieJoue", $idPartieJoue);
 
     $success = $statement->execute();
 
-    if($success) {
-
+    if ($success) {
         $results = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if(gettype($results) == "boolean") {
-
+        if ($results !== false) {
             $scoreJoueur = $results["scoreJoueur"];
             $positionJoueur = $results["positionJoueur"];
             $dateParticipation = $results["dateParticipation"];
@@ -31,10 +31,8 @@ function readJouerPartie(int $idJoueurJoue, int $idPartieJoue): ?JouerPartie {
         
             return new JouerPartie($idJoueurJoue, $idPartieJoue, $scoreJoueur, $positionJoueur, $dateParticipation, $estGagnant);
         }
-
-    } else {
-        return null;
     }
+    return null;
 }
 
 /**
@@ -158,7 +156,7 @@ function readDateParticipation(int $idJoueurJoue, int $idPartieJoue): string {
  */
 function readEstGagnant(int $idJoueurJoue, int $idPartieJoue): bool {
     return (readJouerPartie($idJoueurJoue, $idPartieJoue) != null) ? 
-    (readJouerPartie($idJoueurJoue, $idPartieJoue))->isEstGagnant() : null;
+    (readJouerPartie($idJoueurJoue, $idPartieJoue))->isEstGagnant() : false;
 }
 
 
@@ -225,25 +223,33 @@ function readAllUsersByIdPartie(int $idP): ?array {
     } 
 }
 
-function updateScore(int $idJ, int $idP, int $score){
+function updateScore(int $idJ, int $idP, int $score): bool {
     $connexion = ConnexionSingleton::getInstance();
 
-    $UpdateQuery = "UPDATE jouerpartie SET scoreJoueur = :score where idPartieJouee = :idP AND idJoueurJouee = :idJ";
-    $statement = $connection->prepare($UpdateQuery);
-    $statement->bindParam(":score", $score);
-    $statement->bindParam(":idP", $idP);
-    $statement->bindParam(":idJ", $idJ);
+    $UpdateQuery = "UPDATE jouerpartie SET scoreJoueur = :score WHERE idPartieJouee = :idP AND idJoueurJouee = :idJ";
+    $statement = $connexion->prepare($UpdateQuery);
+    $statement->bindParam(":score", $score, PDO::PARAM_INT);
+    $statement->bindParam(":idP", $idP, PDO::PARAM_INT);
+    $statement->bindParam(":idJ", $idJ, PDO::PARAM_INT);
 
     return $statement->execute();
 }
 
-function updateEstGagnant(int $idJ, int $idP){
+function updateEstGagnant(int $idJ, int $idP): bool {
     $connexion = ConnexionSingleton::getInstance();
 
-    $UpdateQuery = "UPDATE jouerpartie SET estGagnant = 1 where idPartieJouee = :idP AND idJoueurJouee = :idJ";
-    $statement = $connection->prepare($UpdateQuery);
-    $statement->bindParam(":idP", $idP);
-    $statement->bindParam(":idJ", $idJ);
+    $UpdateQuery = "UPDATE jouerpartie SET estGagnant = 1 WHERE idPartieJouee = :idP AND idJoueurJouee = :idJ";
+    $statement = $connexion->prepare($UpdateQuery);
+    $statement->bindParam(":idP", $idP, PDO::PARAM_INT);
+    $statement->bindParam(":idJ", $idJ, PDO::PARAM_INT);
 
-    return $statement->execute();
+    $result = $statement->execute();
+    if ($result) {
+        error_log("Update estGagnant successfully for user $idJ in game $idP");
+    } else {
+        $errorInfo = $statement->errorInfo();
+        error_log("Failed to update estGagnant for user $idJ in game $idP. Error: " . print_r($errorInfo, true));
+    }
+
+    return $result;
 }

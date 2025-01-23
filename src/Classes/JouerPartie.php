@@ -63,12 +63,12 @@ class JouerPartie {
         $this->dateParticipation = $text;
     }
 
-    function isEstGagnant():bool {
+    function isEstGagnant():int {
         return $this->estGagnant;
     }
 
-    function setEstGagnant(bool $bool):void {
-        $this->estGagnant = $bool;
+    function setEstGagnant(int $tinyInt):void {
+        $this->estGagnant = $tinyInt;
     }
 
 }

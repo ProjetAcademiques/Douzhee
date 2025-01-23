@@ -1,14 +1,23 @@
+import { checkSuccess } from "./checkSucces.js";
 /**
  * @author Nathan
  */
 
 //const URL = "http://localhost:8080/";
 
+let donneesJoueurSingleton = undefined;
+function getDonneesJoueur() {
+    if (donneesJoueurSingleton === undefined) {
+        donneesJoueurSingleton = JSON.parse(localStorage.getItem('donneesJoueur'));
+    }
+    return donneesJoueurSingleton;
+}
+
 let inputs = document.querySelectorAll('.combinaison'); //les inputs contenant les points des combinaisons
 //ajout d'un event listener à tous les input qui permet de gérer les affectations des dés
 inputs.forEach(input => {
     input.addEventListener('click', (event) => {
-        const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+        const donneesJoueur = getDonneesJoueur();
         if(verifInputOwner(donneesJoueur.position, event.target.id)){
             if(event.target.value !== ""){
                 socket.emit('inputValue', { value: event.target.value, idInput: event.target.id, gameId: gameId, playerId: playerId});
@@ -22,7 +31,7 @@ inputs.forEach(input => {
 let des = document.querySelectorAll('.des'); //emplacement des dés du joueur
 //ajout d'un event listener à tous les dés pour permettre de les garder ou non
 document.querySelector('.table').addEventListener('click', (event) => {
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
     const deClique = event.target.closest('.des');
     
     if(donneesJoueur.nbRoll < 3 && donneesJoueur.nbRoll > -1){
@@ -41,9 +50,9 @@ let button = document.getElementById('roll'); //bouton permettant de lancer les 
 //ajout d'un event listener au bouton de lancés qui permet de lancer les dés
 button.addEventListener('click', actionRoll);
 
-document.addEventListener('DOMContentLoaded', () => {
-    let donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
-    if (!donneesJoueur) {
+document.addEventListener('DOMContentLoaded', async () => {
+    let donneesJoueur = getDonneesJoueur();
+    if (!donneesJoueur){
         donneesJoueur = {
             listeDes: [],
             listeDesGardes: [],
@@ -58,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             position: position
         };
         localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
+        donneesJoueurSingleton = donneesJoueur;
 
         if(position === 1){
             socket.emit('finDeTour', {gameId: gameId, position: nbPlayers, nbJoueurs: nbPlayers});
@@ -173,7 +183,7 @@ async function updateInfo(info){
 */
 
 function updateInfo(info) {
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
     if (!donneesJoueur) {
         console.error("Les données du joueur sont introuvables.");
         return;
@@ -201,11 +211,15 @@ function updateInfo(info) {
         donneesJoueur.scoreTot += info.scoreSecInf;
     } else if(info.nbDouzhee !== undefined){
         donneesJoueur.nbDouzhee += 1;
+        if(donneesJoueur.nbDouzhee > 1){
+            donneesJoueur.listePointsObt[11] = parseInt(donneesJoueur.listePointsObt[11]) + 25;
+        }
     } else if(info.bonusSecSup){
         donneesJoueur.bonusSecSup = true;
     } else if(info.nbRoll !== undefined){
         donneesJoueur.nbRoll = info.nbRoll;
     }
+    console.log('score section inferieure youpi : ' + donneesJoueur.scoreSecInf);
 
     localStorage.setItem('donneesJoueur', JSON.stringify(donneesJoueur));
 }
@@ -222,40 +236,25 @@ socket.on('debutNvTour', (positionNvJoueur) => {
 });
 
 socket.on('finDePartie', () => {
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
 
     socket.emit('transmitionScoreTot', {gameId: gameId, position: position, scoreTot: donneesJoueur.scoreTot});
 });
 
-let tabScoresJoueurs = [];
+let tabScoresJoueurs = new FormData();
 socket.on('transmitionScoreTot', (data) => {
-    tabScoresJoueurs[data.position] = data.scoreTot;
+    tabScoresJoueurs.append(data.position, data.scoreTot);
 
-    let rempli = true;
-    for(let i = 1; i <= nbPlayers ; i++){
-        if(tabScoresJoueurs[i] === undefined || tabScoresJoueurs[i] === null){
-            rempli = false;
-            break;
-        }
-    }
+    // Vérifie si le FormData contient des valeurs pour toutes les positions des joueurs
+    let rempli = Array.from({length: nbPlayers}, (_, i) => tabScoresJoueurs.has(String(i + 1))).every(Boolean);
 
     if(rempli){
         finDePartie();
     }
 });
 
-function reprisePartie(nbRoll){
-    if(!verifCombiRemplies()){
-        nbRoll === 3 ? false : activeInput();
-        nbRoll < 3 ? activeDes() : false;
-        button.disabled = false;
-    } else{
-        socket.emit('finDePartie', {gameId: gameId});
-    }
-}
-
 socket.on('reloadPage', (playerId) => {
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
 
     const nbRoll = donneesJoueur.nbRoll;
     if(nbRoll >= 0){
@@ -310,8 +309,21 @@ socket.on('affichageScore', (data) => {
     afficheScore(data);
 });
 
+function reprisePartie(nbRoll){
+    if(!verifCombiRemplies()){
+        nbRoll === 3 ? false : activeInput();
+        nbRoll < 3 ? activeDes() : false;
+        button.disabled = false;
+    } else{
+        socket.emit('finDePartie', {gameId: gameId});
+    }
+}
+
 function verifCombiRemplies(){
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
+    if (!donneesJoueur) {
+        throw new Error('donneesJoueur est null');
+    }
     for(let i = 0 ; i <= 12 ; i++){
         if(donneesJoueur.listePointsObt[i] === undefined || donneesJoueur.listePointsObt[i] === null){
             return false;
@@ -352,7 +364,7 @@ socket.on('afficheDes', (data) => {
  * @param {Object} data
  */
 socket.on('affichePointsCombinaisons', (result) => {
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
     const pointsCombinaisons = result.pointsCombinaisons;
 
     if(result.playerId === playerId){
@@ -363,21 +375,20 @@ socket.on('affichePointsCombinaisons', (result) => {
         const index = (11 * nbPlayers) + (result.position - 1);
         if(result.playerId === playerId){
             updateInfo({nbDouzhee: true});
+
+            if(donneesJoueur.nbRoll === 2){
+                checkSuccess(10);
+            }
+            if(donneesJoueur.nbDouzhee === 3){
+                checkSuccess(11);
+            }
         }
-        if(inputs[index].value === '50'){
+        if(inputs[index].value !== '' && inputs[index].value !== '0'){
             inputs[index].value = parseInt(inputs[index].value) + 25; // Ajout de 25 points
             if(result.playerId === playerId){
                 updateInfo({scoreSecInf: 25});
-                const scoreInf = donneesJoueur.scoreSecInf + 25;
 
-                if(donneesJoueur.nbRoll === 3){
-                    // Succès pour le premier coup
-                }
-                if(donneesJoueur.nbDouzhee === 3){
-                    // Succès pour 3 Douzhee
-                }
-
-                socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: scoreInf});
+                socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: donneesJoueur.scoreSecInf});
             }
         }
     }
@@ -409,11 +420,12 @@ function setListeDes(desGardes){
     let listeDes = [...desGardes];
         
     while (listeDes.length < 5) {
-        const de = Math.floor(Math.random() * 6) + 1;
+        //const de = Math.floor(Math.random() * 6) + 1;
+        const de = 6;
         listeDes.push(de);
     }
 
-    return listeDes;
+    return [6, 6, 6, 6, 6];
 }
 
 function afficheListeDes(data){
@@ -476,7 +488,7 @@ function actionRoll(){
         updateInfo({listeDesGardes: desAGarder}); // stocke la liste des dés gardés par le joueur
         updateInfo({listeDes: true}); // stocke la liste des dés du joueur
 
-        const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+        const donneesJoueur = getDonneesJoueur();
     
         // affiche les dés du joueur à tout le monde
         socket.emit('afficheDes', { desGardes: desAGarder, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: false});
@@ -497,7 +509,7 @@ function actionRoll(){
  */
 function gardeDes(){
     let desGardes = [];
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
 
     des.forEach((de, index) => {
         if(de.classList.contains("selected")){
@@ -512,7 +524,7 @@ function gardeDes(){
  * @brief Permet de vérifier si le joueur garde tous les dés pour désactiver le bouton de lancés
  */
 function verifDesTousGardes(){
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
     let nbDesGardes = 0;
     const nbRoll = donneesJoueur.nbRoll;
     des.forEach(de => {
@@ -528,7 +540,7 @@ function verifDesTousGardes(){
 }
 
 function verifRoll(){
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
     const nbRoll = donneesJoueur.nbRoll;
     if(nbRoll <= 0){
         desactiveButtonRoll();
@@ -586,14 +598,12 @@ function ajoutScore(inputElements){
         updateInfo({scoreSecInf: value});
     }
 
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
-    let scoreTot = donneesJoueur.scoreTot;
+    const donneesJoueur = getDonneesJoueur();
     let scoreSecSup = donneesJoueur.scoreSecSup;
     let changement = false;
     if(!donneesJoueur.bonusSecSup && donneesJoueur.scoreSecSup > 62){
         updateInfo({scoreSecSup: 35});
         updateInfo({bonusSecSup: true});
-        scoreTot += 35;
         changement = true;
     }
 
@@ -605,10 +615,6 @@ function ajoutScore(inputElements){
     } else{
         socket.emit('affichageScore', {gameId: gameId, position: position, scoreSecInf: donneesJoueur.scoreSecInf});
     }
-
-    if(scoreTot >= 300){
-        //zikette pour ajouter un succès
-    }
 }
 
 /**
@@ -619,7 +625,7 @@ function resetManche(){
     updateInfo({listeDesGardes: []});
     updateInfo({listePointsCombi: []});
 
-    const donneesJoueur = JSON.parse(localStorage.getItem('donneesJoueur'));
+    const donneesJoueur = getDonneesJoueur();
     socket.emit('afficheDes', { desGardes: donneesJoueur.listeDesGardes, listeDes: donneesJoueur.listeDes, gameId: gameId, reset: true});
     socket.emit('calculCombinaisons', { listeDes: donneesJoueur.listeDes, playerId: playerId, position: position, reset: true, gameId: gameId});
 
@@ -631,12 +637,62 @@ function resetManche(){
     socket.emit('finDeTour', {gameId: gameId, position: position, nbJoueurs: nbPlayers});
 }
 
-function finDePartie(){
-    let msg = '';
-    for(let i = 1 ; i <= nbPlayers ; i++){
-        msg += 'Le joueur ' + i + ' a obtenu le score de : ' + tabScoresJoueurs[i] + '\n';
+function triTab() {
+    let tabScoresArray = [];
+    tabScoresJoueurs.forEach((value, key) => {
+        tabScoresArray.push({ position: key, scoreTot: value });
+    });
+
+    return tabScoresArray.sort((a, b) => b.scoreTot - a.scoreTot);
+}
+
+function checkSuccesScore(){
+    const donneesJoueur = getDonneesJoueur();
+
+    let success = [];
+    switch (true) {
+        case (donneesJoueur.scoreTot >= 300):
+            success = [6, 7, 8, 9];
+            break;
+        case (donneesJoueur.scoreTot >= 250):
+            success = [6, 7, 8];
+            break;
+        case (donneesJoueur.scoreTot >= 200):
+            success = [6, 7];
+            break;
+        case (donneesJoueur.scoreTot >= 150):
+            success = [6];
+            break;
     }
+
+    success.forEach((succes) => {
+        console.log("succes numero " + succes);
+        checkSuccess(succes);
+    });
+}
+
+function checkSuccesAucunZero() {
+    const donneesJoueur = getDonneesJoueur();
+    if (!donneesJoueur.listePointsObt.includes(0)) {
+        console.log("succes 0 0");
+        checkSuccess(12);
+    }
+}
+
+function finDePartie() {
+    //affichage du classement
+    let tabScoresTries = triTab();
+    let msg = 'Classement des joueurs :\n';
+    tabScoresTries.forEach((player, index) => {
+        msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
+    });
+
+    //Check des succes
+    checkSuccesAucunZero();
+    checkSuccesScore();
+
+    //Procédures de fin de partie
+    localStorage.removeItem('donneesJoueur');
     window.alert(msg);
-    //localStorage.removeItem('donneesJoueur');
-    //window.location.href = './index.php';
+    window.location.href = './index.php';
 }

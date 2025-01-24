@@ -158,3 +158,13 @@
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
         $statement->execute();
     }
+
+    function videLienPartie(int $idP){
+        $connection = ConnexionSingleton::getInstance();
+
+        $videQuery = 'UPDATE partie SET lienPartie = NULL WHERE id = :idP';
+
+        $statement = $connection->prepare($videQuery);
+        $statement->bindParam(':idP', $idP, PDO::PARAM_INT);
+        $statement->execute();
+    }

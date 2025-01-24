@@ -3,7 +3,7 @@ import { checkSuccess } from "./checkSucces.js";
 import { updateEndOfGame } from "./updateFinDePartie.js";
 import { updateNbDouzhee } from "./updateFinDePartie.js";
 import { setIdPartieEnCours } from "./scriptIdPartieEnCours.js";
-import { updateStatutPartie, updateScoreTotalPartie } from "./updatePartie.js";
+import { updateStatutPartie, updateScoreTotalPartie, videLienPartie } from "./updatePartie.js";
 /**
  * @author Nathan
  */
@@ -691,7 +691,7 @@ function finDePartie() {
     let scoreTotPartie = 0;
     tabScoresTries.forEach((player, index) => {
         msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
-        scoreTotPartie += player.scoreTot;
+        scoreTotPartie += parseInt(player.scoreTot);
         if(index === 0 && parseInt(player.position) === position){
             console.log('je suis premier ' + position);
             updateEstGagnantJouerPartie(gameId);
@@ -711,6 +711,7 @@ function finDePartie() {
     if(position === 1){
         updateStatutPartie(gameId, "Terminée");
         updateScoreTotalPartie(gameId, scoreTotPartie);
+        videLienPartie(gameId);
     }
 
     //Procédures de fin de partie

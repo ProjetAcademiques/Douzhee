@@ -19,3 +19,13 @@ export function updateScoreTotalPartie(idPartie, scoreTot) {
         body: formData
     });
 }
+
+export function videLienPartie(idPartie) {
+    let formData = new FormData();
+    formData.append('testdesecurité', true);
+    formData.append('idPartie', idPartie);
+    fetch('../Utils/videLienPartie.php', {
+        method: 'POST',
+        body: formData
+    });
+}

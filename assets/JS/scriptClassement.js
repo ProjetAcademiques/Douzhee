@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", (DOMevent) => {
 
         let tableRows = document.querySelectorAll("tr:not(tbody:first-child)");
         tableRows = Array.from(tableRows);
+        tableRows.splice(0, 1);
         for(let i = 0; i < tableRows.length; i++) {
             tableRows[i].querySelector("#nom" + i).textContent = tableData[i].pseudonyme;
             if (isScoreBT) {

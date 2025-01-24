@@ -134,7 +134,7 @@
                 break;
             }
         }
-    }    
+    }
     
     /**
      * @brief Recupère le classement en fonction du nombre de Douzhee

@@ -31,7 +31,7 @@
             }
             else{
                 if (preg_match($regexEmail, $_POST['E-mail'])){
-                    createJoueur($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
+                    createJoueur($_POST['Pseudo'],$_POST['Password'],$_POST['E-mail']);
                     $_SESSION["newconnected"] = 1;
                     $_SESSION['userId'] = getIdUser($_POST['E-mail']);
                     createStatistiques($_SESSION['userId']);

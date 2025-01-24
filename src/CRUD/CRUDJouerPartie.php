@@ -106,12 +106,11 @@ function readPositionIsUsed(int $idPJ, int $position) : int {
 function createJouerPartie(int $idJoueurJoue, int $idPartieJoue, int $positionJoueur): bool {
     $connection = ConnexionSingleton::getInstance();
 
-    $dateParticipation = date("j:n:g:i:s");
     $estGagnant = false;
     $scoreJoueur = 0;
 
     $InsertQuery = "INSERT INTO JouerPartie (idJoueurJouee, idPartieJouee, scoreJoueur, positionJoueur, dateParticipation, estGagnant) 
-    VALUES (:idJoueurJoue, :idPartieJoue, :scoreJoueur, :positionJoueur, :dateParticipation, :estGagnant)";
+    VALUES (:idJoueurJoue, :idPartieJoue, :scoreJoueur, :positionJoueur, CURRENT_TIMESTAMP, :estGagnant)";
 
     $statement = $connection->prepare($InsertQuery);
 
@@ -119,7 +118,6 @@ function createJouerPartie(int $idJoueurJoue, int $idPartieJoue, int $positionJo
     $statement->bindParam("idPartieJoue", $idPartieJoue);
     $statement->bindParam("scoreJoueur", $scoreJoueur);
     $statement->bindParam("positionJoueur", $positionJoueur);
-    $statement->bindParam("dateParticipation", $dateParticipation);
     $statement->bindParam("estGagnant", $estGagnant);
 
     return $statement->execute();

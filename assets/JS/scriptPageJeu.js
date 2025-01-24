@@ -3,6 +3,7 @@ import { checkSuccess } from "./checkSucces.js";
 import { updateEndOfGame } from "./updateFinDePartie.js";
 import { updateNbDouzhee } from "./updateFinDePartie.js";
 import { setIdPartieEnCours } from "./scriptIdPartieEnCours.js";
+import { updateStatutPartie, updateScoreTotalPartie, videLienPartie } from "./updatePartie.js";
 /**
  * @author Nathan
  */
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         donneesJoueurSingleton = donneesJoueur;
 
         if(position === 1){
+            updateStatutPartie(gameId, "En cours");
             socket.emit('finDeTour', {gameId: gameId, position: nbPlayers, nbJoueurs: nbPlayers});
         }
     } else{
@@ -686,8 +688,10 @@ function finDePartie() {
     //affichage du classement
     let tabScoresTries = triTab();
     let msg = 'Classement des joueurs :\n';
+    let scoreTotPartie = 0;
     tabScoresTries.forEach((player, index) => {
         msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
+        scoreTotPartie += parseInt(player.scoreTot);
         if(index === 0 && parseInt(player.position) === position){
             console.log('je suis premier ' + position);
             updateEstGagnantJouerPartie(gameId);
@@ -700,11 +704,15 @@ function finDePartie() {
 
     //Mise à jour de la BD
     const donneesJoueur = getDonneesJoueur();
-    console.log(donneesJoueur.scoreTot);
     updateScoreJouerPartie(gameId, parseInt(donneesJoueur.scoreTot));
     updateNbDouzhee(donneesJoueur.nbDouzhee);
     updateEndOfGame(gameId);
     setIdPartieEnCours(0);
+    if(position === 1){
+        updateStatutPartie(gameId, "Terminée");
+        updateScoreTotalPartie(gameId, scoreTotPartie);
+        videLienPartie(gameId);
+    }
 
     //Procédures de fin de partie
     localStorage.removeItem('donneesJoueur');

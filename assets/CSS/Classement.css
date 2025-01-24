@@ -12,11 +12,13 @@ body {
 }
 
 table, td {
-    background-color: white;
+    background-color: #d4d0d6;
     border-collapse: collapse;
     border: 1px solid black;
     width: 60%;
-    height: 60%;
+    height: 10vh;
+    border-radius: 20px;
+    overflow: hidden;
     text-align: center;
 }
 

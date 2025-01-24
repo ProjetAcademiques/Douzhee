@@ -95,7 +95,7 @@
             updateClassement($idUser, $stats->getNbPartiesGagnees() + 1);
         }
     
-        $updateRatio = 'UPDATE statistiques SET ratioVictoire = nbPartiesGagnees / nbPartieJoues WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
+        $updateRatio = 'UPDATE statistiques SET ratioVictoire = ROUND(nbPartiesGagnees / nbPartieJoues, 2) WHERE id = (SELECT idStatistiques FROM consulte WHERE idJoueur = :idUser)';
         $statement = $connection->prepare($updateRatio);
         $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
         $statement->execute();

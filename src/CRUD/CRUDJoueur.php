@@ -400,9 +400,9 @@ function isNull(mixed $argument) :bool {
 
 function getIdUser($email){
     $connexion = ConnexionSingleton::getInstance();
-    $sql = "Select id from joueur where email = ? ";
+    $sql = "SELECT id FROM joueur WHERE email = ? ";
     $stmt = $connexion->prepare($sql);
-    $stmt->bindParam(1,$email);
+    $stmt->bindParam(1, $email, PDO::PARAM_STR);
     $stmt->execute();
     $idUser = $stmt->fetch(PDO::FETCH_ASSOC);
     return $idUser['id'];

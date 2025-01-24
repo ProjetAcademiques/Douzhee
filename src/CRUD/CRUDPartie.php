@@ -142,13 +142,13 @@
     }
 
     /**
-     * @brief Met à jour une partie lors de sa fin
+     * @brief Met à jour le score total d'une partie
      * @author Nathan
      * @param int $scoreTotal score total de la partie
      * @param int $id identifiant de la partie
      * @return void
-     */ /* REDÉCLARATION : DEJA UNE DECLARATION DANS CRUD STATISTIQUES
-     function updateEndOfGame(int $scoreTotal, int $id): void{
+     */
+     function updateScoreTot(int $scoreTotal, int $id): void{
         $connection = ConnexionSingleton::getInstance();
 
         $updatePartie = 'UPDATE partie SET scoreTotalPartie = :scoreTotal WHERE id = :id';
@@ -158,4 +158,3 @@
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
         $statement->execute();
     }
-    */

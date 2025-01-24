@@ -1,4 +1,7 @@
 <?php
+    // VERSION MODIFIEE : AFFICHE UN MESSAGE D'ERREUR EN DESSOUS DES CHAMPS EN ERREUR
+    
+    require_once("../CRUD/CRUDJoueur.php");
     require_once("../Utils/headerInit.php");
     require_once("../CRUD/CRUDJoueur.php");
     $cookiename = "Email";

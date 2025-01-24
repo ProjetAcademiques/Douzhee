@@ -53,22 +53,16 @@ document.addEventListener("DOMContentLoaded", (DOMevent) => {
 
         let tableRows = document.querySelectorAll("tr:not(tbody:first-child)");
         tableRows = Array.from(tableRows);
-        for(let i = 1; i < tableRows.length; i++) {
+        for(let i = 0; i < tableRows.length; i++) {
             tableRows[i].querySelector("#nom" + i).textContent = tableData[i].pseudonyme;
-            if (isScoreBT) { 
-                console.log(tableRows[i].querySelector("#stat" + i));
+            if (isScoreBT) {
                 tableRows[i].querySelector("#stat" + i).textContent = tableData[i].score; 
-                console.log("score");
             }
             else if (isDouzheeBT) { 
-                console.log(tableRows[i].querySelector("#stat" + i));
                 tableRows[i].querySelector("#stat" + i).textContent = tableData[i].nbDouzhee;
-                console.log("piece");
             }
             else if (isSuccesBT) {
-                console.log(tableRows[i].querySelector("#stat" + i)); 
-                tableRows[i].querySelector("#stat" + i).textContent = tableData[i].nbSucces; 
-                console.log("stat");
+                tableRows[i].querySelector("#stat" + i).textContent = tableData[i].nbSucces;
             }
         }
     }

@@ -27,18 +27,18 @@
                 </tr>
                 <tr>
                     <td>#1</td>
+                    <td id = "nom0">--</td>
+                    <td id = "stat0">--</td>
+                </tr>
+                <tr>
+                    <td>#2</td>
                     <td id = "nom1">--</td>
                     <td id = "stat1">--</td>
                 </tr>
                 <tr>
-                    <td>#2</td>
+                    <td>#3</td>
                     <td id = "nom2">--</td>
                     <td id = "stat2">--</td>
-                </tr>
-                <tr>
-                    <td>#3</td>
-                    <td id = "nom3">--</td>
-                    <td id = "stat3">--</td>
                 </tr>
             </tbody>
         </table>

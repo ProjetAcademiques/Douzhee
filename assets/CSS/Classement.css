@@ -1,14 +1,23 @@
-
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    flex-direction: column;
+    gap: 20px;
+}
 
 table, td {
     background-color: white;
-}
-
-#ldFlexContainer {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    align-items: center;
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: 60%;
+    height: 60%;
+    text-align: center;
 }
 
 td:not(tr:first-child){

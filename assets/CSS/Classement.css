@@ -1,0 +1,19 @@
+
+
+table, td {
+    background-color: white;
+}
+
+#ldFlexContainer {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    align-items: center;
+}
+
+td:not(tr:first-child){
+    width: 33%;
+}
+
+
+

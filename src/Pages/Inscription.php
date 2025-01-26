@@ -4,6 +4,9 @@
     require_once("../CRUD/CRUDStatistiques.php");
     require_once("../CRUD/CRUDClassement.php");
     require_once("../CRUD/CRUDSkinAchete.php");
+    require '../../assets/PHPmailer/vendor/autoload.php';
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
     $regexEmail = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
 ?>
     <link rel="stylesheet" href="../../assets/css/styleCIRV.css">
@@ -31,6 +34,37 @@
             }
             else{
                 if (preg_match($regexEmail, $_POST['E-mail'])){
+                    $verifMail = new PHPMailer(true);
+                    try{
+                        $verifMail->isSMTP();
+                        $verifMail->Host = 'smtp.gmail.com';
+                        $verifMail->SMTPAuth = true;
+                        $verifMail->Username = 'douzhee12@gmail.com'; 
+                        $verifMail->Password = 'oltebmtjpmhoqagk';  
+                        $verifMail->SMTPSecure = 'ssl';
+                        $verifMail->Port = 465;
+
+                        $verifMail->setFrom('douzhee12@gmail.com', 'Douzhee');
+                        $verifMail->addAddress($_POST['E-mail'], 'Joueur');
+                        $verifMail->isHTML(true);
+                        $verifMail->Subject = 'Bienvenue sur Douzhee';
+                        $verifMail->Body    = 'Bonjour'.$_POST['Pseudo'].'
+                            Merci de vous être inscrit à Douzhee ! 🎲
+                            Nous sommes ravis de vous compter parmi nos joueurs. Préparez-vous à lancer les dés, tenter votre chance et montrer vos talents dans ce jeu de Yahtzee en ligne.
+                            Si vous avez des questions ou besoin d’aide, notre équipe est là pour vous.
+                            À bientôt sur Douzhee,
+                            L’équipe Douzhee.';
+                        if ($verifMail->send()) {
+                            //l'adresse mail existe
+                        } else {
+                            echo '<script  type="text/javascript"> window.onload = function () { alert("Votre email n existe pas, veuiller en inserer un autre"); }
+                         </script>';
+                            exit();
+                        }                                 
+                    }
+                    catch (Exception $e) {
+                     echo "Erreur d'envoi: {$verifMail->ErrorInfo}";
+                 }
                     insertUser($_POST['E-mail'],$_POST['Password'],$_POST['Pseudo']);
                     $_SESSION['userId'] = getIdUser($_POST['E-mail']);
                     createStatistiques($_SESSION['userId']);

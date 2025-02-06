@@ -43,9 +43,9 @@
 
 
     <div>
-        <button type = "button" id = "leaderBoardScore">Leaderboard par score</button>
-        <button type = "button" id = "leaderBoardDouzhee">Leaderboard par monnaie</button>
-        <button type = "button" id = "leaderBoardSucces">Leaderboard par succes</button>
+        <button type = "button" id = "leaderBoardWin">trier par victoires</button>
+        <button type = "button" id = "leaderBoardDouzhee">trier par Douzhee</button>
+        <button type = "button" id = "leaderBoardSucces">trier par Succès</button>
     </div>
     <script src = "../../assets/JS/scriptClassement.js" type = "text/javascript"></script>
 </body>

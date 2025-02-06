@@ -20,13 +20,13 @@
                 break;
 
             case "CRC": // Currency
-                $currencyLeaderBoard = readClassemnetBynbDouzhee();
-                echo json_encode($currencyLeaderBoard);
+                $douzheeLeaderBoard = readClassemnetBynbDouzhee();
+                echo json_encode($douzheeLeaderBoard);
                 break;
 
             case "RK": // Rank
-                $rankLeaderBoard = readClassementByScore();
-                echo json_encode($rankLeaderBoard);
+                $winLeaderBoard = readClassementByScore();
+                echo json_encode($winLeaderBoard);
                 break;
 
             default:

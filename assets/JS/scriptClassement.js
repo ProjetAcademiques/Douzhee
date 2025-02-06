@@ -1,12 +1,12 @@
 
 document.addEventListener("DOMContentLoaded", (DOMevent) => {
 
-    let scoreBT = document.querySelector("#leaderBoardScore");
+    let winBT = document.querySelector("#leaderBoardWin");
     let douzheeBT = document.querySelector("#leaderBoardDouzhee");
     let succesBT = document.querySelector("#leaderBoardSucces");
 
     const buttons = [];
-    buttons.push(scoreBT, douzheeBT, succesBT);
+    buttons.push(winBT, douzheeBT, succesBT);
     buttons.forEach((element, index) => {
         element.addEventListener("click", () => loadTable());
     })
@@ -36,16 +36,16 @@ document.addEventListener("DOMContentLoaded", (DOMevent) => {
     async function loadTable() {
 
         console.log(event.target);
-        let isScoreBT = event.target == scoreBT;
+        let isWinBT = event.target == winBT;
         let isDouzheeBT = event.target == douzheeBT;
         let isSuccesBT = event.target == succesBT;
 
-        if (isScoreBT) {
+        if (isWinBT) {
             await getTableData("RK");
-            leaderBoardMode.textContent = "Score";
+            leaderBoardMode.textContent = "Victoires";
         } else if (isDouzheeBT) {
             await getTableData("CRC");
-            leaderBoardMode.textContent = "DouzCoins";
+            leaderBoardMode.textContent = "Douzhee";
         } else {
             await getTableData("ACH");
             leaderBoardMode.textContent = "Succes";
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", (DOMevent) => {
         tableRows.splice(0, 1);
         for(let i = 0; i < tableRows.length; i++) {
             tableRows[i].querySelector("#nom" + i).textContent = tableData[i].pseudonyme;
-            if (isScoreBT) {
+            if (isWinBT) {
                 tableRows[i].querySelector("#stat" + i).textContent = tableData[i].score; 
             }
             else if (isDouzheeBT) { 

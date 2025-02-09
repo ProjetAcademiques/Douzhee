@@ -278,10 +278,12 @@ io.on('connection', (socket) => {
         io.to(data.gameId).emit('chat message game', data); // Diffuser le message à tous les clients dans la salle spécifique
     });
 
+    //Permet d'envoyer les dés d'un joueur à tous les autres joueurs
     socket.on('afficheDes', (data) => {
         io.to(data.gameId).emit('afficheDes', data);
     });
 
+    //Permet de calculer toutes les combinaisons d'un lancer de dés et d'envoyer le résultat à tous les joueurs
     socket.on('calculCombinaisons', (data) => {
         let pointsCombi = [];
         if(!data.reset){
@@ -298,26 +300,32 @@ io.on('connection', (socket) => {
         io.to(data.gameId).emit('affichePointsCombinaisons', results);
     });
 
+    //Permet d'indiquer à tous les joueurs qu'un joueur à reload sa page (permet la récupération des données pour ce joueur)
     socket.on('reloadPage', (data) => {
         io.to(data.gameId).emit('reloadPage', data.playerId);
     });
 
+    //Permet de transmettre ses combinaisons validées ou non à tous les joueurs
     socket.on('transmitionPoints', (data) => {
         io.to(data.gameId).emit('transmitionPoints', data);
     });
 
+    //Permet de transmettre ses dés à tous les joueurs
     socket.on('transmitionDes', (data) => {
         io.to(data.gameId).emit('transmitionDes', data);
     });
 
+    //Permet de transmettre son score de la section inférieure et supérieure
     socket.on('transmitionScore', (data) => {
         io.to(data.gameId).emit('transmitionScore', data);
     });
 
+    //Permet de faire afficher ses scores pour tous les joueurs
     socket.on('affichageScore', (data) => {
         io.to(data.gameId).emit('affichageScore', data);
     });
 
+    //Permet de mettre fin à son tour et de lancer le tour du joueur suivant
     socket.on('finDeTour', (data) => {
         let positionNvJoueur = data.position + 1;
         if(positionNvJoueur > data.nbJoueurs){
@@ -326,10 +334,12 @@ io.on('connection', (socket) => {
         io.to(data.gameId).emit('debutNvTour', positionNvJoueur);
     });
 
+    //Permet d'annoncer la fin de la partie à tous les joueurs
     socket.on('finDePartie', (data) => {
         io.to(data.gameId).emit('finDePartie');
     });
 
+    //Permet de transmettre son score total à tous les joueurs
     socket.on('transmitionScoreTot', (data) => {
         io.to(data.gameId).emit('transmitionScoreTot', data);
     });

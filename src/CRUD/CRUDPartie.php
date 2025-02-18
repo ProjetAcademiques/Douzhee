@@ -79,11 +79,11 @@
     function updateScoreTot(int $scoreTotal, string $id): void{
         $connection = ConnexionSingleton::getInstance();
 
-        $updatePartie = 'UPDATE partie SET scoreTotalPartie = :scoreTotal WHERE id = :id';
+        $updatePartie = 'UPDATE partie SET scoreTotalPartie = :scoreTotal WHERE idPartie = :id';
 
         $statement = $connection->prepare($updatePartie);
         $statement->bindParam(':scoreTotal', $scoreTotal, PDO::PARAM_INT);
-        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        $statement->bindParam(':id', $id, PDO::PARAM_STR);
         $statement->execute();
     }
 

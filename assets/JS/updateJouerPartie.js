@@ -4,15 +4,19 @@
  * @param {int} idPartie id de la partie à mettre à jour
  * @param {int} score score total de la partie
  */
-export function updateScoreJouerPartie(idPartie, score) {
+export async function updateScoreJouerPartie(idPartie, idJoueur, score) {
     let formData = new FormData();
     formData.append('testdesecurité', true);
     formData.append('idPartie', idPartie);
+    formData.append('idJoueur', idJoueur);
     formData.append('score', score);
-    fetch('../Utils/updateScoreJouerPartie.php', {
+
+    return fetch('../Utils/updateScoreJouerPartie.php', {
         method: 'POST',
         body: formData
-    });
+    })
+    .then(response => response.text())
+    .then(text => console.log("Réponse PHP :", text));
 }
 
 /**

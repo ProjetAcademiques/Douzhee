@@ -170,19 +170,26 @@
         $UpdateQuery = "UPDATE JoueurPartie SET score = :score WHERE idPartie = :idP AND idJoueur = :idJ";
         $statement = $connexion->prepare($UpdateQuery);
         $statement->bindParam(":score", $score, PDO::PARAM_INT);
-        $statement->bindParam(":idP", $idP, PDO::PARAM_INT);
-        $statement->bindParam(":idJ", $idJ, PDO::PARAM_INT);
+        $statement->bindParam(":idP", $idP, PDO::PARAM_STR);
+        $statement->bindParam(":idJ", $idJ, PDO::PARAM_STR);
     
-        return $statement->execute();
-    }
+        if ($statement->execute()) {
+            echo "Mise à jour réussie pour Joueur $idJ\n";
+            return true;
+        } else {
+            echo "Erreur SQL : ";
+            print_r($statement->errorInfo());
+            return false;
+        }
+    }    
     
     function updateEstGagnant(string $idJ, string $idP): bool {
         $connexion = ConnexionSingleton::getInstance();
     
         $UpdateQuery = "UPDATE JoueurPartie SET estGagnant = 1 WHERE idPartie = :idP AND idJoueur = :idJ";
         $statement = $connexion->prepare($UpdateQuery);
-        $statement->bindParam(":idP", $idP, PDO::PARAM_INT);
-        $statement->bindParam(":idJ", $idJ, PDO::PARAM_INT);
+        $statement->bindParam(":idP", $idP, PDO::PARAM_STR);
+        $statement->bindParam(":idJ", $idJ, PDO::PARAM_STR);
     
         $result = $statement->execute();
         if ($result) {
@@ -200,7 +207,7 @@
     
         $DeleteQuery = "DELETE FROM JoueurPartie WHERE idJoueur = :idJ AND idPartie IN (SELECT idPartie FROM Partie WHERE statut = 1)";
         $statement = $connexion->prepare($DeleteQuery);
-        $statement->bindParam(":idJ", $idJ, PDO::PARAM_INT);
+        $statement->bindParam(":idJ", $idJ, PDO::PARAM_STR);
     
         return $statement->execute();
     }

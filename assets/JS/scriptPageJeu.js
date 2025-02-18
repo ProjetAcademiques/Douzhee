@@ -773,43 +773,49 @@ function checkSuccesScore(){
 function checkSuccesAucunZero() {
     const donneesJoueur = getDonneesJoueur();
     if (!donneesJoueur.listePointsObt.includes(0)) {
-        console.log("succes 0 0");
         checkSuccess(12);
     }
 }
 
+let finEffectuee = false;
 /**
  * @brief Permet de faire les procédures de fin de partie
  */
-function finDePartie() {
-    //conception du classement
-    let tabScoresTries = triTab();
-    let msg = 'Classement des joueurs :\n';
-    let scoreTotPartie = 0;
-    tabScoresTries.forEach((player, index) => {
-        msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
-        scoreTotPartie += parseInt(player.scoreTot);
-        if(index === 0 && parseInt(player.position) === position){
-            updateEstGagnantJouerPartie(gameId);
+async function finDePartie() {
+    if(!finEffectuee){
+        finEffectuee = true;
+        // conception du classement
+        let tabScoresTries = triTab();
+        let msg = 'Classement des joueurs :\n';
+        let scoreTotPartie = 0;
+
+        const donneesJoueur = getDonneesJoueur();
+        // Mise à jour des scores en base pour chaque joueur
+        tabScoresTries.forEach((player, index) => {
+            msg += `Position ${index + 1}: Joueur ${player.position} avec un score de ${player.scoreTot}\n`;
+            scoreTotPartie += parseInt(player.scoreTot);
+
+            // Mise à jour du gagnant
+            if (index === 0 && parseInt(player.position) === position) {
+                updateEstGagnantJouerPartie(gameId);
+            }
+        });
+
+        // Check des succès
+        checkSuccesAucunZero();
+        checkSuccesScore();
+
+        // Mise à jour du statut de la partie et du score total si le joueur actuel est le premier
+        if (position === 1) {
+            console.log(gameId, position, scoreTotPartie);
+            updateStatutPartie(gameId, 2);
+            updateScoreTotalPartie(gameId, scoreTotPartie);
         }
-    });
+        await updateScoreJouerPartie(gameId, playerId, parseInt(donneesJoueur.scoreTot));
 
-    //Check des succes
-    checkSuccesAucunZero();
-    checkSuccesScore();
-
-    //Mise à jour de la BD
-    const donneesJoueur = getDonneesJoueur();
-    updateScoreJouerPartie(gameId, parseInt(donneesJoueur.scoreTot));
-    updateNbDouzhee(donneesJoueur.nbDouzhee);
-    updateEndOfGame(gameId);
-    if(position === 1){
-        updateStatutPartie(gameId, 2);
-        updateScoreTotalPartie(gameId, scoreTotPartie);
+        // Suppression des données locales et affichage du classement
+        localStorage.removeItem('donneesJoueur');
+        window.alert(msg);
+        //window.location.href = './index.php';
     }
-
-    //Suppression des données locales et affichage du classement
-    localStorage.removeItem('donneesJoueur');
-    window.alert(msg);
-    window.location.href = './index.php';
 }

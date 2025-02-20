@@ -1,5 +1,9 @@
+/**
+ * @brief Permet de mettre à jour la base de données lors de la fin d'une partie
+ * @author Nathan
+ * @param {int} idPartie id de la partie terminée
+ */
 export function updateEndOfGame(idPartie){
-    console.log("je fais l'end " + idPartie);
     let formData = new FormData();
     formData.append('testdesecurité', true);
     formData.append('idPartie', idPartie);
@@ -10,6 +14,11 @@ export function updateEndOfGame(idPartie){
     .catch(error => console.error('Erreur:', error));
 }
 
+/**
+ * @brief Permet de mettre à jour le nombre de Douzhee du joueur
+ * @author Nathan
+ * @param {int} nbDouzhee Nombre de Douzhee à ajouter
+ */
 export function updateNbDouzhee(nbDouzhee){
     let formData = new FormData();
     formData.append('testdesecurité', true);

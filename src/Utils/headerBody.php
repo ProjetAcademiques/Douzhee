@@ -2,7 +2,6 @@
     require_once("../CRUD/CRUDJoueur.php");
     require_once("../CRUD/CRUDMusique.php");
     require_once("../Utils/headerInit.php");
-    
     if (isset($_SESSION['userId'])){
         $musicPath = readCheminMusique(readIdMusiqueJoueur($_SESSION['userId']));
        

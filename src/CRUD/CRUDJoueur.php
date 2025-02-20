@@ -240,7 +240,7 @@
 
         $updateNbDouzhee = 'UPDATE Joueur SET nbDouzhee = nbDouzhee + :nbDouzhee WHERE id = :idUser';
         $statement = $connection->prepare($updateNbDouzhee);
-        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_STR);
         $statement->bindParam(':nbDouzhee', $nbDouzhee, PDO::PARAM_INT);
         $statement->execute();
     }
@@ -251,19 +251,19 @@
     
         $updateNbParties = 'UPDATE Joueur SET nbPartiesJouees = nbPartiesJouees + 1 WHERE id = :idUser';
         $statement = $connection->prepare($updateNbParties);
-        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_STR);
         $statement->execute();
     
         if (readEstGagnant($idUser, $idGame)) {
             $updateVictory = 'UPDATE Joueur SET nbPartiesGagnees = nbPartiesGagnees + 1 WHERE id = :idUser';
             $statement = $connection->prepare($updateVictory);
-            $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+            $statement->bindParam(':idUser', $idUser, PDO::PARAM_STR);
             $statement->execute();
         }
     
         $updateRatio = 'UPDATE Joueur SET ratioVictoire = ROUND(nbPartiesGagnees / nbPartieJoues, 2) WHERE id = :idUser';
         $statement = $connection->prepare($updateRatio);
-        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_STR);
         $statement->execute();
     
         $partie = readJoueurPartie($idUser, $idGame);
@@ -272,7 +272,7 @@
             $statement = $connection->prepare($updateBestScore);
             $scoreJoueur = $partie->getScore();
             $statement->bindParam(':newScore', $scoreJoueur, PDO::PARAM_INT);
-            $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+            $statement->bindParam(':idUser', $idUser, PDO::PARAM_STR);
             $statement->execute();
         }
     }
@@ -288,7 +288,7 @@
 
         $updateSucces = 'UPDATE Joueur SET nbSucces = nbSucces + 1 WHERE id = :idUser';
         $statement = $connection->prepare($updateSucces);
-        $statement->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+        $statement->bindParam(':idUser', $idUser, PDO::PARAM_STR);
         $statement->execute();
     }
 

@@ -6,7 +6,6 @@
     $key = "this-is-a-zikette-key-for-a-pass";
     $newemail = isset($_COOKIE[$cookiename]) ? decryptage($_COOKIE[$cookiename], $key) : '';
     $newmdp = isset($_COOKIE[$cookiename2]) ? decryptage($_COOKIE[$cookiename2], $key) : '';
-    $email_err_mess = null;
 ?>
 <head>
     <link rel="stylesheet" href="../../assets/css/styleCIRV.css">
@@ -14,12 +13,11 @@
 <body>
     <div class="PCIR">
         <h2>Connexion</h2>
-        <form action = "Connexion.php" method="POST">
-            <input name="E-mail" type="email" placeholder="E-mail" required value="<?php echo htmlspecialchars($newemail);?>">
+        <form id="loginForm" method="POST">
+            <input id="E-mail" type="email" placeholder="E-mail" required value="<?php echo htmlspecialchars($newemail);?>">
             <span style = "color : red">
-
             </span>
-            <input name = "Password" type="password" placeholder="Password" required value="<?php echo htmlspecialchars($newmdp);?>">
+            <input id = "Password" type="password" placeholder="Password" required value="<?php echo htmlspecialchars($newmdp);?>">
                 <div class="checkbox">
                 <input type ="checkbox" id="check" name="checkbox">
                 <label for="check">Se souvenir de moi</label>
@@ -32,54 +30,6 @@
             <a href="Inscription.php">Inscrivez vous</a>
         </div>
     </div>
+    <script src="../../assets/js/auth.js"></script>
 </body>
 </html>
-<?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (!empty($_COOKIE[$cookiename]) && !empty($_COOKIE[$cookiename2])) {
-            $email = decryptage($_COOKIE[$cookiename], $key);
-            $mdp = decryptage($_COOKIE[$cookiename2], $key);
-            $trouve = verifUser($email, $mdp);
-            if ($trouve) {
-                $_SESSION['userId'] = readIdJoueur($email);
-                $_SESSION['timeStart'] = microtime(true);
-                $_SESSION['isconnected'] = 1;
-                $_POST['email'] = $email;
-                $_POST['mdp'] = $mdp;
-            }
-        }
-        if (!empty($_POST['E-mail']) && !empty($_POST['Password'])) {
-            $email = $_POST['E-mail'];
-            $mdp = $_POST['Password'];
-            if (!empty($_POST['checkbox'])) {
-                $cryptedEmail = cryptage($email, $key);
-                $cryptedPassword = cryptage($mdp, $key);
-                setcookie($cookiename, $cryptedEmail, [
-                    'expires' => time() + (60 * 60 * 2),
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                    'samesite' => 'Strict'
-                ]);
-                setcookie($cookiename2, $cryptedPassword, [
-                    'expires' => time() + (60 * 60 * 2),
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                    'samesite' => 'Strict'
-                ]);
-            }
-            
-            $trouve = verifUser($email, $mdp);
-            if ($trouve) {
-                $_SESSION['userId'] = readIdJoueur($email);
-                $_SESSION['timeStart'] = microtime(true);
-                $_SESSION['isconnected'] = 1;
-                header('Location: Index.php');
-                exit();
-            } else {
-                echo '<script type="text/javascript"> window.onload = function () { alert("Mauvais mot de passe ou email"); }</script>';
-            }
-        }
-    }
-?>

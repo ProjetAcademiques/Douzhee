@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", (DOMevent) => {
 
     let PJBT = document.querySelector("#leaderBoardPJ");
@@ -9,11 +8,12 @@ document.addEventListener("DOMContentLoaded", (DOMevent) => {
     const leaderBoardMode = document.querySelector("#leaderBoardMode");
     const ldSpan = document.querySelector("#toFill");
 
-    const buttons = [];
-    buttons.push(PJBT, douzheeBT, succesBT, ratioBT);
-    buttons.forEach((element, index) => {
-        element.addEventListener("click", () => loadTable());
-    })
+    const buttons = [PJBT, douzheeBT, succesBT, ratioBT];
+    buttons.forEach((element) => {
+        if (element) {
+            element.addEventListener("click", () => loadTable());
+        }
+    });
 
     var tableData = null // une chaîne JSON qui représente les données d'une table.
 

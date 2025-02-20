@@ -46,57 +46,58 @@ document.addEventListener('DOMContentLoaded', function () {
                         let divJoueur = document.createElement('div');
                         divJoueur.classList.add('joueur');
 
-                        let imgAvatar = document.createElement('img');
-                        imgAvatar.classList.add('imgAvatar');
-                        imgAvatar.src = data.infoJoueur.avatarChemin;
-                        divJoueur.appendChild(imgAvatar);
-
                         let spanName = document.createElement('span');
                         spanName.classList.add('spanName');
                         spanName.textContent = data.infoJoueur.pseudo;
                         divJoueur.appendChild(spanName);
 
-                        let spanScore = document.createElement('span');
-                        spanScore.classList.add('spanScore');
-                        spanScore.textContent = partie.score + ' points';
-                        divJoueur.appendChild(spanScore);
+                        let divAvatar = document.createElement('img');
+                        divAvatar.classList.add('imgAvatar');
+                        divAvatar.src = data.infoJoueur.avatarChemin;
+                        divJoueur.appendChild(divAvatar);
 
                         div.appendChild(divJoueur);
 
                         data2.infoAdversaires.forEach(adversaire => {
-                            let spanVersus = document.createElement('span');
-                            spanVersus.classList.add('spanVersus');
-                            spanVersus.textContent = 'VS';
-                            div.appendChild(spanVersus);
-
                             let divAdversaire = document.createElement('div');
                             divAdversaire.classList.add('joueur');
-
-                            let imgAvatar = document.createElement('img');
-                            imgAvatar.classList.add('imgAvatar');
-                            imgAvatar.src = adversaire.avatarChemin;
-                            divAdversaire.appendChild(imgAvatar);
 
                             let spanName = document.createElement('span');
                             spanName.classList.add('spanName');
                             spanName.textContent = adversaire.pseudo;
                             divAdversaire.appendChild(spanName);
 
-                            let spanScore = document.createElement('span');
-                            spanScore.classList.add('spanScore');
-                            spanScore.textContent = adversaire.score + ' points';
-                            divAdversaire.appendChild(spanScore);
+                            let divAvatar = document.createElement('img');
+                            divAvatar.classList.add('imgAvatar');
+                            divAvatar.src = adversaire.avatarChemin;
+                            divAdversaire.appendChild(divAvatar);
 
                             div.appendChild(divAdversaire);
                         });
-
-                        let styleHistoriquesGrid = "grid-template-columns: 1fr";
-
-                        for (let i = 0; i < div.querySelectorAll('.joueur').length - 1; i++) {
-                            styleHistoriquesGrid += " auto 1fr";
+                        
+                        for (let i = 0; i < div.childElementCount; i++) {
+                            if (i == 0) {
+                                let span = document.createElement('span');
+                                span.classList.add('spanVSRight');
+                                span.textContent = 'V';
+                                div.childNodes[i].appendChild(span);
+                            } else if (i == div.childElementCount - 1) {
+                                let span = document.createElement('span');
+                                span.classList.add('spanVSLeft');
+                                span.textContent = 'S';
+                                div.childNodes[i].appendChild(span);
+                            } else {
+                                let span = document.createElement('span');
+                                span.classList.add('spanVSRight');
+                                span.textContent = 'V';
+                                div.childNodes[i].appendChild(span);
+                                
+                                let span2 = document.createElement('span');
+                                span2.classList.add('spanVSLeft');
+                                span2.textContent = 'S';
+                                div.childNodes[i].appendChild(span2);
+                            }
                         }
-
-                        div.style = styleHistoriquesGrid;
 
                         containerHistorique.appendChild(div);
                     }
@@ -137,70 +138,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(response => response.json())
                     .then(data2 => {
                         if (data2.status == 'success') {
-                            let div = document.createElement('div');
+                            div = document.createElement('div');
                             div.classList.add('historiquePartie');
-    
+
                             if (partie.estGagnant == 1) {
                                 div.classList.add('victoire');
                             } else {
                                 div.classList.add('defaite');
                             }
-    
+
                             let divJoueur = document.createElement('div');
                             divJoueur.classList.add('joueur');
-    
-                            let imgAvatar = document.createElement('img');
-                            imgAvatar.classList.add('imgAvatar');
-                            imgAvatar.src = data.infoJoueur.avatarChemin;
-                            divJoueur.appendChild(imgAvatar);
-    
+
                             let spanName = document.createElement('span');
                             spanName.classList.add('spanName');
                             spanName.textContent = data.infoJoueur.pseudo;
                             divJoueur.appendChild(spanName);
-    
-                            let spanScore = document.createElement('span');
-                            spanScore.classList.add('spanScore');
-                            spanScore.textContent = partie.score + ' points';
-                            divJoueur.appendChild(spanScore);
-    
+
+                            let divAvatar = document.createElement('img');
+                            divAvatar.classList.add('imgAvatar');
+                            divAvatar.src = data.infoJoueur.avatarChemin;
+                            divJoueur.appendChild(divAvatar);
+
                             div.appendChild(divJoueur);
-    
+
                             data2.infoAdversaires.forEach(adversaire => {
-                                let spanVersus = document.createElement('span');
-                                spanVersus.classList.add('spanVersus');
-                                spanVersus.textContent = 'VS';
-                                div.appendChild(spanVersus);
-    
                                 let divAdversaire = document.createElement('div');
                                 divAdversaire.classList.add('joueur');
-    
-                                let imgAvatar = document.createElement('img');
-                                imgAvatar.classList.add('imgAvatar');
-                                imgAvatar.src = adversaire.avatarChemin;
-                                divAdversaire.appendChild(imgAvatar);
-    
+
                                 let spanName = document.createElement('span');
                                 spanName.classList.add('spanName');
                                 spanName.textContent = adversaire.pseudo;
                                 divAdversaire.appendChild(spanName);
-    
-                                let spanScore = document.createElement('span');
-                                spanScore.classList.add('spanScore');
-                                spanScore.textContent = adversaire.score + ' points';
-                                divAdversaire.appendChild(spanScore);
-    
+
+                                let divAvatar = document.createElement('img');
+                                divAvatar.classList.add('imgAvatar');
+                                divAvatar.src = adversaire.avatarChemin;
+                                divAdversaire.appendChild(divAvatar);
+
                                 div.appendChild(divAdversaire);
                             });
-    
-                            let styleHistoriquesGrid = "grid-template-columns: 1fr";
-    
-                            for (let i = 0; i < div.querySelectorAll('.joueur').length - 1; i++) {
-                                styleHistoriquesGrid += " auto 1fr";
-                            }
-    
-                            div.style = styleHistoriquesGrid;
-    
+
                             containerHistorique.appendChild(div);
                         }
                     })

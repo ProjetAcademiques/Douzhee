@@ -13,6 +13,15 @@
         header("Location: ./index.php");
         exit();
     }
+
+    /*
+    if (readIdPartieEnCour($_SESSION['userId']) == null) {
+        $idPartieEnCours = $_SESSION['idPartie'];
+    }
+    else {
+        $idPartieEnCours = readIdPartieEnCour($_SESSION['userId']);
+    }
+        */
 ?>
     <link rel="stylesheet" href="../../assets/CSS/Theme.css">
     <link rel="stylesheet" href="../../assets/CSS/game.css">   
@@ -20,7 +29,7 @@
 <body>
     <script type="module" src="../../assets/JS/scriptTheme.js"></script>
     <?php
-        $requiredPlayers = readPartie(readIdPartieEnCour($_SESSION['userId']))->getNbJoueur();; // nombre de joueurs requis pour commencer la partie
+        $requiredPlayers = readPartie($_SESSION['idPartie'])->getNbJoueur();; // nombre de joueurs requis pour commencer la partie
         $connectedPlayers = readConnectedPlayers($_SESSION['idPartie']); // nombre de joueurs connectés
         $idsInputs = 0; // id pour les inputs
 
@@ -374,10 +383,10 @@
     <script src="../../assets/JS/connectionWebSocket.js"></script>
     <script>
         const playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
-        const position = <?= json_encode(readPosition($_SESSION["userId"], readIdPartieEnCour($_SESSION['userId']))) ?>; // Récupérer la position du joueur
+        const position = <?= json_encode(readPosition($_SESSION["userId"], $_SESSION['idPartie'])) ?>; // Récupérer la position du joueur
         const nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
 
-        const gameId = <?= json_encode(readIdPartieEnCour($_SESSION['userId'])); ?>; // Récupérer l'ID de la partie
+        const gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
         const pseudoid = <?= json_encode(readPseudo($_SESSION["userId"])); ?>; // Récupérer le pseudo du joueur
 
         const requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie

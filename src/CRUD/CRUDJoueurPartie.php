@@ -148,7 +148,7 @@
         return null;
     }
 
-    function readIdPartieEnCour(string $idJ): string {
+    function readIdPartieEnCour(string $idJ): ?string {
         $connexion = ConnexionSingleton::getInstance();
 
         $query = "SELECT idPartie FROM JoueurPartie WHERE idJoueur = :idJ AND idPartie IN (SELECT idPartie FROM Partie WHERE statut = 1)";
@@ -161,7 +161,10 @@
 
         $results = $statement->fetch(PDO::FETCH_ASSOC);
 
-        return $results['idPartie'];
+        if ($results) {
+            return $results['idPartie'];
+        }
+        return null;
     }
 
     function readEstGagnant(string $idJ, string $idP): bool {

@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: http://localhost");
 header("Access-Control-Allow-Headers: application/json");
-
+header("Access-Control-Allow-Credentials: true");
 require_once("../CRUD/CRUDJoueur.php");
 require_once("../CRUD/CRUDPartie.php");
 require_once("../CRUD/CRUDJoueurPartie.php");
@@ -29,7 +29,7 @@ function routing(mixed $request): void {
 
     switch (getAction($request)) {
         case "READ":
-            connectUser($request["params"]["email"], $request["params"]["pwdHash"],$request["params"]["rememberMe"]);
+            connectUser($request["params"]["email"], $request["params"]["pwd"],$request["params"]["rememberMe"]);
             break;
         case "CREATE":
             createUser($request["params"]["username"], $request["params"]["pwd"], $request["params"]["email"]);

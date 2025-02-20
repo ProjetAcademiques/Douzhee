@@ -26,6 +26,7 @@ body{
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
     color: white;
+    position: relative;
 }
 .PCIR h2{
     margin-bottom: 20px;
@@ -94,5 +95,15 @@ a:visited{
     outline: none;
     border-color: #007bff;
 }
+
+.eye-icon {
+    position: absolute;
+    right: 8px;
+    top: 63%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: white;
+}
+
 
 

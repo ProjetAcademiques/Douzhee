@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecteur Musique</title>
+</head>
+<body>
+    <audio id="audioMusique" controls loop>
+        <source id="audioSource" type="audio/mpeg">
+    </audio>
+
+    <button id="playButton">Play Music</button>
+
+    <script>
+        const audio = document.getElementById("audioMusique");
+        const audioSource = document.getElementById("audioSource");
+        const playButton = document.getElementById("playButton");
+
+        // Récupérer le chemin du fichier audio depuis localStorage
+        const musicPath = localStorage.getItem('musicPath');
+
+        if (musicPath) {
+            // Mettre à jour la source audio avec le chemin stocké
+            audioSource.src = musicPath;
+            audio.load();  // Recharge le fichier audio
+        } else {
+            console.error("Le chemin de la musique est introuvable.");
+        }
+
+        // Lancer la musique seulement après que l'utilisateur interagisse
+        playButton.addEventListener('click', () => {
+            audio.play().catch(err => {
+                console.error("Erreur de lecture audio :", err);
+            });
+        });
+        
+        // Sauvegarder l'état de la lecture de la musique avant de quitter
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('audioCurrentTime', audio.currentTime);
+            localStorage.setItem('isMusicPlaying', !audio.paused);
+        });
+    </script>
+</body>
+</html>

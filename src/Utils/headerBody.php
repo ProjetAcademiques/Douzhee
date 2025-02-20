@@ -4,7 +4,9 @@
     require_once("../Utils/headerInit.php");
     if (isset($_SESSION['userId'])){
         $musicPath = readCheminMusique(readIdMusiqueJoueur($_SESSION['userId']));
-       
+        $modifiedPath = str_replace("../../", "", $musicPath);
+        $newPath = "/douzhee/".$modifiedPath;
+        echo "<script>localStorage.setItem('musicPath', '" . $newPath . "');</script>";
     }
     if (isset($_SESSION['timeStart'])){
         $_SESSION['timeEnd'] = microtime(true);  
@@ -14,16 +16,13 @@
     }
 ?>
     <header class="themeItem1">
-        <audio id="audioPlayer" controls loop>
-            <source id="audioSource" src="<?php echo $musicPath?>" type="audio/mpeg">
-        </audio>
-
+       
         <a href="index.php">
             <input id="Logo" type="submit" value=""> 
         </a>
         
         <?php if (isset($_SESSION['userId'])): ?>
-        
+            <iframe src="/douzhee/src/Utils/audio.html" style="display: none;" id="musicFrame"></iframe>
             <div class="selection_droite">
                 <span id="money"><?php echo readDouzCoin($_SESSION['userId']); ?></span>
                 <img src="../../assets/images/imgheader/coin_dollar_finance_icon_125510 1.png" alt="Money du Jeu" width="27" height="27" id="coin">

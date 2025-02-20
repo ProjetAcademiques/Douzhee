@@ -23,29 +23,37 @@ class AuthManager {
      * @param {*} password un mot de passe HASHÉ, qui idéalement existe dans la BdD
      * Une fonction qui vérifie si un utilisateur existe dans la base de données. Si oui, le conencte.
      */
-   async ConnectExistingUser (email, pwdHash) {
+   async ConnectExistingUser (email, pwd, rememberMe) {
     try {
         const response = await fetch("http://localhost/douzhee/src/Controllers/AuthController.php", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({
                 "for": "connection",
                 "action": "READ",
                 "object": "Joueur",
-                "params": { email, pwdHash }
+                "params": { email, pwd,rememberMe }
             })
         });
 
-        const data = await response.json();
-        if (data.success) {
-            window.location.href = "Index.php"; 
-        } else {
-            console.error("Erreur:", data.message);
+        const textResponse = await response.text();  
+        const data = JSON.parse(textResponse);
+        if (data.error) {
+            if (data.error === "Email non trouvé") {
+                alert("Cet email n'existe pas. Veuillez vérifier votre adresse email.");
+            } else if (data.error === "Mot de passe incorrect") {
+                alert("Le mot de passe que vous avez entré est incorrect.");
+            } else {
+                alert(data.error);  
+            }
+        } else if (data.success) {
+            window.location.href = "Index.php";  
         }
     } catch (error) {
-        console.error("Erreur de connexion:", error);
+        alert("Erreur de connexion, veuillez réessayer.");  
     }
 }
     /**
@@ -70,17 +78,20 @@ class AuthManager {
             });
 
             const data = await response.json();
-            if (data.success) {
-                window.location.href = "index.php"; // Redirection après inscription réussie
-            } else {
-                console.error("Erreur:", data.message);
+            if (data.error) {
+                if (data.error === "L'email est déjà utilisé") {
+                    alert("Cet email est déjà pris. Veuillez en choisir un autre.");
+                } else {
+                    alert(data.error); 
+                }
+            } else if (data.success) {
+                window.location.href = "index.php"; 
             }
         } catch (error) {
-            console.error("Erreur d'inscription:", error);
+            alert("Erreur d'inscription, veuillez réessayer.");  
         }
     }
+    
 }
+export default AuthManager;
 
-const  Manager = new AuthManager.getInstance(); 
-Manager.ConnectExistingUser("test@gmail.com", "$2y$10$aDgMydsudCBz48nuAjslKu13sUj/cygPJ7LmQA5NGBW87d5kwWzuq");
-Manager.SignUpNewUser("cosmos2", "mon_mot_de_passe", "cosmos2@gmail.com");

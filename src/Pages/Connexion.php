@@ -30,6 +30,6 @@
             <a href="Inscription.php">Inscrivez vous</a>
         </div>
     </div>
-    <script src="../../assets/js/auth.js"></script>
+    <script type="module" src="../../assets/js/auth.js"></script>
 </body>
 </html>

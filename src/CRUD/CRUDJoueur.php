@@ -2,6 +2,7 @@
     require_once "../Classes/Joueur.php";
     require_once "../Utils/connectionSingleton.php";
     require_once "../CRUD/CRUDJoueurPartie.php";
+    require_once "../Classes/Classement.php";
 
     /**
      * @brief insère un nouveau joueur dans la table Joueur selon les paramètres spécifiés. tout les paramètres sont obligatoires.
@@ -330,5 +331,57 @@
         $stmt->bindParam(2, $idJoueur);
 
         return $stmt->execute();
+    }
+    /**
+     * Retourne un classement de joueurs basé sur le mode de classement (param $mode)
+     * @author Mael
+     * @param string $mode une chaîne de caractères qui représente sur quelle base le classement doit être fait
+     * @param int $limit le nombre de lignes qui devrait apparaître dans le classement
+     * @return mixed une collection d'objets Classement de taille limit
+     */
+    function leaderBoard(string $mode, int $limit): mixed {
+
+        $column = "";
+
+        switch ($mode) {
+            case "RK": // RanK
+                $column = "nbDouzhee";
+                break;
+            case "RV": // Ratio de Victoires
+                $column = "ratioVictoire";
+                break;
+            case "ACH": // ACHievment
+                $column = "nbSucces"; 
+                break;
+            case "VR": // VictoiRes
+                $column = "nbPartieGagnees";
+                break;
+            default:
+                $column = "nbDouzhee";
+                break;
+        }
+        
+
+        $connexion = ConnexionSingleton::getInstance();
+
+        $query = "SELECT pseudo, " . $column . " as stat FROM Joueur ORDER BY " . $column . " ASC LIMIT :limit";
+
+        $statement = $connexion->prepare($query);
+        $statement->bindParam("limit", $limit, PDO::PARAM_INT);
+
+        $success = $statement->execute();
+
+        if (gettype($success)) {
+            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $returnedArray = [];
+            for($i = 0; $i < sizeof($results); $i++ ) {
+                $newRoom = new Classement($i, $results[$i]["pseudo"], $results[$i]["stat"]);
+                array_push($returnedArray, $newRoom);
+            }
+
+            return $returnedArray;
+        }
+
+        return null;
     }
 ?>

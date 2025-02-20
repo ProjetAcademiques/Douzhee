@@ -11,20 +11,37 @@ body {
     gap: 20px;
 }
 
-table, td {
-    background-color: #d4d0d6;
-    border-collapse: collapse;
-    border: 1px solid black;
-    width: 60%;
-    height: 10vh;
-    border-radius: 20px;
-    overflow: hidden;
-    text-align: center;
+
+
+.LeaderBoardRoom {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding : 20px;
+    border: solid 2px #692786;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-td:not(tr:first-child){
-    width: 33%;
+.LeaderBoardRoom:hover, button:hover {
+    transform: scaleX(1.05) scaleY(1.05);
+    transition-duration: 0.4s;
 }
+
+.title {
+    font-size: 20px;
+}
+#toFill {
+    min-height: 50vh;
+}
+
+
+
 
 
 

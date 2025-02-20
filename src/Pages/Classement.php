@@ -14,37 +14,25 @@
 <html>
 <body>
     <?php require_once("../Utils/headerBody.php"); ?>
-    <table id = "leaderBoard">
-        <tbody>
-            <tr>
-                <th></th>
-                <th>Joueur</th>
-                <th id = "leaderBoardMode"></th>
-            </tr>
-            <tr>
-                <td>#1</td>
-                <td id = "nom0">--</td>
-                <td id = "stat0">--</td>
-            </tr>
-            <tr>
-                <td>#2</td>
-                <td id = "nom1">--</td>
-                <td id = "stat1">--</td>
-            </tr>
-            <tr>
-                <td>#3</td>
-                <td id = "nom2">--</td>
-                <td id = "stat2">--</td>
-            </tr>
-        </tbody>
-    </table>
-
 
     <div>
-        <button type = "button" id = "leaderBoardScore">Leaderboard par score</button>
-        <button type = "button" id = "leaderBoardDouzhee">Leaderboard par monnaie</button>
-        <button type = "button" id = "leaderBoardSucces">Leaderboard par succes</button>
+        <span class = "title">Modes de classement : </span>
+        <button type = "button" id = "leaderBoardPJ">parties jouées</button>
+        <button type = "button" id = "leaderBoardDouzhee">Douzhee</button>
+        <button type = "button" id = "leaderBoardSucces">Succès</button>
+        <button type = "button" id = "leaderBoardRatio">par victoires</button>
     </div>
+
+    <span id = "leaderBoard">
+            <div id = "header" class = "LeaderBoardRoom">
+                <span>Classement</span>
+                <span>Joueur</span>
+                <span id = "leaderBoardMode">Critère de Classement</span>
+            </div>
+    </span>
+
+    <span id = "toFill"></span>
+
     <script src = "../../assets/JS/scriptClassement.js" type = "text/javascript"></script>
 </body>
 </html>

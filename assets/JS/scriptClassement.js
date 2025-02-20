@@ -1,70 +1,98 @@
 
 document.addEventListener("DOMContentLoaded", (DOMevent) => {
 
-    let scoreBT = document.querySelector("#leaderBoardScore");
+    let PJBT = document.querySelector("#leaderBoardPJ");
     let douzheeBT = document.querySelector("#leaderBoardDouzhee");
     let succesBT = document.querySelector("#leaderBoardSucces");
+    let ratioBT = document.querySelector("#leaderBoardRatio");
+
+    const leaderBoardMode = document.querySelector("#leaderBoardMode");
+    const ldSpan = document.querySelector("#toFill");
 
     const buttons = [];
-    buttons.push(scoreBT, douzheeBT, succesBT);
+    buttons.push(PJBT, douzheeBT, succesBT, ratioBT);
     buttons.forEach((element, index) => {
         element.addEventListener("click", () => loadTable());
     })
 
-    const leaderBoardMode = document.querySelector("#leaderBoardMode");
     var tableData = null // une chaîne JSON qui représente les données d'une table.
 
+    /**
+     * enlève tout les enfants d'un HTMLElement, le rendant vide
+     * @author Mael
+     * @param {HTMLElement} node
+     */
+    function removeAllChildren(node) {
+        while(node.lastElementChild != null) {
+            node.removeChild(node.lastElementChild);
+        }
+    }
 
     /**
      * @async 
-     * @param {*} tableMode une chaîne de caractère qui indique quelle données on récup
+     * @param {string} tableMode une chaîne de caractère qui indique quelle données on récupère
+     * @param {number} lines le nombre de lignes qu'on souhaite afficher
      */
-    async function getTableData(tableMode) { // ACH, RK, CRC
+    async function getTableData(tableMode, lines) { // ACH, RK, CRC
         const response = await fetch("../../src/Controllers/LeaderBoardController.php", {
             mode: "cors",
             method: "POST",
             body: JSON.stringify({
                 "for": "LeaderBoard",
-                "mode": tableMode
+                "mode": tableMode,
+                "lines": lines
             })
         });
         const data = await response.json();
+        console.log(data);
         tableData = Array.from(data); // Ensure tableData is populated after fetch
     }
 
 
     async function loadTable() {
+        console.log("loadTable called");
 
-        console.log(event.target);
-        let isScoreBT = event.target == scoreBT;
+        removeAllChildren(ldSpan);
+
+        let isPJBT = event.target == PJBT;
         let isDouzheeBT = event.target == douzheeBT;
         let isSuccesBT = event.target == succesBT;
+        let isRatioVictoireBT = event.target == ratioBT;
 
-        if (isScoreBT) {
-            await getTableData("RK");
+        if (isPJBT) {
+            await getTableData("RK", 4);
             leaderBoardMode.textContent = "Score";
         } else if (isDouzheeBT) {
-            await getTableData("CRC");
+            await getTableData("CRC", 4);
             leaderBoardMode.textContent = "DouzCoins";
-        } else {
-            await getTableData("ACH");
+        } else if (isRatioVictoireBT) {
+            await getTableData("RV", 4);
+            leaderBoardMode.textContent = "Ratio de Victoires";
+        } else if (isSuccesBT) {
+            await getTableData("ACH", 4);
             leaderBoardMode.textContent = "Succes";
+        } else {
+            await getTableData("VC", 4);
+            leaderBoardMode.textContent = "Victoires"
         }
 
-        let tableRows = document.querySelectorAll("tr:not(tbody:first-child)");
-        tableRows = Array.from(tableRows);
-        tableRows.splice(0, 1);
-        for(let i = 0; i < tableRows.length; i++) {
-            tableRows[i].querySelector("#nom" + i).textContent = tableData[i].pseudonyme;
-            if (isScoreBT) {
-                tableRows[i].querySelector("#stat" + i).textContent = tableData[i].score; 
-            }
-            else if (isDouzheeBT) { 
-                tableRows[i].querySelector("#stat" + i).textContent = tableData[i].nbDouzhee;
-            }
-            else if (isSuccesBT) {
-                tableRows[i].querySelector("#stat" + i).textContent = tableData[i].nbSucces;
-            }
+        for(let i = 0; i < tableData.length; i++) {
+            let leaderBoardRoom = document.createElement("div");
+            leaderBoardRoom.classList.add("LeaderBoardRoom");
+            let rank = document.createElement("span");
+            let name = document.createElement("span");
+            let stat = document.createElement("span");
+
+            console.log (`rank : ${tableData[i].rank}; name : ${tableData[i].name}; rank: ${tableData[i].stat}`);
+
+            rank.textContent = `${tableData[i].rank + 1}`;
+            name.textContent = `${tableData[i].name}`;
+            stat.textContent = `${tableData[i].stat}`;
+
+            leaderBoardRoom.appendChild(rank);
+            leaderBoardRoom.appendChild(name);
+            leaderBoardRoom.appendChild(stat);
+            ldSpan.appendChild(leaderBoardRoom);
         }
-    }
+}
 }); // fin de DOMContentLoaded - callback

@@ -55,7 +55,6 @@ document.querySelector('.table').addEventListener('click', (event) => {
     }
 });
 
-
 let button = document.getElementById('roll'); //bouton permettant de lancer les dés
 //ajout d'un event listener au bouton de lancés qui permet de lancer les dés
 button.addEventListener('click', actionRoll);
@@ -248,6 +247,7 @@ function updateInfo(info) {
 socket.on('debutNvTour', (positionNvJoueur) => {
     if(positionNvJoueur === position){ // Vérifie si le joueur est bien le prochain à jouer
         // Vérifie si le joueur à rempli toutes les combinaisons, si c'est le cas on finit la partie, sinon on initialise son tour
+        console.log('Début du tour du joueur', position);
         if(!verifCombiRemplies()){ 
             button.disabled = false; // Activation du bouton de lancés
             updateInfo({nbRoll: 3}); // Permet 3 lancés au joueur

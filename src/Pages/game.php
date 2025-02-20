@@ -4,6 +4,11 @@
     require_once("../CRUD/CRUDPartie.php");
     require_once("../CRUD/CRUDJoueurPartie.php");
 
+    if (!isset($_SESSION['userId'])) {
+        header("Location: ./index.php");
+        exit();
+    }
+
     if (!(readPartieEnCommencement($_SESSION['userId'])) && !(readPartieEnCours($_SESSION['userId']))) {
         header("Location: ./index.php");
         exit();
@@ -15,7 +20,7 @@
 <body>
     <script type="module" src="../../assets/JS/scriptTheme.js"></script>
     <?php
-        $requiredPlayers = readPartie($_SESSION['idPartie'])->getNbJoueur();; // nombre de joueurs requis pour commencer la partie
+        $requiredPlayers = readPartie(readIdPartieEnCour($_SESSION['userId']))->getNbJoueur();; // nombre de joueurs requis pour commencer la partie
         $connectedPlayers = readConnectedPlayers($_SESSION['idPartie']); // nombre de joueurs connectés
         $idsInputs = 0; // id pour les inputs
 
@@ -25,7 +30,7 @@
         $idInf = 1;
         $idsScoreSecInf = 'idInf';
 
-        $users = readAllUsersByIdPartie($_SESSION['idPartie']); // liste des joueurs
+        $users = readAllUsersByIdPartie(readIdPartieEnCour($_SESSION['userId'])); // liste des joueurs
 
         //debugSession();
     ?>
@@ -369,10 +374,10 @@
     <script src="../../assets/JS/connectionWebSocket.js"></script>
     <script>
         const playerId = <?= json_encode($_SESSION["userId"]); ?>; // Récupérer l'ID du joueur
-        const position = <?= json_encode($_SESSION["position"]); ?>; // Récupérer la position du joueur
+        const position = <?= json_encode(readPosition($_SESSION["userId"], readIdPartieEnCour($_SESSION['userId']))) ?>; // Récupérer la position du joueur
         const nbPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs
 
-        const gameId = <?= json_encode($_SESSION['idPartie']); ?>; // Récupérer l'ID de la partie
+        const gameId = <?= json_encode(readIdPartieEnCour($_SESSION['userId'])); ?>; // Récupérer l'ID de la partie
         const pseudoid = <?= json_encode(readPseudo($_SESSION["userId"])); ?>; // Récupérer le pseudo du joueur
 
         const requiredPlayers = <?= json_encode($requiredPlayers); ?>; // Récupérer le nombre de joueurs requis pour commencer la partie
@@ -380,6 +385,7 @@
 
         // Rejoindre la salle de chat pour la partie spécifique
         socket.emit('player joined', gameId);
+        //socket.emit('reconnect', {gameId: gameId, position: position});
     </script>
     <script src="../../assets/JS/scriptPageJeu.js" type="module"></script>
     <script src="../../assets/JS/scriptChatEnLigne.js"></script>

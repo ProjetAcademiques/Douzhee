@@ -112,6 +112,23 @@
         return $results['COUNT(*)'];
     }
 
+    function readPosition(string $idJoueur, string $idPartie): int {
+        $connexion = ConnexionSingleton::getInstance();
+
+        $query = "SELECT positionPartie FROM JoueurPartie WHERE idJoueur = :idJoueur AND idPartie = :idPartie";
+
+        $statement = $connexion->prepare($query);
+
+        $statement->bindParam(':idJoueur', $idJoueur);
+        $statement->bindParam(':idPartie', $idPartie);
+
+        $statement->execute();
+
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $results['positionPartie'];
+    }
+
     function readAllUsersByIdPartie(string $idPartie): ?array {
         $connexion = ConnexionSingleton::getInstance();
 

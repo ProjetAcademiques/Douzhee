@@ -218,6 +218,8 @@ app.post('/end-game', (req, res) => {
 // Suivre les connexions des joueurs
 const connectedPlayers = {};
 
+const gameEnCours = {};
+
 // Événements Socket.IO
 io.on('connection', (socket) => {
     // Gestion de la connexion d'un client
